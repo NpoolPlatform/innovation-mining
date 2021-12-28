@@ -1,0 +1,6 @@
+commonLabels:
+  # app: innovation-minning
+
+resources:
+- 01-innovation-minning.yaml
+- 02-ingress.yaml

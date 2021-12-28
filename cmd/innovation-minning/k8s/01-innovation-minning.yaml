@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-sample
+  name: innovation-minning
   namespace: kube-system
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: service-sample
+      app: innovation-minning
   template:
     metadata:
       labels:
-        app: service-sample
+        app: innovation-minning
     spec:
       containers:
-      - name: service-sample
-        image: uhub.service.ucloud.cn/entropypool/service-sample:latest
+      - name: innovation-minning
+        image: uhub.service.ucloud.cn/entropypool/innovation-minning:latest
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
@@ -42,12 +42,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-sample
+  name: innovation-minning
   namespace: kube-system
 spec:
   ports:
-  - name: api
-    port: 32759
-    targetPort: 32759
+  - name: http
+    port: 50210
+    targetPort: 50210
+  - name: grpc
+    port: 50211
+    targetPort: 50211
+  - name: prometheus
+    port: 50212
+    targetPort: 50212
   selector:
-    app: service-sample
+    app: innovation-minning
