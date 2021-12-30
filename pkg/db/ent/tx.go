@@ -18,6 +18,10 @@ type Tx struct {
 	Project *ProjectClient
 	// Team is the client for interacting with the Team builders.
 	Team *TeamClient
+	// TechniqueAnalysis is the client for interacting with the TechniqueAnalysis builders.
+	TechniqueAnalysis *TechniqueAnalysisClient
+	// TrendAnalysis is the client for interacting with the TrendAnalysis builders.
+	TrendAnalysis *TrendAnalysisClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -158,6 +162,8 @@ func (tx *Tx) init() {
 	tx.Capital = NewCapitalClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
 	tx.Team = NewTeamClient(tx.config)
+	tx.TechniqueAnalysis = NewTechniqueAnalysisClient(tx.config)
+	tx.TrendAnalysis = NewTrendAnalysisClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 

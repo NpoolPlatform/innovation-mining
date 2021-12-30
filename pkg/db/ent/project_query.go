@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
+	"github.com/google/uuid"
 )
 
 // ProjectQuery is the builder for querying Project entities.
@@ -84,8 +85,8 @@ func (pq *ProjectQuery) FirstX(ctx context.Context) *Project {
 
 // FirstID returns the first Project ID from the query.
 // Returns a *NotFoundError when no Project ID was found.
-func (pq *ProjectQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (pq *ProjectQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = pq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -97,7 +98,7 @@ func (pq *ProjectQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (pq *ProjectQuery) FirstIDX(ctx context.Context) int {
+func (pq *ProjectQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := pq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -135,8 +136,8 @@ func (pq *ProjectQuery) OnlyX(ctx context.Context) *Project {
 // OnlyID is like Only, but returns the only Project ID in the query.
 // Returns a *NotSingularError when exactly one Project ID is not found.
 // Returns a *NotFoundError when no entities are found.
-func (pq *ProjectQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (pq *ProjectQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = pq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -152,7 +153,7 @@ func (pq *ProjectQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (pq *ProjectQuery) OnlyIDX(ctx context.Context) int {
+func (pq *ProjectQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := pq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,8 +179,8 @@ func (pq *ProjectQuery) AllX(ctx context.Context) []*Project {
 }
 
 // IDs executes the query and returns a list of Project IDs.
-func (pq *ProjectQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (pq *ProjectQuery) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	var ids []uuid.UUID
 	if err := pq.Select(project.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -187,7 +188,7 @@ func (pq *ProjectQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (pq *ProjectQuery) IDsX(ctx context.Context) []int {
+func (pq *ProjectQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := pq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +250,19 @@ func (pq *ProjectQuery) Clone() *ProjectQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Project.Query().
+//		GroupBy(project.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
+//
 func (pq *ProjectQuery) GroupBy(field string, fields ...string) *ProjectGroupBy {
 	group := &ProjectGroupBy{config: pq.config}
 	group.fields = append([]string{field}, fields...)
@@ -263,6 +277,17 @@ func (pq *ProjectQuery) GroupBy(field string, fields ...string) *ProjectGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Project.Query().
+//		Select(project.FieldName).
+//		Scan(ctx, &v)
+//
 func (pq *ProjectQuery) Select(fields ...string) *ProjectSelect {
 	pq.fields = append(pq.fields, fields...)
 	return &ProjectSelect{ProjectQuery: pq}
@@ -329,7 +354,7 @@ func (pq *ProjectQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   project.Table,
 			Columns: project.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: project.FieldID,
 			},
 		},

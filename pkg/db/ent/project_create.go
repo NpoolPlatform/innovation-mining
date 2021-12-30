@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
+	"github.com/google/uuid"
 )
 
 // ProjectCreate is the builder for creating a Project entity.
@@ -19,6 +21,90 @@ type ProjectCreate struct {
 	mutation *ProjectMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
+}
+
+// SetName sets the "name" field.
+func (pc *ProjectCreate) SetName(s string) *ProjectCreate {
+	pc.mutation.SetName(s)
+	return pc
+}
+
+// SetGoodID sets the "good_id" field.
+func (pc *ProjectCreate) SetGoodID(u uuid.UUID) *ProjectCreate {
+	pc.mutation.SetGoodID(u)
+	return pc
+}
+
+// SetTeamID sets the "team_id" field.
+func (pc *ProjectCreate) SetTeamID(u uuid.UUID) *ProjectCreate {
+	pc.mutation.SetTeamID(u)
+	return pc
+}
+
+// SetCapitalIds sets the "capital_ids" field.
+func (pc *ProjectCreate) SetCapitalIds(u []uuid.UUID) *ProjectCreate {
+	pc.mutation.SetCapitalIds(u)
+	return pc
+}
+
+// SetIntroduction sets the "introduction" field.
+func (pc *ProjectCreate) SetIntroduction(s string) *ProjectCreate {
+	pc.mutation.SetIntroduction(s)
+	return pc
+}
+
+// SetLogo sets the "logo" field.
+func (pc *ProjectCreate) SetLogo(s string) *ProjectCreate {
+	pc.mutation.SetLogo(s)
+	return pc
+}
+
+// SetCreateAt sets the "create_at" field.
+func (pc *ProjectCreate) SetCreateAt(u uint32) *ProjectCreate {
+	pc.mutation.SetCreateAt(u)
+	return pc
+}
+
+// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableCreateAt(u *uint32) *ProjectCreate {
+	if u != nil {
+		pc.SetCreateAt(*u)
+	}
+	return pc
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (pc *ProjectCreate) SetUpdateAt(u uint32) *ProjectCreate {
+	pc.mutation.SetUpdateAt(u)
+	return pc
+}
+
+// SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableUpdateAt(u *uint32) *ProjectCreate {
+	if u != nil {
+		pc.SetUpdateAt(*u)
+	}
+	return pc
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (pc *ProjectCreate) SetDeleteAt(u uint32) *ProjectCreate {
+	pc.mutation.SetDeleteAt(u)
+	return pc
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableDeleteAt(u *uint32) *ProjectCreate {
+	if u != nil {
+		pc.SetDeleteAt(*u)
+	}
+	return pc
+}
+
+// SetID sets the "id" field.
+func (pc *ProjectCreate) SetID(u uuid.UUID) *ProjectCreate {
+	pc.mutation.SetID(u)
+	return pc
 }
 
 // Mutation returns the ProjectMutation object of the builder.
@@ -32,6 +118,7 @@ func (pc *ProjectCreate) Save(ctx context.Context) (*Project, error) {
 		err  error
 		node *Project
 	)
+	pc.defaults()
 	if len(pc.hooks) == 0 {
 		if err = pc.check(); err != nil {
 			return nil, err
@@ -89,8 +176,55 @@ func (pc *ProjectCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *ProjectCreate) defaults() {
+	if _, ok := pc.mutation.CreateAt(); !ok {
+		v := project.DefaultCreateAt()
+		pc.mutation.SetCreateAt(v)
+	}
+	if _, ok := pc.mutation.UpdateAt(); !ok {
+		v := project.DefaultUpdateAt()
+		pc.mutation.SetUpdateAt(v)
+	}
+	if _, ok := pc.mutation.DeleteAt(); !ok {
+		v := project.DefaultDeleteAt()
+		pc.mutation.SetDeleteAt(v)
+	}
+	if _, ok := pc.mutation.ID(); !ok {
+		v := project.DefaultID()
+		pc.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProjectCreate) check() error {
+	if _, ok := pc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "name"`)}
+	}
+	if _, ok := pc.mutation.GoodID(); !ok {
+		return &ValidationError{Name: "good_id", err: errors.New(`ent: missing required field "good_id"`)}
+	}
+	if _, ok := pc.mutation.TeamID(); !ok {
+		return &ValidationError{Name: "team_id", err: errors.New(`ent: missing required field "team_id"`)}
+	}
+	if _, ok := pc.mutation.CapitalIds(); !ok {
+		return &ValidationError{Name: "capital_ids", err: errors.New(`ent: missing required field "capital_ids"`)}
+	}
+	if _, ok := pc.mutation.Introduction(); !ok {
+		return &ValidationError{Name: "introduction", err: errors.New(`ent: missing required field "introduction"`)}
+	}
+	if _, ok := pc.mutation.Logo(); !ok {
+		return &ValidationError{Name: "logo", err: errors.New(`ent: missing required field "logo"`)}
+	}
+	if _, ok := pc.mutation.CreateAt(); !ok {
+		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
+	}
+	if _, ok := pc.mutation.UpdateAt(); !ok {
+		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "update_at"`)}
+	}
+	if _, ok := pc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "delete_at"`)}
+	}
 	return nil
 }
 
@@ -102,8 +236,9 @@ func (pc *ProjectCreate) sqlSave(ctx context.Context) (*Project, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		_node.ID = _spec.ID.Value.(uuid.UUID)
+	}
 	return _node, nil
 }
 
@@ -113,12 +248,88 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: project.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: project.FieldID,
 			},
 		}
 	)
 	_spec.OnConflict = pc.conflict
+	if id, ok := pc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := pc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: project.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := pc.mutation.GoodID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: project.FieldGoodID,
+		})
+		_node.GoodID = value
+	}
+	if value, ok := pc.mutation.TeamID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: project.FieldTeamID,
+		})
+		_node.TeamID = value
+	}
+	if value, ok := pc.mutation.CapitalIds(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
+			Value:  value,
+			Column: project.FieldCapitalIds,
+		})
+		_node.CapitalIds = value
+	}
+	if value, ok := pc.mutation.Introduction(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: project.FieldIntroduction,
+		})
+		_node.Introduction = value
+	}
+	if value, ok := pc.mutation.Logo(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: project.FieldLogo,
+		})
+		_node.Logo = value
+	}
+	if value, ok := pc.mutation.CreateAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: project.FieldCreateAt,
+		})
+		_node.CreateAt = value
+	}
+	if value, ok := pc.mutation.UpdateAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: project.FieldUpdateAt,
+		})
+		_node.UpdateAt = value
+	}
+	if value, ok := pc.mutation.DeleteAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: project.FieldDeleteAt,
+		})
+		_node.DeleteAt = value
+	}
 	return _node, _spec
 }
 
@@ -126,11 +337,17 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Project.Create().
+//		SetName(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.ProjectUpsert) {
+//			SetName(v+v).
+//		}).
 //		Exec(ctx)
 //
 func (pc *ProjectCreate) OnConflict(opts ...sql.ConflictOption) *ProjectUpsertOne {
@@ -167,17 +384,133 @@ type (
 	}
 )
 
-// UpdateNewValues updates the fields using the new values that were set on create.
+// SetName sets the "name" field.
+func (u *ProjectUpsert) SetName(v string) *ProjectUpsert {
+	u.Set(project.FieldName, v)
+	return u
+}
+
+// UpdateName sets the "name" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateName() *ProjectUpsert {
+	u.SetExcluded(project.FieldName)
+	return u
+}
+
+// SetGoodID sets the "good_id" field.
+func (u *ProjectUpsert) SetGoodID(v uuid.UUID) *ProjectUpsert {
+	u.Set(project.FieldGoodID, v)
+	return u
+}
+
+// UpdateGoodID sets the "good_id" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateGoodID() *ProjectUpsert {
+	u.SetExcluded(project.FieldGoodID)
+	return u
+}
+
+// SetTeamID sets the "team_id" field.
+func (u *ProjectUpsert) SetTeamID(v uuid.UUID) *ProjectUpsert {
+	u.Set(project.FieldTeamID, v)
+	return u
+}
+
+// UpdateTeamID sets the "team_id" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateTeamID() *ProjectUpsert {
+	u.SetExcluded(project.FieldTeamID)
+	return u
+}
+
+// SetCapitalIds sets the "capital_ids" field.
+func (u *ProjectUpsert) SetCapitalIds(v []uuid.UUID) *ProjectUpsert {
+	u.Set(project.FieldCapitalIds, v)
+	return u
+}
+
+// UpdateCapitalIds sets the "capital_ids" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateCapitalIds() *ProjectUpsert {
+	u.SetExcluded(project.FieldCapitalIds)
+	return u
+}
+
+// SetIntroduction sets the "introduction" field.
+func (u *ProjectUpsert) SetIntroduction(v string) *ProjectUpsert {
+	u.Set(project.FieldIntroduction, v)
+	return u
+}
+
+// UpdateIntroduction sets the "introduction" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateIntroduction() *ProjectUpsert {
+	u.SetExcluded(project.FieldIntroduction)
+	return u
+}
+
+// SetLogo sets the "logo" field.
+func (u *ProjectUpsert) SetLogo(v string) *ProjectUpsert {
+	u.Set(project.FieldLogo, v)
+	return u
+}
+
+// UpdateLogo sets the "logo" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateLogo() *ProjectUpsert {
+	u.SetExcluded(project.FieldLogo)
+	return u
+}
+
+// SetCreateAt sets the "create_at" field.
+func (u *ProjectUpsert) SetCreateAt(v uint32) *ProjectUpsert {
+	u.Set(project.FieldCreateAt, v)
+	return u
+}
+
+// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateCreateAt() *ProjectUpsert {
+	u.SetExcluded(project.FieldCreateAt)
+	return u
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (u *ProjectUpsert) SetUpdateAt(v uint32) *ProjectUpsert {
+	u.Set(project.FieldUpdateAt, v)
+	return u
+}
+
+// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateUpdateAt() *ProjectUpsert {
+	u.SetExcluded(project.FieldUpdateAt)
+	return u
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (u *ProjectUpsert) SetDeleteAt(v uint32) *ProjectUpsert {
+	u.Set(project.FieldDeleteAt, v)
+	return u
+}
+
+// UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
+func (u *ProjectUpsert) UpdateDeleteAt() *ProjectUpsert {
+	u.SetExcluded(project.FieldDeleteAt)
+	return u
+}
+
+// UpdateNewValues updates the fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Project.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(project.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 //
 func (u *ProjectUpsertOne) UpdateNewValues() *ProjectUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(project.FieldID)
+		}
+	}))
 	return u
 }
 
@@ -209,6 +542,132 @@ func (u *ProjectUpsertOne) Update(set func(*ProjectUpsert)) *ProjectUpsertOne {
 	return u
 }
 
+// SetName sets the "name" field.
+func (u *ProjectUpsertOne) SetName(v string) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetName(v)
+	})
+}
+
+// UpdateName sets the "name" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateName() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateName()
+	})
+}
+
+// SetGoodID sets the "good_id" field.
+func (u *ProjectUpsertOne) SetGoodID(v uuid.UUID) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetGoodID(v)
+	})
+}
+
+// UpdateGoodID sets the "good_id" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateGoodID() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateGoodID()
+	})
+}
+
+// SetTeamID sets the "team_id" field.
+func (u *ProjectUpsertOne) SetTeamID(v uuid.UUID) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetTeamID(v)
+	})
+}
+
+// UpdateTeamID sets the "team_id" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateTeamID() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateTeamID()
+	})
+}
+
+// SetCapitalIds sets the "capital_ids" field.
+func (u *ProjectUpsertOne) SetCapitalIds(v []uuid.UUID) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetCapitalIds(v)
+	})
+}
+
+// UpdateCapitalIds sets the "capital_ids" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateCapitalIds() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateCapitalIds()
+	})
+}
+
+// SetIntroduction sets the "introduction" field.
+func (u *ProjectUpsertOne) SetIntroduction(v string) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetIntroduction(v)
+	})
+}
+
+// UpdateIntroduction sets the "introduction" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateIntroduction() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateIntroduction()
+	})
+}
+
+// SetLogo sets the "logo" field.
+func (u *ProjectUpsertOne) SetLogo(v string) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetLogo(v)
+	})
+}
+
+// UpdateLogo sets the "logo" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateLogo() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateLogo()
+	})
+}
+
+// SetCreateAt sets the "create_at" field.
+func (u *ProjectUpsertOne) SetCreateAt(v uint32) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetCreateAt(v)
+	})
+}
+
+// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateCreateAt() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateCreateAt()
+	})
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (u *ProjectUpsertOne) SetUpdateAt(v uint32) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetUpdateAt(v)
+	})
+}
+
+// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateUpdateAt() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateUpdateAt()
+	})
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (u *ProjectUpsertOne) SetDeleteAt(v uint32) *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetDeleteAt(v)
+	})
+}
+
+// UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
+func (u *ProjectUpsertOne) UpdateDeleteAt() *ProjectUpsertOne {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateDeleteAt()
+	})
+}
+
 // Exec executes the query.
 func (u *ProjectUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -225,7 +684,12 @@ func (u *ProjectUpsertOne) ExecX(ctx context.Context) {
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *ProjectUpsertOne) ID(ctx context.Context) (id int, err error) {
+func (u *ProjectUpsertOne) ID(ctx context.Context) (id uuid.UUID, err error) {
+	if u.create.driver.Dialect() == dialect.MySQL {
+		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
+		// fields from the database since MySQL does not support the RETURNING clause.
+		return id, errors.New("ent: ProjectUpsertOne.ID is not supported by MySQL driver. Use ProjectUpsertOne.Exec instead")
+	}
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -234,7 +698,7 @@ func (u *ProjectUpsertOne) ID(ctx context.Context) (id int, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *ProjectUpsertOne) IDX(ctx context.Context) int {
+func (u *ProjectUpsertOne) IDX(ctx context.Context) uuid.UUID {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -257,6 +721,7 @@ func (pcb *ProjectCreateBulk) Save(ctx context.Context) ([]*Project, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProjectMutation)
 				if !ok {
@@ -285,10 +750,6 @@ func (pcb *ProjectCreateBulk) Save(ctx context.Context) ([]*Project, error) {
 				}
 				mutation.id = &nodes[i].ID
 				mutation.done = true
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				return nodes[i], nil
 			})
 			for i := len(builder.hooks) - 1; i >= 0; i-- {
@@ -336,6 +797,11 @@ func (pcb *ProjectCreateBulk) ExecX(ctx context.Context) {
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.ProjectUpsert) {
+//			SetName(v+v).
+//		}).
 //		Exec(ctx)
 //
 func (pcb *ProjectCreateBulk) OnConflict(opts ...sql.ConflictOption) *ProjectUpsertBulk {
@@ -371,11 +837,22 @@ type ProjectUpsertBulk struct {
 //	client.Project.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(project.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 //
 func (u *ProjectUpsertBulk) UpdateNewValues() *ProjectUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(project.FieldID)
+				return
+			}
+		}
+	}))
 	return u
 }
 
@@ -405,6 +882,132 @@ func (u *ProjectUpsertBulk) Update(set func(*ProjectUpsert)) *ProjectUpsertBulk 
 		set(&ProjectUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetName sets the "name" field.
+func (u *ProjectUpsertBulk) SetName(v string) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetName(v)
+	})
+}
+
+// UpdateName sets the "name" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateName() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateName()
+	})
+}
+
+// SetGoodID sets the "good_id" field.
+func (u *ProjectUpsertBulk) SetGoodID(v uuid.UUID) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetGoodID(v)
+	})
+}
+
+// UpdateGoodID sets the "good_id" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateGoodID() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateGoodID()
+	})
+}
+
+// SetTeamID sets the "team_id" field.
+func (u *ProjectUpsertBulk) SetTeamID(v uuid.UUID) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetTeamID(v)
+	})
+}
+
+// UpdateTeamID sets the "team_id" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateTeamID() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateTeamID()
+	})
+}
+
+// SetCapitalIds sets the "capital_ids" field.
+func (u *ProjectUpsertBulk) SetCapitalIds(v []uuid.UUID) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetCapitalIds(v)
+	})
+}
+
+// UpdateCapitalIds sets the "capital_ids" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateCapitalIds() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateCapitalIds()
+	})
+}
+
+// SetIntroduction sets the "introduction" field.
+func (u *ProjectUpsertBulk) SetIntroduction(v string) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetIntroduction(v)
+	})
+}
+
+// UpdateIntroduction sets the "introduction" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateIntroduction() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateIntroduction()
+	})
+}
+
+// SetLogo sets the "logo" field.
+func (u *ProjectUpsertBulk) SetLogo(v string) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetLogo(v)
+	})
+}
+
+// UpdateLogo sets the "logo" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateLogo() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateLogo()
+	})
+}
+
+// SetCreateAt sets the "create_at" field.
+func (u *ProjectUpsertBulk) SetCreateAt(v uint32) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetCreateAt(v)
+	})
+}
+
+// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateCreateAt() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateCreateAt()
+	})
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (u *ProjectUpsertBulk) SetUpdateAt(v uint32) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetUpdateAt(v)
+	})
+}
+
+// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateUpdateAt() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateUpdateAt()
+	})
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (u *ProjectUpsertBulk) SetDeleteAt(v uint32) *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.SetDeleteAt(v)
+	})
+}
+
+// UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
+func (u *ProjectUpsertBulk) UpdateDeleteAt() *ProjectUpsertBulk {
+	return u.Update(func(s *ProjectUpsert) {
+		s.UpdateDeleteAt()
+	})
 }
 
 // Exec executes the query.

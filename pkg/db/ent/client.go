@@ -13,6 +13,8 @@ import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/techniqueanalysis"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/trendanalysis"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 
 	"entgo.io/ent/dialect"
@@ -30,6 +32,10 @@ type Client struct {
 	Project *ProjectClient
 	// Team is the client for interacting with the Team builders.
 	Team *TeamClient
+	// TechniqueAnalysis is the client for interacting with the TechniqueAnalysis builders.
+	TechniqueAnalysis *TechniqueAnalysisClient
+	// TrendAnalysis is the client for interacting with the TrendAnalysis builders.
+	TrendAnalysis *TrendAnalysisClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -48,6 +54,8 @@ func (c *Client) init() {
 	c.Capital = NewCapitalClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.Team = NewTeamClient(c.config)
+	c.TechniqueAnalysis = NewTechniqueAnalysisClient(c.config)
+	c.TrendAnalysis = NewTrendAnalysisClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -80,12 +88,14 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:     ctx,
-		config:  cfg,
-		Capital: NewCapitalClient(cfg),
-		Project: NewProjectClient(cfg),
-		Team:    NewTeamClient(cfg),
-		User:    NewUserClient(cfg),
+		ctx:               ctx,
+		config:            cfg,
+		Capital:           NewCapitalClient(cfg),
+		Project:           NewProjectClient(cfg),
+		Team:              NewTeamClient(cfg),
+		TechniqueAnalysis: NewTechniqueAnalysisClient(cfg),
+		TrendAnalysis:     NewTrendAnalysisClient(cfg),
+		User:              NewUserClient(cfg),
 	}, nil
 }
 
@@ -103,11 +113,13 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		config:  cfg,
-		Capital: NewCapitalClient(cfg),
-		Project: NewProjectClient(cfg),
-		Team:    NewTeamClient(cfg),
-		User:    NewUserClient(cfg),
+		config:            cfg,
+		Capital:           NewCapitalClient(cfg),
+		Project:           NewProjectClient(cfg),
+		Team:              NewTeamClient(cfg),
+		TechniqueAnalysis: NewTechniqueAnalysisClient(cfg),
+		TrendAnalysis:     NewTrendAnalysisClient(cfg),
+		User:              NewUserClient(cfg),
 	}, nil
 }
 
@@ -140,6 +152,8 @@ func (c *Client) Use(hooks ...Hook) {
 	c.Capital.Use(hooks...)
 	c.Project.Use(hooks...)
 	c.Team.Use(hooks...)
+	c.TechniqueAnalysis.Use(hooks...)
+	c.TrendAnalysis.Use(hooks...)
 	c.User.Use(hooks...)
 }
 
@@ -273,7 +287,7 @@ func (c *ProjectClient) UpdateOne(pr *Project) *ProjectUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ProjectClient) UpdateOneID(id int) *ProjectUpdateOne {
+func (c *ProjectClient) UpdateOneID(id uuid.UUID) *ProjectUpdateOne {
 	mutation := newProjectMutation(c.config, OpUpdateOne, withProjectID(id))
 	return &ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -290,7 +304,7 @@ func (c *ProjectClient) DeleteOne(pr *Project) *ProjectDeleteOne {
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *ProjectClient) DeleteOneID(id int) *ProjectDeleteOne {
+func (c *ProjectClient) DeleteOneID(id uuid.UUID) *ProjectDeleteOne {
 	builder := c.Delete().Where(project.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -305,12 +319,12 @@ func (c *ProjectClient) Query() *ProjectQuery {
 }
 
 // Get returns a Project entity by its id.
-func (c *ProjectClient) Get(ctx context.Context, id int) (*Project, error) {
+func (c *ProjectClient) Get(ctx context.Context, id uuid.UUID) (*Project, error) {
 	return c.Query().Where(project.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ProjectClient) GetX(ctx context.Context, id int) *Project {
+func (c *ProjectClient) GetX(ctx context.Context, id uuid.UUID) *Project {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -411,6 +425,186 @@ func (c *TeamClient) GetX(ctx context.Context, id uuid.UUID) *Team {
 // Hooks returns the client hooks.
 func (c *TeamClient) Hooks() []Hook {
 	return c.hooks.Team
+}
+
+// TechniqueAnalysisClient is a client for the TechniqueAnalysis schema.
+type TechniqueAnalysisClient struct {
+	config
+}
+
+// NewTechniqueAnalysisClient returns a client for the TechniqueAnalysis from the given config.
+func NewTechniqueAnalysisClient(c config) *TechniqueAnalysisClient {
+	return &TechniqueAnalysisClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `techniqueanalysis.Hooks(f(g(h())))`.
+func (c *TechniqueAnalysisClient) Use(hooks ...Hook) {
+	c.hooks.TechniqueAnalysis = append(c.hooks.TechniqueAnalysis, hooks...)
+}
+
+// Create returns a create builder for TechniqueAnalysis.
+func (c *TechniqueAnalysisClient) Create() *TechniqueAnalysisCreate {
+	mutation := newTechniqueAnalysisMutation(c.config, OpCreate)
+	return &TechniqueAnalysisCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TechniqueAnalysis entities.
+func (c *TechniqueAnalysisClient) CreateBulk(builders ...*TechniqueAnalysisCreate) *TechniqueAnalysisCreateBulk {
+	return &TechniqueAnalysisCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TechniqueAnalysis.
+func (c *TechniqueAnalysisClient) Update() *TechniqueAnalysisUpdate {
+	mutation := newTechniqueAnalysisMutation(c.config, OpUpdate)
+	return &TechniqueAnalysisUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TechniqueAnalysisClient) UpdateOne(ta *TechniqueAnalysis) *TechniqueAnalysisUpdateOne {
+	mutation := newTechniqueAnalysisMutation(c.config, OpUpdateOne, withTechniqueAnalysis(ta))
+	return &TechniqueAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TechniqueAnalysisClient) UpdateOneID(id uuid.UUID) *TechniqueAnalysisUpdateOne {
+	mutation := newTechniqueAnalysisMutation(c.config, OpUpdateOne, withTechniqueAnalysisID(id))
+	return &TechniqueAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TechniqueAnalysis.
+func (c *TechniqueAnalysisClient) Delete() *TechniqueAnalysisDelete {
+	mutation := newTechniqueAnalysisMutation(c.config, OpDelete)
+	return &TechniqueAnalysisDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *TechniqueAnalysisClient) DeleteOne(ta *TechniqueAnalysis) *TechniqueAnalysisDeleteOne {
+	return c.DeleteOneID(ta.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *TechniqueAnalysisClient) DeleteOneID(id uuid.UUID) *TechniqueAnalysisDeleteOne {
+	builder := c.Delete().Where(techniqueanalysis.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TechniqueAnalysisDeleteOne{builder}
+}
+
+// Query returns a query builder for TechniqueAnalysis.
+func (c *TechniqueAnalysisClient) Query() *TechniqueAnalysisQuery {
+	return &TechniqueAnalysisQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a TechniqueAnalysis entity by its id.
+func (c *TechniqueAnalysisClient) Get(ctx context.Context, id uuid.UUID) (*TechniqueAnalysis, error) {
+	return c.Query().Where(techniqueanalysis.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TechniqueAnalysisClient) GetX(ctx context.Context, id uuid.UUID) *TechniqueAnalysis {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TechniqueAnalysisClient) Hooks() []Hook {
+	return c.hooks.TechniqueAnalysis
+}
+
+// TrendAnalysisClient is a client for the TrendAnalysis schema.
+type TrendAnalysisClient struct {
+	config
+}
+
+// NewTrendAnalysisClient returns a client for the TrendAnalysis from the given config.
+func NewTrendAnalysisClient(c config) *TrendAnalysisClient {
+	return &TrendAnalysisClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trendanalysis.Hooks(f(g(h())))`.
+func (c *TrendAnalysisClient) Use(hooks ...Hook) {
+	c.hooks.TrendAnalysis = append(c.hooks.TrendAnalysis, hooks...)
+}
+
+// Create returns a create builder for TrendAnalysis.
+func (c *TrendAnalysisClient) Create() *TrendAnalysisCreate {
+	mutation := newTrendAnalysisMutation(c.config, OpCreate)
+	return &TrendAnalysisCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrendAnalysis entities.
+func (c *TrendAnalysisClient) CreateBulk(builders ...*TrendAnalysisCreate) *TrendAnalysisCreateBulk {
+	return &TrendAnalysisCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrendAnalysis.
+func (c *TrendAnalysisClient) Update() *TrendAnalysisUpdate {
+	mutation := newTrendAnalysisMutation(c.config, OpUpdate)
+	return &TrendAnalysisUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrendAnalysisClient) UpdateOne(ta *TrendAnalysis) *TrendAnalysisUpdateOne {
+	mutation := newTrendAnalysisMutation(c.config, OpUpdateOne, withTrendAnalysis(ta))
+	return &TrendAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrendAnalysisClient) UpdateOneID(id uuid.UUID) *TrendAnalysisUpdateOne {
+	mutation := newTrendAnalysisMutation(c.config, OpUpdateOne, withTrendAnalysisID(id))
+	return &TrendAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrendAnalysis.
+func (c *TrendAnalysisClient) Delete() *TrendAnalysisDelete {
+	mutation := newTrendAnalysisMutation(c.config, OpDelete)
+	return &TrendAnalysisDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *TrendAnalysisClient) DeleteOne(ta *TrendAnalysis) *TrendAnalysisDeleteOne {
+	return c.DeleteOneID(ta.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *TrendAnalysisClient) DeleteOneID(id uuid.UUID) *TrendAnalysisDeleteOne {
+	builder := c.Delete().Where(trendanalysis.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrendAnalysisDeleteOne{builder}
+}
+
+// Query returns a query builder for TrendAnalysis.
+func (c *TrendAnalysisClient) Query() *TrendAnalysisQuery {
+	return &TrendAnalysisQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a TrendAnalysis entity by its id.
+func (c *TrendAnalysisClient) Get(ctx context.Context, id uuid.UUID) (*TrendAnalysis, error) {
+	return c.Query().Where(trendanalysis.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrendAnalysisClient) GetX(ctx context.Context, id uuid.UUID) *TrendAnalysis {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrendAnalysisClient) Hooks() []Hook {
+	return c.hooks.TrendAnalysis
 }
 
 // UserClient is a client for the User schema.

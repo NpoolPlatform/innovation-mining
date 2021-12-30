@@ -26,7 +26,16 @@ var (
 	}
 	// ProjectsColumns holds the columns for the "projects" table.
 	ProjectsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "good_id", Type: field.TypeUUID},
+		{Name: "team_id", Type: field.TypeUUID},
+		{Name: "capital_ids", Type: field.TypeJSON},
+		{Name: "introduction", Type: field.TypeString},
+		{Name: "logo", Type: field.TypeString},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
 	ProjectsTable = &schema.Table{
@@ -52,6 +61,40 @@ var (
 		Name:       "teams",
 		Columns:    TeamsColumns,
 		PrimaryKey: []*schema.Column{TeamsColumns[0]},
+	}
+	// TechniqueAnalysesColumns holds the columns for the "technique_analyses" table.
+	TechniqueAnalysesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "project_id", Type: field.TypeUUID},
+		{Name: "author_id", Type: field.TypeUUID},
+		{Name: "title", Type: field.TypeString},
+		{Name: "content", Type: field.TypeString},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
+	}
+	// TechniqueAnalysesTable holds the schema information for the "technique_analyses" table.
+	TechniqueAnalysesTable = &schema.Table{
+		Name:       "technique_analyses",
+		Columns:    TechniqueAnalysesColumns,
+		PrimaryKey: []*schema.Column{TechniqueAnalysesColumns[0]},
+	}
+	// TrendAnalysesColumns holds the columns for the "trend_analyses" table.
+	TrendAnalysesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "project_id", Type: field.TypeUUID},
+		{Name: "author_id", Type: field.TypeUUID},
+		{Name: "title", Type: field.TypeString},
+		{Name: "content", Type: field.TypeString},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
+	}
+	// TrendAnalysesTable holds the schema information for the "trend_analyses" table.
+	TrendAnalysesTable = &schema.Table{
+		Name:       "trend_analyses",
+		Columns:    TrendAnalysesColumns,
+		PrimaryKey: []*schema.Column{TrendAnalysesColumns[0]},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
@@ -81,6 +124,8 @@ var (
 		CapitalsTable,
 		ProjectsTable,
 		TeamsTable,
+		TechniqueAnalysesTable,
+		TrendAnalysesTable,
 		UsersTable,
 	}
 )

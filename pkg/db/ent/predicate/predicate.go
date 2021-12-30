@@ -15,5 +15,11 @@ type Project func(*sql.Selector)
 // Team is the predicate function for team builders.
 type Team func(*sql.Selector)
 
+// TechniqueAnalysis is the predicate function for techniqueanalysis builders.
+type TechniqueAnalysis func(*sql.Selector)
+
+// TrendAnalysis is the predicate function for trendanalysis builders.
+type TrendAnalysis func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

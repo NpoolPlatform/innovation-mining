@@ -11,6 +11,8 @@ import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/techniqueanalysis"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/trendanalysis"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 )
 
@@ -32,10 +34,12 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		capital.Table: capital.ValidColumn,
-		project.Table: project.ValidColumn,
-		team.Table:    team.ValidColumn,
-		user.Table:    user.ValidColumn,
+		capital.Table:           capital.ValidColumn,
+		project.Table:           project.ValidColumn,
+		team.Table:              team.ValidColumn,
+		techniqueanalysis.Table: techniqueanalysis.ValidColumn,
+		trendanalysis.Table:     trendanalysis.ValidColumn,
+		user.Table:              user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

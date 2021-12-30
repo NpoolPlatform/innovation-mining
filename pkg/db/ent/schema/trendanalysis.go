@@ -9,24 +9,21 @@ import (
 	"github.com/google/uuid"
 )
 
-// Project holds the schema definition for the Project entity.
-type Project struct {
+// TrendAnalysis holds the schema definition for the TrendAnalysis entity.
+type TrendAnalysis struct {
 	ent.Schema
 }
 
-// Fields of the Project.
-func (Project) Fields() []ent.Field {
+// Fields of the TrendAnalysis.
+func (TrendAnalysis) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
-		field.String("name").
-			Unique(),
-		field.UUID("good_id", uuid.UUID{}),
-		field.UUID("team_id", uuid.UUID{}),
-		field.JSON("capital_ids", []uuid.UUID{}),
-		field.String("introduction"),
-		field.String("logo"),
+		field.UUID("project_id", uuid.UUID{}),
+		field.UUID("author_id", uuid.UUID{}),
+		field.String("title"),
+		field.String("content"),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {
 				return uint32(time.Now().Unix())
@@ -45,7 +42,7 @@ func (Project) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Project.
-func (Project) Edges() []ent.Edge {
+// Edges of the TrendAnalysis.
+func (TrendAnalysis) Edges() []ent.Edge {
 	return nil
 }

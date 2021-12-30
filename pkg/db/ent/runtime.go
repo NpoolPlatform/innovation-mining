@@ -4,8 +4,11 @@ package ent
 
 import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/schema"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/techniqueanalysis"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/trendanalysis"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 	"github.com/google/uuid"
 )
@@ -34,6 +37,26 @@ func init() {
 	capitalDescID := capitalFields[0].Descriptor()
 	// capital.DefaultID holds the default value on creation for the id field.
 	capital.DefaultID = capitalDescID.Default.(func() uuid.UUID)
+	projectFields := schema.Project{}.Fields()
+	_ = projectFields
+	// projectDescCreateAt is the schema descriptor for create_at field.
+	projectDescCreateAt := projectFields[7].Descriptor()
+	// project.DefaultCreateAt holds the default value on creation for the create_at field.
+	project.DefaultCreateAt = projectDescCreateAt.Default.(func() uint32)
+	// projectDescUpdateAt is the schema descriptor for update_at field.
+	projectDescUpdateAt := projectFields[8].Descriptor()
+	// project.DefaultUpdateAt holds the default value on creation for the update_at field.
+	project.DefaultUpdateAt = projectDescUpdateAt.Default.(func() uint32)
+	// project.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	project.UpdateDefaultUpdateAt = projectDescUpdateAt.UpdateDefault.(func() uint32)
+	// projectDescDeleteAt is the schema descriptor for delete_at field.
+	projectDescDeleteAt := projectFields[9].Descriptor()
+	// project.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	project.DefaultDeleteAt = projectDescDeleteAt.Default.(func() uint32)
+	// projectDescID is the schema descriptor for id field.
+	projectDescID := projectFields[0].Descriptor()
+	// project.DefaultID holds the default value on creation for the id field.
+	project.DefaultID = projectDescID.Default.(func() uuid.UUID)
 	teamFields := schema.Team{}.Fields()
 	_ = teamFields
 	// teamDescCreateAt is the schema descriptor for create_at field.
@@ -54,6 +77,46 @@ func init() {
 	teamDescID := teamFields[0].Descriptor()
 	// team.DefaultID holds the default value on creation for the id field.
 	team.DefaultID = teamDescID.Default.(func() uuid.UUID)
+	techniqueanalysisFields := schema.TechniqueAnalysis{}.Fields()
+	_ = techniqueanalysisFields
+	// techniqueanalysisDescCreateAt is the schema descriptor for create_at field.
+	techniqueanalysisDescCreateAt := techniqueanalysisFields[5].Descriptor()
+	// techniqueanalysis.DefaultCreateAt holds the default value on creation for the create_at field.
+	techniqueanalysis.DefaultCreateAt = techniqueanalysisDescCreateAt.Default.(func() uint32)
+	// techniqueanalysisDescUpdateAt is the schema descriptor for update_at field.
+	techniqueanalysisDescUpdateAt := techniqueanalysisFields[6].Descriptor()
+	// techniqueanalysis.DefaultUpdateAt holds the default value on creation for the update_at field.
+	techniqueanalysis.DefaultUpdateAt = techniqueanalysisDescUpdateAt.Default.(func() uint32)
+	// techniqueanalysis.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	techniqueanalysis.UpdateDefaultUpdateAt = techniqueanalysisDescUpdateAt.UpdateDefault.(func() uint32)
+	// techniqueanalysisDescDeleteAt is the schema descriptor for delete_at field.
+	techniqueanalysisDescDeleteAt := techniqueanalysisFields[7].Descriptor()
+	// techniqueanalysis.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	techniqueanalysis.DefaultDeleteAt = techniqueanalysisDescDeleteAt.Default.(func() uint32)
+	// techniqueanalysisDescID is the schema descriptor for id field.
+	techniqueanalysisDescID := techniqueanalysisFields[0].Descriptor()
+	// techniqueanalysis.DefaultID holds the default value on creation for the id field.
+	techniqueanalysis.DefaultID = techniqueanalysisDescID.Default.(func() uuid.UUID)
+	trendanalysisFields := schema.TrendAnalysis{}.Fields()
+	_ = trendanalysisFields
+	// trendanalysisDescCreateAt is the schema descriptor for create_at field.
+	trendanalysisDescCreateAt := trendanalysisFields[5].Descriptor()
+	// trendanalysis.DefaultCreateAt holds the default value on creation for the create_at field.
+	trendanalysis.DefaultCreateAt = trendanalysisDescCreateAt.Default.(func() uint32)
+	// trendanalysisDescUpdateAt is the schema descriptor for update_at field.
+	trendanalysisDescUpdateAt := trendanalysisFields[6].Descriptor()
+	// trendanalysis.DefaultUpdateAt holds the default value on creation for the update_at field.
+	trendanalysis.DefaultUpdateAt = trendanalysisDescUpdateAt.Default.(func() uint32)
+	// trendanalysis.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	trendanalysis.UpdateDefaultUpdateAt = trendanalysisDescUpdateAt.UpdateDefault.(func() uint32)
+	// trendanalysisDescDeleteAt is the schema descriptor for delete_at field.
+	trendanalysisDescDeleteAt := trendanalysisFields[7].Descriptor()
+	// trendanalysis.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	trendanalysis.DefaultDeleteAt = trendanalysisDescDeleteAt.Default.(func() uint32)
+	// trendanalysisDescID is the schema descriptor for id field.
+	trendanalysisDescID := trendanalysisFields[0].Descriptor()
+	// trendanalysis.DefaultID holds the default value on creation for the id field.
+	trendanalysis.DefaultID = trendanalysisDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCreateAt is the schema descriptor for create_at field.

@@ -48,6 +48,32 @@ func (f TeamFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	return f(ctx, mv)
 }
 
+// The TechniqueAnalysisFunc type is an adapter to allow the use of ordinary
+// function as TechniqueAnalysis mutator.
+type TechniqueAnalysisFunc func(context.Context, *ent.TechniqueAnalysisMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TechniqueAnalysisFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.TechniqueAnalysisMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TechniqueAnalysisMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The TrendAnalysisFunc type is an adapter to allow the use of ordinary
+// function as TrendAnalysis mutator.
+type TrendAnalysisFunc func(context.Context, *ent.TrendAnalysisMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrendAnalysisFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.TrendAnalysisMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TrendAnalysisMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
