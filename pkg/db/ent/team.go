@@ -3,18 +3,36 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/google/uuid"
 )
 
 // Team is the model entity for the Team schema.
 type Team struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// TeamName holds the value of the "team_name" field.
+	TeamName string `json:"team_name,omitempty"`
+	// TeamLogo holds the value of the "team_logo" field.
+	TeamLogo string `json:"team_logo,omitempty"`
+	// LeaderID holds the value of the "leader_id" field.
+	LeaderID uuid.UUID `json:"leader_id,omitempty"`
+	// MemberIds holds the value of the "member_ids" field.
+	MemberIds []uuid.UUID `json:"member_ids,omitempty"`
+	// Introduction holds the value of the "introduction" field.
+	Introduction string `json:"introduction,omitempty"`
+	// CreateAt holds the value of the "create_at" field.
+	CreateAt uint32 `json:"create_at,omitempty"`
+	// UpdateAt holds the value of the "update_at" field.
+	UpdateAt uint32 `json:"update_at,omitempty"`
+	// DeleteAt holds the value of the "delete_at" field.
+	DeleteAt uint32 `json:"delete_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -22,8 +40,14 @@ func (*Team) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case team.FieldID:
+		case team.FieldMemberIds:
+			values[i] = new([]byte)
+		case team.FieldCreateAt, team.FieldUpdateAt, team.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
+		case team.FieldTeamName, team.FieldTeamLogo, team.FieldIntroduction:
+			values[i] = new(sql.NullString)
+		case team.FieldID, team.FieldLeaderID:
+			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Team", columns[i])
 		}
@@ -40,11 +64,61 @@ func (t *Team) assignValues(columns []string, values []interface{}) error {
 	for i := range columns {
 		switch columns[i] {
 		case team.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				t.ID = *value
 			}
-			t.ID = int(value.Int64)
+		case team.FieldTeamName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field team_name", values[i])
+			} else if value.Valid {
+				t.TeamName = value.String
+			}
+		case team.FieldTeamLogo:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field team_logo", values[i])
+			} else if value.Valid {
+				t.TeamLogo = value.String
+			}
+		case team.FieldLeaderID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field leader_id", values[i])
+			} else if value != nil {
+				t.LeaderID = *value
+			}
+		case team.FieldMemberIds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field member_ids", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &t.MemberIds); err != nil {
+					return fmt.Errorf("unmarshal field member_ids: %w", err)
+				}
+			}
+		case team.FieldIntroduction:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field introduction", values[i])
+			} else if value.Valid {
+				t.Introduction = value.String
+			}
+		case team.FieldCreateAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field create_at", values[i])
+			} else if value.Valid {
+				t.CreateAt = uint32(value.Int64)
+			}
+		case team.FieldUpdateAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field update_at", values[i])
+			} else if value.Valid {
+				t.UpdateAt = uint32(value.Int64)
+			}
+		case team.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				t.DeleteAt = uint32(value.Int64)
+			}
 		}
 	}
 	return nil
@@ -73,6 +147,22 @@ func (t *Team) String() string {
 	var builder strings.Builder
 	builder.WriteString("Team(")
 	builder.WriteString(fmt.Sprintf("id=%v", t.ID))
+	builder.WriteString(", team_name=")
+	builder.WriteString(t.TeamName)
+	builder.WriteString(", team_logo=")
+	builder.WriteString(t.TeamLogo)
+	builder.WriteString(", leader_id=")
+	builder.WriteString(fmt.Sprintf("%v", t.LeaderID))
+	builder.WriteString(", member_ids=")
+	builder.WriteString(fmt.Sprintf("%v", t.MemberIds))
+	builder.WriteString(", introduction=")
+	builder.WriteString(t.Introduction)
+	builder.WriteString(", create_at=")
+	builder.WriteString(fmt.Sprintf("%v", t.CreateAt))
+	builder.WriteString(", update_at=")
+	builder.WriteString(fmt.Sprintf("%v", t.UpdateAt))
+	builder.WriteString(", delete_at=")
+	builder.WriteString(fmt.Sprintf("%v", t.DeleteAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

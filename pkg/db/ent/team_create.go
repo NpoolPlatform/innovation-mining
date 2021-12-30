@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/google/uuid"
 )
 
 // TeamCreate is the builder for creating a Team entity.
@@ -19,6 +21,84 @@ type TeamCreate struct {
 	mutation *TeamMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
+}
+
+// SetTeamName sets the "team_name" field.
+func (tc *TeamCreate) SetTeamName(s string) *TeamCreate {
+	tc.mutation.SetTeamName(s)
+	return tc
+}
+
+// SetTeamLogo sets the "team_logo" field.
+func (tc *TeamCreate) SetTeamLogo(s string) *TeamCreate {
+	tc.mutation.SetTeamLogo(s)
+	return tc
+}
+
+// SetLeaderID sets the "leader_id" field.
+func (tc *TeamCreate) SetLeaderID(u uuid.UUID) *TeamCreate {
+	tc.mutation.SetLeaderID(u)
+	return tc
+}
+
+// SetMemberIds sets the "member_ids" field.
+func (tc *TeamCreate) SetMemberIds(u []uuid.UUID) *TeamCreate {
+	tc.mutation.SetMemberIds(u)
+	return tc
+}
+
+// SetIntroduction sets the "introduction" field.
+func (tc *TeamCreate) SetIntroduction(s string) *TeamCreate {
+	tc.mutation.SetIntroduction(s)
+	return tc
+}
+
+// SetCreateAt sets the "create_at" field.
+func (tc *TeamCreate) SetCreateAt(u uint32) *TeamCreate {
+	tc.mutation.SetCreateAt(u)
+	return tc
+}
+
+// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
+func (tc *TeamCreate) SetNillableCreateAt(u *uint32) *TeamCreate {
+	if u != nil {
+		tc.SetCreateAt(*u)
+	}
+	return tc
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (tc *TeamCreate) SetUpdateAt(u uint32) *TeamCreate {
+	tc.mutation.SetUpdateAt(u)
+	return tc
+}
+
+// SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
+func (tc *TeamCreate) SetNillableUpdateAt(u *uint32) *TeamCreate {
+	if u != nil {
+		tc.SetUpdateAt(*u)
+	}
+	return tc
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (tc *TeamCreate) SetDeleteAt(u uint32) *TeamCreate {
+	tc.mutation.SetDeleteAt(u)
+	return tc
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (tc *TeamCreate) SetNillableDeleteAt(u *uint32) *TeamCreate {
+	if u != nil {
+		tc.SetDeleteAt(*u)
+	}
+	return tc
+}
+
+// SetID sets the "id" field.
+func (tc *TeamCreate) SetID(u uuid.UUID) *TeamCreate {
+	tc.mutation.SetID(u)
+	return tc
 }
 
 // Mutation returns the TeamMutation object of the builder.
@@ -32,6 +112,7 @@ func (tc *TeamCreate) Save(ctx context.Context) (*Team, error) {
 		err  error
 		node *Team
 	)
+	tc.defaults()
 	if len(tc.hooks) == 0 {
 		if err = tc.check(); err != nil {
 			return nil, err
@@ -89,8 +170,52 @@ func (tc *TeamCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tc *TeamCreate) defaults() {
+	if _, ok := tc.mutation.CreateAt(); !ok {
+		v := team.DefaultCreateAt()
+		tc.mutation.SetCreateAt(v)
+	}
+	if _, ok := tc.mutation.UpdateAt(); !ok {
+		v := team.DefaultUpdateAt()
+		tc.mutation.SetUpdateAt(v)
+	}
+	if _, ok := tc.mutation.DeleteAt(); !ok {
+		v := team.DefaultDeleteAt()
+		tc.mutation.SetDeleteAt(v)
+	}
+	if _, ok := tc.mutation.ID(); !ok {
+		v := team.DefaultID()
+		tc.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (tc *TeamCreate) check() error {
+	if _, ok := tc.mutation.TeamName(); !ok {
+		return &ValidationError{Name: "team_name", err: errors.New(`ent: missing required field "team_name"`)}
+	}
+	if _, ok := tc.mutation.TeamLogo(); !ok {
+		return &ValidationError{Name: "team_logo", err: errors.New(`ent: missing required field "team_logo"`)}
+	}
+	if _, ok := tc.mutation.LeaderID(); !ok {
+		return &ValidationError{Name: "leader_id", err: errors.New(`ent: missing required field "leader_id"`)}
+	}
+	if _, ok := tc.mutation.MemberIds(); !ok {
+		return &ValidationError{Name: "member_ids", err: errors.New(`ent: missing required field "member_ids"`)}
+	}
+	if _, ok := tc.mutation.Introduction(); !ok {
+		return &ValidationError{Name: "introduction", err: errors.New(`ent: missing required field "introduction"`)}
+	}
+	if _, ok := tc.mutation.CreateAt(); !ok {
+		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
+	}
+	if _, ok := tc.mutation.UpdateAt(); !ok {
+		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "update_at"`)}
+	}
+	if _, ok := tc.mutation.DeleteAt(); !ok {
+		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "delete_at"`)}
+	}
 	return nil
 }
 
@@ -102,8 +227,9 @@ func (tc *TeamCreate) sqlSave(ctx context.Context) (*Team, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		_node.ID = _spec.ID.Value.(uuid.UUID)
+	}
 	return _node, nil
 }
 
@@ -113,12 +239,80 @@ func (tc *TeamCreate) createSpec() (*Team, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: team.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: team.FieldID,
 			},
 		}
 	)
 	_spec.OnConflict = tc.conflict
+	if id, ok := tc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := tc.mutation.TeamName(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldTeamName,
+		})
+		_node.TeamName = value
+	}
+	if value, ok := tc.mutation.TeamLogo(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldTeamLogo,
+		})
+		_node.TeamLogo = value
+	}
+	if value, ok := tc.mutation.LeaderID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: team.FieldLeaderID,
+		})
+		_node.LeaderID = value
+	}
+	if value, ok := tc.mutation.MemberIds(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
+			Value:  value,
+			Column: team.FieldMemberIds,
+		})
+		_node.MemberIds = value
+	}
+	if value, ok := tc.mutation.Introduction(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldIntroduction,
+		})
+		_node.Introduction = value
+	}
+	if value, ok := tc.mutation.CreateAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldCreateAt,
+		})
+		_node.CreateAt = value
+	}
+	if value, ok := tc.mutation.UpdateAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldUpdateAt,
+		})
+		_node.UpdateAt = value
+	}
+	if value, ok := tc.mutation.DeleteAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldDeleteAt,
+		})
+		_node.DeleteAt = value
+	}
 	return _node, _spec
 }
 
@@ -126,11 +320,17 @@ func (tc *TeamCreate) createSpec() (*Team, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Team.Create().
+//		SetTeamName(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.TeamUpsert) {
+//			SetTeamName(v+v).
+//		}).
 //		Exec(ctx)
 //
 func (tc *TeamCreate) OnConflict(opts ...sql.ConflictOption) *TeamUpsertOne {
@@ -167,17 +367,121 @@ type (
 	}
 )
 
-// UpdateNewValues updates the fields using the new values that were set on create.
+// SetTeamName sets the "team_name" field.
+func (u *TeamUpsert) SetTeamName(v string) *TeamUpsert {
+	u.Set(team.FieldTeamName, v)
+	return u
+}
+
+// UpdateTeamName sets the "team_name" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateTeamName() *TeamUpsert {
+	u.SetExcluded(team.FieldTeamName)
+	return u
+}
+
+// SetTeamLogo sets the "team_logo" field.
+func (u *TeamUpsert) SetTeamLogo(v string) *TeamUpsert {
+	u.Set(team.FieldTeamLogo, v)
+	return u
+}
+
+// UpdateTeamLogo sets the "team_logo" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateTeamLogo() *TeamUpsert {
+	u.SetExcluded(team.FieldTeamLogo)
+	return u
+}
+
+// SetLeaderID sets the "leader_id" field.
+func (u *TeamUpsert) SetLeaderID(v uuid.UUID) *TeamUpsert {
+	u.Set(team.FieldLeaderID, v)
+	return u
+}
+
+// UpdateLeaderID sets the "leader_id" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateLeaderID() *TeamUpsert {
+	u.SetExcluded(team.FieldLeaderID)
+	return u
+}
+
+// SetMemberIds sets the "member_ids" field.
+func (u *TeamUpsert) SetMemberIds(v []uuid.UUID) *TeamUpsert {
+	u.Set(team.FieldMemberIds, v)
+	return u
+}
+
+// UpdateMemberIds sets the "member_ids" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateMemberIds() *TeamUpsert {
+	u.SetExcluded(team.FieldMemberIds)
+	return u
+}
+
+// SetIntroduction sets the "introduction" field.
+func (u *TeamUpsert) SetIntroduction(v string) *TeamUpsert {
+	u.Set(team.FieldIntroduction, v)
+	return u
+}
+
+// UpdateIntroduction sets the "introduction" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateIntroduction() *TeamUpsert {
+	u.SetExcluded(team.FieldIntroduction)
+	return u
+}
+
+// SetCreateAt sets the "create_at" field.
+func (u *TeamUpsert) SetCreateAt(v uint32) *TeamUpsert {
+	u.Set(team.FieldCreateAt, v)
+	return u
+}
+
+// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateCreateAt() *TeamUpsert {
+	u.SetExcluded(team.FieldCreateAt)
+	return u
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (u *TeamUpsert) SetUpdateAt(v uint32) *TeamUpsert {
+	u.Set(team.FieldUpdateAt, v)
+	return u
+}
+
+// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateUpdateAt() *TeamUpsert {
+	u.SetExcluded(team.FieldUpdateAt)
+	return u
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (u *TeamUpsert) SetDeleteAt(v uint32) *TeamUpsert {
+	u.Set(team.FieldDeleteAt, v)
+	return u
+}
+
+// UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateDeleteAt() *TeamUpsert {
+	u.SetExcluded(team.FieldDeleteAt)
+	return u
+}
+
+// UpdateNewValues updates the fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Team.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(team.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 //
 func (u *TeamUpsertOne) UpdateNewValues() *TeamUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(team.FieldID)
+		}
+	}))
 	return u
 }
 
@@ -209,6 +513,118 @@ func (u *TeamUpsertOne) Update(set func(*TeamUpsert)) *TeamUpsertOne {
 	return u
 }
 
+// SetTeamName sets the "team_name" field.
+func (u *TeamUpsertOne) SetTeamName(v string) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetTeamName(v)
+	})
+}
+
+// UpdateTeamName sets the "team_name" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateTeamName() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateTeamName()
+	})
+}
+
+// SetTeamLogo sets the "team_logo" field.
+func (u *TeamUpsertOne) SetTeamLogo(v string) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetTeamLogo(v)
+	})
+}
+
+// UpdateTeamLogo sets the "team_logo" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateTeamLogo() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateTeamLogo()
+	})
+}
+
+// SetLeaderID sets the "leader_id" field.
+func (u *TeamUpsertOne) SetLeaderID(v uuid.UUID) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetLeaderID(v)
+	})
+}
+
+// UpdateLeaderID sets the "leader_id" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateLeaderID() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateLeaderID()
+	})
+}
+
+// SetMemberIds sets the "member_ids" field.
+func (u *TeamUpsertOne) SetMemberIds(v []uuid.UUID) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetMemberIds(v)
+	})
+}
+
+// UpdateMemberIds sets the "member_ids" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateMemberIds() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateMemberIds()
+	})
+}
+
+// SetIntroduction sets the "introduction" field.
+func (u *TeamUpsertOne) SetIntroduction(v string) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetIntroduction(v)
+	})
+}
+
+// UpdateIntroduction sets the "introduction" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateIntroduction() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateIntroduction()
+	})
+}
+
+// SetCreateAt sets the "create_at" field.
+func (u *TeamUpsertOne) SetCreateAt(v uint32) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetCreateAt(v)
+	})
+}
+
+// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateCreateAt() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateCreateAt()
+	})
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (u *TeamUpsertOne) SetUpdateAt(v uint32) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetUpdateAt(v)
+	})
+}
+
+// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateUpdateAt() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateUpdateAt()
+	})
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (u *TeamUpsertOne) SetDeleteAt(v uint32) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetDeleteAt(v)
+	})
+}
+
+// UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateDeleteAt() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateDeleteAt()
+	})
+}
+
 // Exec executes the query.
 func (u *TeamUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -225,7 +641,12 @@ func (u *TeamUpsertOne) ExecX(ctx context.Context) {
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *TeamUpsertOne) ID(ctx context.Context) (id int, err error) {
+func (u *TeamUpsertOne) ID(ctx context.Context) (id uuid.UUID, err error) {
+	if u.create.driver.Dialect() == dialect.MySQL {
+		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
+		// fields from the database since MySQL does not support the RETURNING clause.
+		return id, errors.New("ent: TeamUpsertOne.ID is not supported by MySQL driver. Use TeamUpsertOne.Exec instead")
+	}
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -234,7 +655,7 @@ func (u *TeamUpsertOne) ID(ctx context.Context) (id int, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *TeamUpsertOne) IDX(ctx context.Context) int {
+func (u *TeamUpsertOne) IDX(ctx context.Context) uuid.UUID {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -257,6 +678,7 @@ func (tcb *TeamCreateBulk) Save(ctx context.Context) ([]*Team, error) {
 	for i := range tcb.builders {
 		func(i int, root context.Context) {
 			builder := tcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TeamMutation)
 				if !ok {
@@ -285,10 +707,6 @@ func (tcb *TeamCreateBulk) Save(ctx context.Context) ([]*Team, error) {
 				}
 				mutation.id = &nodes[i].ID
 				mutation.done = true
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				return nodes[i], nil
 			})
 			for i := len(builder.hooks) - 1; i >= 0; i-- {
@@ -336,6 +754,11 @@ func (tcb *TeamCreateBulk) ExecX(ctx context.Context) {
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.TeamUpsert) {
+//			SetTeamName(v+v).
+//		}).
 //		Exec(ctx)
 //
 func (tcb *TeamCreateBulk) OnConflict(opts ...sql.ConflictOption) *TeamUpsertBulk {
@@ -371,11 +794,22 @@ type TeamUpsertBulk struct {
 //	client.Team.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(team.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 //
 func (u *TeamUpsertBulk) UpdateNewValues() *TeamUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(team.FieldID)
+				return
+			}
+		}
+	}))
 	return u
 }
 
@@ -405,6 +839,118 @@ func (u *TeamUpsertBulk) Update(set func(*TeamUpsert)) *TeamUpsertBulk {
 		set(&TeamUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetTeamName sets the "team_name" field.
+func (u *TeamUpsertBulk) SetTeamName(v string) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetTeamName(v)
+	})
+}
+
+// UpdateTeamName sets the "team_name" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateTeamName() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateTeamName()
+	})
+}
+
+// SetTeamLogo sets the "team_logo" field.
+func (u *TeamUpsertBulk) SetTeamLogo(v string) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetTeamLogo(v)
+	})
+}
+
+// UpdateTeamLogo sets the "team_logo" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateTeamLogo() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateTeamLogo()
+	})
+}
+
+// SetLeaderID sets the "leader_id" field.
+func (u *TeamUpsertBulk) SetLeaderID(v uuid.UUID) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetLeaderID(v)
+	})
+}
+
+// UpdateLeaderID sets the "leader_id" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateLeaderID() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateLeaderID()
+	})
+}
+
+// SetMemberIds sets the "member_ids" field.
+func (u *TeamUpsertBulk) SetMemberIds(v []uuid.UUID) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetMemberIds(v)
+	})
+}
+
+// UpdateMemberIds sets the "member_ids" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateMemberIds() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateMemberIds()
+	})
+}
+
+// SetIntroduction sets the "introduction" field.
+func (u *TeamUpsertBulk) SetIntroduction(v string) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetIntroduction(v)
+	})
+}
+
+// UpdateIntroduction sets the "introduction" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateIntroduction() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateIntroduction()
+	})
+}
+
+// SetCreateAt sets the "create_at" field.
+func (u *TeamUpsertBulk) SetCreateAt(v uint32) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetCreateAt(v)
+	})
+}
+
+// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateCreateAt() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateCreateAt()
+	})
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (u *TeamUpsertBulk) SetUpdateAt(v uint32) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetUpdateAt(v)
+	})
+}
+
+// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateUpdateAt() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateUpdateAt()
+	})
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (u *TeamUpsertBulk) SetDeleteAt(v uint32) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetDeleteAt(v)
+	})
+}
+
+// UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateDeleteAt() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateDeleteAt()
+	})
 }
 
 // Exec executes the query.

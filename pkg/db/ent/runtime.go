@@ -5,6 +5,7 @@ package ent
 import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/member"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/schema"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
 	"github.com/google/uuid"
 )
 
@@ -32,4 +33,24 @@ func init() {
 	memberDescID := memberFields[0].Descriptor()
 	// member.DefaultID holds the default value on creation for the id field.
 	member.DefaultID = memberDescID.Default.(func() uuid.UUID)
+	teamFields := schema.Team{}.Fields()
+	_ = teamFields
+	// teamDescCreateAt is the schema descriptor for create_at field.
+	teamDescCreateAt := teamFields[6].Descriptor()
+	// team.DefaultCreateAt holds the default value on creation for the create_at field.
+	team.DefaultCreateAt = teamDescCreateAt.Default.(func() uint32)
+	// teamDescUpdateAt is the schema descriptor for update_at field.
+	teamDescUpdateAt := teamFields[7].Descriptor()
+	// team.DefaultUpdateAt holds the default value on creation for the update_at field.
+	team.DefaultUpdateAt = teamDescUpdateAt.Default.(func() uint32)
+	// team.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	team.UpdateDefaultUpdateAt = teamDescUpdateAt.UpdateDefault.(func() uint32)
+	// teamDescDeleteAt is the schema descriptor for delete_at field.
+	teamDescDeleteAt := teamFields[8].Descriptor()
+	// team.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	team.DefaultDeleteAt = teamDescDeleteAt.Default.(func() uint32)
+	// teamDescID is the schema descriptor for id field.
+	teamDescID := teamFields[0].Descriptor()
+	// team.DefaultID holds the default value on creation for the id field.
+	team.DefaultID = teamDescID.Default.(func() uuid.UUID)
 }

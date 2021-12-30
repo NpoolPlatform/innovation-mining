@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/google/uuid"
 )
 
 // TeamQuery is the builder for querying Team entities.
@@ -84,8 +85,8 @@ func (tq *TeamQuery) FirstX(ctx context.Context) *Team {
 
 // FirstID returns the first Team ID from the query.
 // Returns a *NotFoundError when no Team ID was found.
-func (tq *TeamQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (tq *TeamQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = tq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -97,7 +98,7 @@ func (tq *TeamQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tq *TeamQuery) FirstIDX(ctx context.Context) int {
+func (tq *TeamQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := tq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -135,8 +136,8 @@ func (tq *TeamQuery) OnlyX(ctx context.Context) *Team {
 // OnlyID is like Only, but returns the only Team ID in the query.
 // Returns a *NotSingularError when exactly one Team ID is not found.
 // Returns a *NotFoundError when no entities are found.
-func (tq *TeamQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (tq *TeamQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = tq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -152,7 +153,7 @@ func (tq *TeamQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tq *TeamQuery) OnlyIDX(ctx context.Context) int {
+func (tq *TeamQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := tq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,8 +179,8 @@ func (tq *TeamQuery) AllX(ctx context.Context) []*Team {
 }
 
 // IDs executes the query and returns a list of Team IDs.
-func (tq *TeamQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (tq *TeamQuery) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	var ids []uuid.UUID
 	if err := tq.Select(team.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -187,7 +188,7 @@ func (tq *TeamQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tq *TeamQuery) IDsX(ctx context.Context) []int {
+func (tq *TeamQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := tq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +250,19 @@ func (tq *TeamQuery) Clone() *TeamQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		TeamName string `json:"team_name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Team.Query().
+//		GroupBy(team.FieldTeamName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
+//
 func (tq *TeamQuery) GroupBy(field string, fields ...string) *TeamGroupBy {
 	group := &TeamGroupBy{config: tq.config}
 	group.fields = append([]string{field}, fields...)
@@ -263,6 +277,17 @@ func (tq *TeamQuery) GroupBy(field string, fields ...string) *TeamGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		TeamName string `json:"team_name,omitempty"`
+//	}
+//
+//	client.Team.Query().
+//		Select(team.FieldTeamName).
+//		Scan(ctx, &v)
+//
 func (tq *TeamQuery) Select(fields ...string) *TeamSelect {
 	tq.fields = append(tq.fields, fields...)
 	return &TeamSelect{TeamQuery: tq}
@@ -329,7 +354,7 @@ func (tq *TeamQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   team.Table,
 			Columns: team.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: team.FieldID,
 			},
 		},

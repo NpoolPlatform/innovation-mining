@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/google/uuid"
 )
 
 // TeamUpdate is the builder for updating Team entities.
@@ -26,6 +27,91 @@ func (tu *TeamUpdate) Where(ps ...predicate.Team) *TeamUpdate {
 	return tu
 }
 
+// SetTeamName sets the "team_name" field.
+func (tu *TeamUpdate) SetTeamName(s string) *TeamUpdate {
+	tu.mutation.SetTeamName(s)
+	return tu
+}
+
+// SetTeamLogo sets the "team_logo" field.
+func (tu *TeamUpdate) SetTeamLogo(s string) *TeamUpdate {
+	tu.mutation.SetTeamLogo(s)
+	return tu
+}
+
+// SetLeaderID sets the "leader_id" field.
+func (tu *TeamUpdate) SetLeaderID(u uuid.UUID) *TeamUpdate {
+	tu.mutation.SetLeaderID(u)
+	return tu
+}
+
+// SetMemberIds sets the "member_ids" field.
+func (tu *TeamUpdate) SetMemberIds(u []uuid.UUID) *TeamUpdate {
+	tu.mutation.SetMemberIds(u)
+	return tu
+}
+
+// SetIntroduction sets the "introduction" field.
+func (tu *TeamUpdate) SetIntroduction(s string) *TeamUpdate {
+	tu.mutation.SetIntroduction(s)
+	return tu
+}
+
+// SetCreateAt sets the "create_at" field.
+func (tu *TeamUpdate) SetCreateAt(u uint32) *TeamUpdate {
+	tu.mutation.ResetCreateAt()
+	tu.mutation.SetCreateAt(u)
+	return tu
+}
+
+// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
+func (tu *TeamUpdate) SetNillableCreateAt(u *uint32) *TeamUpdate {
+	if u != nil {
+		tu.SetCreateAt(*u)
+	}
+	return tu
+}
+
+// AddCreateAt adds u to the "create_at" field.
+func (tu *TeamUpdate) AddCreateAt(u uint32) *TeamUpdate {
+	tu.mutation.AddCreateAt(u)
+	return tu
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (tu *TeamUpdate) SetUpdateAt(u uint32) *TeamUpdate {
+	tu.mutation.ResetUpdateAt()
+	tu.mutation.SetUpdateAt(u)
+	return tu
+}
+
+// AddUpdateAt adds u to the "update_at" field.
+func (tu *TeamUpdate) AddUpdateAt(u uint32) *TeamUpdate {
+	tu.mutation.AddUpdateAt(u)
+	return tu
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (tu *TeamUpdate) SetDeleteAt(u uint32) *TeamUpdate {
+	tu.mutation.ResetDeleteAt()
+	tu.mutation.SetDeleteAt(u)
+	return tu
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (tu *TeamUpdate) SetNillableDeleteAt(u *uint32) *TeamUpdate {
+	if u != nil {
+		tu.SetDeleteAt(*u)
+	}
+	return tu
+}
+
+// AddDeleteAt adds u to the "delete_at" field.
+func (tu *TeamUpdate) AddDeleteAt(u uint32) *TeamUpdate {
+	tu.mutation.AddDeleteAt(u)
+	return tu
+}
+
 // Mutation returns the TeamMutation object of the builder.
 func (tu *TeamUpdate) Mutation() *TeamMutation {
 	return tu.mutation
@@ -37,6 +123,7 @@ func (tu *TeamUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	tu.defaults()
 	if len(tu.hooks) == 0 {
 		affected, err = tu.sqlSave(ctx)
 	} else {
@@ -85,13 +172,21 @@ func (tu *TeamUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tu *TeamUpdate) defaults() {
+	if _, ok := tu.mutation.UpdateAt(); !ok {
+		v := team.UpdateDefaultUpdateAt()
+		tu.mutation.SetUpdateAt(v)
+	}
+}
+
 func (tu *TeamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   team.Table,
 			Columns: team.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: team.FieldID,
 			},
 		},
@@ -102,6 +197,83 @@ func (tu *TeamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tu.mutation.TeamName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldTeamName,
+		})
+	}
+	if value, ok := tu.mutation.TeamLogo(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldTeamLogo,
+		})
+	}
+	if value, ok := tu.mutation.LeaderID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: team.FieldLeaderID,
+		})
+	}
+	if value, ok := tu.mutation.MemberIds(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
+			Value:  value,
+			Column: team.FieldMemberIds,
+		})
+	}
+	if value, ok := tu.mutation.Introduction(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldIntroduction,
+		})
+	}
+	if value, ok := tu.mutation.CreateAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldCreateAt,
+		})
+	}
+	if value, ok := tu.mutation.AddedCreateAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldCreateAt,
+		})
+	}
+	if value, ok := tu.mutation.UpdateAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldUpdateAt,
+		})
+	}
+	if value, ok := tu.mutation.AddedUpdateAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldUpdateAt,
+		})
+	}
+	if value, ok := tu.mutation.DeleteAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldDeleteAt,
+		})
+	}
+	if value, ok := tu.mutation.AddedDeleteAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldDeleteAt,
+		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -122,6 +294,91 @@ type TeamUpdateOne struct {
 	mutation *TeamMutation
 }
 
+// SetTeamName sets the "team_name" field.
+func (tuo *TeamUpdateOne) SetTeamName(s string) *TeamUpdateOne {
+	tuo.mutation.SetTeamName(s)
+	return tuo
+}
+
+// SetTeamLogo sets the "team_logo" field.
+func (tuo *TeamUpdateOne) SetTeamLogo(s string) *TeamUpdateOne {
+	tuo.mutation.SetTeamLogo(s)
+	return tuo
+}
+
+// SetLeaderID sets the "leader_id" field.
+func (tuo *TeamUpdateOne) SetLeaderID(u uuid.UUID) *TeamUpdateOne {
+	tuo.mutation.SetLeaderID(u)
+	return tuo
+}
+
+// SetMemberIds sets the "member_ids" field.
+func (tuo *TeamUpdateOne) SetMemberIds(u []uuid.UUID) *TeamUpdateOne {
+	tuo.mutation.SetMemberIds(u)
+	return tuo
+}
+
+// SetIntroduction sets the "introduction" field.
+func (tuo *TeamUpdateOne) SetIntroduction(s string) *TeamUpdateOne {
+	tuo.mutation.SetIntroduction(s)
+	return tuo
+}
+
+// SetCreateAt sets the "create_at" field.
+func (tuo *TeamUpdateOne) SetCreateAt(u uint32) *TeamUpdateOne {
+	tuo.mutation.ResetCreateAt()
+	tuo.mutation.SetCreateAt(u)
+	return tuo
+}
+
+// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
+func (tuo *TeamUpdateOne) SetNillableCreateAt(u *uint32) *TeamUpdateOne {
+	if u != nil {
+		tuo.SetCreateAt(*u)
+	}
+	return tuo
+}
+
+// AddCreateAt adds u to the "create_at" field.
+func (tuo *TeamUpdateOne) AddCreateAt(u uint32) *TeamUpdateOne {
+	tuo.mutation.AddCreateAt(u)
+	return tuo
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (tuo *TeamUpdateOne) SetUpdateAt(u uint32) *TeamUpdateOne {
+	tuo.mutation.ResetUpdateAt()
+	tuo.mutation.SetUpdateAt(u)
+	return tuo
+}
+
+// AddUpdateAt adds u to the "update_at" field.
+func (tuo *TeamUpdateOne) AddUpdateAt(u uint32) *TeamUpdateOne {
+	tuo.mutation.AddUpdateAt(u)
+	return tuo
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (tuo *TeamUpdateOne) SetDeleteAt(u uint32) *TeamUpdateOne {
+	tuo.mutation.ResetDeleteAt()
+	tuo.mutation.SetDeleteAt(u)
+	return tuo
+}
+
+// SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
+func (tuo *TeamUpdateOne) SetNillableDeleteAt(u *uint32) *TeamUpdateOne {
+	if u != nil {
+		tuo.SetDeleteAt(*u)
+	}
+	return tuo
+}
+
+// AddDeleteAt adds u to the "delete_at" field.
+func (tuo *TeamUpdateOne) AddDeleteAt(u uint32) *TeamUpdateOne {
+	tuo.mutation.AddDeleteAt(u)
+	return tuo
+}
+
 // Mutation returns the TeamMutation object of the builder.
 func (tuo *TeamUpdateOne) Mutation() *TeamMutation {
 	return tuo.mutation
@@ -140,6 +397,7 @@ func (tuo *TeamUpdateOne) Save(ctx context.Context) (*Team, error) {
 		err  error
 		node *Team
 	)
+	tuo.defaults()
 	if len(tuo.hooks) == 0 {
 		node, err = tuo.sqlSave(ctx)
 	} else {
@@ -188,13 +446,21 @@ func (tuo *TeamUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tuo *TeamUpdateOne) defaults() {
+	if _, ok := tuo.mutation.UpdateAt(); !ok {
+		v := team.UpdateDefaultUpdateAt()
+		tuo.mutation.SetUpdateAt(v)
+	}
+}
+
 func (tuo *TeamUpdateOne) sqlSave(ctx context.Context) (_node *Team, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   team.Table,
 			Columns: team.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: team.FieldID,
 			},
 		},
@@ -222,6 +488,83 @@ func (tuo *TeamUpdateOne) sqlSave(ctx context.Context) (_node *Team, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tuo.mutation.TeamName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldTeamName,
+		})
+	}
+	if value, ok := tuo.mutation.TeamLogo(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldTeamLogo,
+		})
+	}
+	if value, ok := tuo.mutation.LeaderID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: team.FieldLeaderID,
+		})
+	}
+	if value, ok := tuo.mutation.MemberIds(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
+			Value:  value,
+			Column: team.FieldMemberIds,
+		})
+	}
+	if value, ok := tuo.mutation.Introduction(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldIntroduction,
+		})
+	}
+	if value, ok := tuo.mutation.CreateAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldCreateAt,
+		})
+	}
+	if value, ok := tuo.mutation.AddedCreateAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldCreateAt,
+		})
+	}
+	if value, ok := tuo.mutation.UpdateAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldUpdateAt,
+		})
+	}
+	if value, ok := tuo.mutation.AddedUpdateAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldUpdateAt,
+		})
+	}
+	if value, ok := tuo.mutation.DeleteAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldDeleteAt,
+		})
+	}
+	if value, ok := tuo.mutation.AddedDeleteAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: team.FieldDeleteAt,
+		})
 	}
 	_node = &Team{config: tuo.config}
 	_spec.Assign = _node.assignValues
