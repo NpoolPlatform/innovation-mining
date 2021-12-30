@@ -8,11 +8,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/author"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/member"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -33,11 +32,10 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		author.Table:  author.ValidColumn,
 		capital.Table: capital.ValidColumn,
-		member.Table:  member.ValidColumn,
 		project.Table: project.ValidColumn,
 		team.Table:    team.ValidColumn,
+		user.Table:    user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

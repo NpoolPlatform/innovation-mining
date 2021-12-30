@@ -3,9 +3,9 @@
 package ent
 
 import (
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/member"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/schema"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -13,26 +13,6 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	memberFields := schema.Member{}.Fields()
-	_ = memberFields
-	// memberDescCreateAt is the schema descriptor for create_at field.
-	memberDescCreateAt := memberFields[4].Descriptor()
-	// member.DefaultCreateAt holds the default value on creation for the create_at field.
-	member.DefaultCreateAt = memberDescCreateAt.Default.(func() uint32)
-	// memberDescUpdateAt is the schema descriptor for update_at field.
-	memberDescUpdateAt := memberFields[5].Descriptor()
-	// member.DefaultUpdateAt holds the default value on creation for the update_at field.
-	member.DefaultUpdateAt = memberDescUpdateAt.Default.(func() uint32)
-	// member.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
-	member.UpdateDefaultUpdateAt = memberDescUpdateAt.UpdateDefault.(func() uint32)
-	// memberDescDeleteAt is the schema descriptor for delete_at field.
-	memberDescDeleteAt := memberFields[6].Descriptor()
-	// member.DefaultDeleteAt holds the default value on creation for the delete_at field.
-	member.DefaultDeleteAt = memberDescDeleteAt.Default.(func() uint32)
-	// memberDescID is the schema descriptor for id field.
-	memberDescID := memberFields[0].Descriptor()
-	// member.DefaultID holds the default value on creation for the id field.
-	member.DefaultID = memberDescID.Default.(func() uuid.UUID)
 	teamFields := schema.Team{}.Fields()
 	_ = teamFields
 	// teamDescCreateAt is the schema descriptor for create_at field.
@@ -53,4 +33,24 @@ func init() {
 	teamDescID := teamFields[0].Descriptor()
 	// team.DefaultID holds the default value on creation for the id field.
 	team.DefaultID = teamDescID.Default.(func() uuid.UUID)
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescCreateAt is the schema descriptor for create_at field.
+	userDescCreateAt := userFields[4].Descriptor()
+	// user.DefaultCreateAt holds the default value on creation for the create_at field.
+	user.DefaultCreateAt = userDescCreateAt.Default.(func() uint32)
+	// userDescUpdateAt is the schema descriptor for update_at field.
+	userDescUpdateAt := userFields[5].Descriptor()
+	// user.DefaultUpdateAt holds the default value on creation for the update_at field.
+	user.DefaultUpdateAt = userDescUpdateAt.Default.(func() uint32)
+	// user.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	user.UpdateDefaultUpdateAt = userDescUpdateAt.UpdateDefault.(func() uint32)
+	// userDescDeleteAt is the schema descriptor for delete_at field.
+	userDescDeleteAt := userFields[6].Descriptor()
+	// user.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	user.DefaultDeleteAt = userDescDeleteAt.Default.(func() uint32)
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

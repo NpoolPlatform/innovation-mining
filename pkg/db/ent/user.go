@@ -7,12 +7,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/member"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 	"github.com/google/uuid"
 )
 
-// Member is the model entity for the Member schema.
-type Member struct {
+// User is the model entity for the User schema.
+type User struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -31,122 +31,122 @@ type Member struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Member) scanValues(columns []string) ([]interface{}, error) {
+func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case member.FieldCreateAt, member.FieldUpdateAt, member.FieldDeleteAt:
+		case user.FieldCreateAt, user.FieldUpdateAt, user.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case member.FieldFirstName, member.FieldLastName, member.FieldIntroduction:
+		case user.FieldFirstName, user.FieldLastName, user.FieldIntroduction:
 			values[i] = new(sql.NullString)
-		case member.FieldID:
+		case user.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Member", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type User", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the Member fields.
-func (m *Member) assignValues(columns []string, values []interface{}) error {
+// to the User fields.
+func (u *User) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case member.FieldID:
+		case user.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				m.ID = *value
+				u.ID = *value
 			}
-		case member.FieldFirstName:
+		case user.FieldFirstName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field first_name", values[i])
 			} else if value.Valid {
-				m.FirstName = value.String
+				u.FirstName = value.String
 			}
-		case member.FieldLastName:
+		case user.FieldLastName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field last_name", values[i])
 			} else if value.Valid {
-				m.LastName = value.String
+				u.LastName = value.String
 			}
-		case member.FieldIntroduction:
+		case user.FieldIntroduction:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field introduction", values[i])
 			} else if value.Valid {
-				m.Introduction = value.String
+				u.Introduction = value.String
 			}
-		case member.FieldCreateAt:
+		case user.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field create_at", values[i])
 			} else if value.Valid {
-				m.CreateAt = uint32(value.Int64)
+				u.CreateAt = uint32(value.Int64)
 			}
-		case member.FieldUpdateAt:
+		case user.FieldUpdateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field update_at", values[i])
 			} else if value.Valid {
-				m.UpdateAt = uint32(value.Int64)
+				u.UpdateAt = uint32(value.Int64)
 			}
-		case member.FieldDeleteAt:
+		case user.FieldDeleteAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
 			} else if value.Valid {
-				m.DeleteAt = uint32(value.Int64)
+				u.DeleteAt = uint32(value.Int64)
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this Member.
-// Note that you need to call Member.Unwrap() before calling this method if this Member
+// Update returns a builder for updating this User.
+// Note that you need to call User.Unwrap() before calling this method if this User
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (m *Member) Update() *MemberUpdateOne {
-	return (&MemberClient{config: m.config}).UpdateOne(m)
+func (u *User) Update() *UserUpdateOne {
+	return (&UserClient{config: u.config}).UpdateOne(u)
 }
 
-// Unwrap unwraps the Member entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the User entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (m *Member) Unwrap() *Member {
-	tx, ok := m.config.driver.(*txDriver)
+func (u *User) Unwrap() *User {
+	tx, ok := u.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: Member is not a transactional entity")
+		panic("ent: User is not a transactional entity")
 	}
-	m.config.driver = tx.drv
-	return m
+	u.config.driver = tx.drv
+	return u
 }
 
 // String implements the fmt.Stringer.
-func (m *Member) String() string {
+func (u *User) String() string {
 	var builder strings.Builder
-	builder.WriteString("Member(")
-	builder.WriteString(fmt.Sprintf("id=%v", m.ID))
+	builder.WriteString("User(")
+	builder.WriteString(fmt.Sprintf("id=%v", u.ID))
 	builder.WriteString(", first_name=")
-	builder.WriteString(m.FirstName)
+	builder.WriteString(u.FirstName)
 	builder.WriteString(", last_name=")
-	builder.WriteString(m.LastName)
+	builder.WriteString(u.LastName)
 	builder.WriteString(", introduction=")
-	builder.WriteString(m.Introduction)
+	builder.WriteString(u.Introduction)
 	builder.WriteString(", create_at=")
-	builder.WriteString(fmt.Sprintf("%v", m.CreateAt))
+	builder.WriteString(fmt.Sprintf("%v", u.CreateAt))
 	builder.WriteString(", update_at=")
-	builder.WriteString(fmt.Sprintf("%v", m.UpdateAt))
+	builder.WriteString(fmt.Sprintf("%v", u.UpdateAt))
 	builder.WriteString(", delete_at=")
-	builder.WriteString(fmt.Sprintf("%v", m.DeleteAt))
+	builder.WriteString(fmt.Sprintf("%v", u.DeleteAt))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// Members is a parsable slice of Member.
-type Members []*Member
+// Users is a parsable slice of User.
+type Users []*User
 
-func (m Members) config(cfg config) {
-	for _i := range m {
-		m[_i].config = cfg
+func (u Users) config(cfg config) {
+	for _i := range u {
+		u[_i].config = cfg
 	}
 }

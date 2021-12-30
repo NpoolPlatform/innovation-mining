@@ -10,13 +10,13 @@ import (
 	"github.com/google/uuid"
 )
 
-// Member holds the schema definition for the Member entity.
-type Member struct {
+// User holds the schema definition for the User entity.
+type User struct {
 	ent.Schema
 }
 
-// Fields of the Member.
-func (Member) Fields() []ent.Field {
+// Fields of the User.
+func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
@@ -42,13 +42,13 @@ func (Member) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Member.
-func (Member) Edges() []ent.Edge {
+// Edges of the User.
+func (User) Edges() []ent.Edge {
 	return nil
 }
 
-// Indexes of the Member
-func (Member) Indexes() []ent.Index {
+// Indexes of the User
+func (User) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("first_name", "last_name").
 			Unique(),

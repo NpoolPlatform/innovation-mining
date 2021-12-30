@@ -11,125 +11,125 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/member"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
 	"github.com/google/uuid"
 )
 
-// MemberCreate is the builder for creating a Member entity.
-type MemberCreate struct {
+// UserCreate is the builder for creating a User entity.
+type UserCreate struct {
 	config
-	mutation *MemberMutation
+	mutation *UserMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
 }
 
 // SetFirstName sets the "first_name" field.
-func (mc *MemberCreate) SetFirstName(s string) *MemberCreate {
-	mc.mutation.SetFirstName(s)
-	return mc
+func (uc *UserCreate) SetFirstName(s string) *UserCreate {
+	uc.mutation.SetFirstName(s)
+	return uc
 }
 
 // SetLastName sets the "last_name" field.
-func (mc *MemberCreate) SetLastName(s string) *MemberCreate {
-	mc.mutation.SetLastName(s)
-	return mc
+func (uc *UserCreate) SetLastName(s string) *UserCreate {
+	uc.mutation.SetLastName(s)
+	return uc
 }
 
 // SetIntroduction sets the "introduction" field.
-func (mc *MemberCreate) SetIntroduction(s string) *MemberCreate {
-	mc.mutation.SetIntroduction(s)
-	return mc
+func (uc *UserCreate) SetIntroduction(s string) *UserCreate {
+	uc.mutation.SetIntroduction(s)
+	return uc
 }
 
 // SetCreateAt sets the "create_at" field.
-func (mc *MemberCreate) SetCreateAt(u uint32) *MemberCreate {
-	mc.mutation.SetCreateAt(u)
-	return mc
+func (uc *UserCreate) SetCreateAt(u uint32) *UserCreate {
+	uc.mutation.SetCreateAt(u)
+	return uc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableCreateAt(u *uint32) *MemberCreate {
+func (uc *UserCreate) SetNillableCreateAt(u *uint32) *UserCreate {
 	if u != nil {
-		mc.SetCreateAt(*u)
+		uc.SetCreateAt(*u)
 	}
-	return mc
+	return uc
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (mc *MemberCreate) SetUpdateAt(u uint32) *MemberCreate {
-	mc.mutation.SetUpdateAt(u)
-	return mc
+func (uc *UserCreate) SetUpdateAt(u uint32) *UserCreate {
+	uc.mutation.SetUpdateAt(u)
+	return uc
 }
 
 // SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableUpdateAt(u *uint32) *MemberCreate {
+func (uc *UserCreate) SetNillableUpdateAt(u *uint32) *UserCreate {
 	if u != nil {
-		mc.SetUpdateAt(*u)
+		uc.SetUpdateAt(*u)
 	}
-	return mc
+	return uc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (mc *MemberCreate) SetDeleteAt(u uint32) *MemberCreate {
-	mc.mutation.SetDeleteAt(u)
-	return mc
+func (uc *UserCreate) SetDeleteAt(u uint32) *UserCreate {
+	uc.mutation.SetDeleteAt(u)
+	return uc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (mc *MemberCreate) SetNillableDeleteAt(u *uint32) *MemberCreate {
+func (uc *UserCreate) SetNillableDeleteAt(u *uint32) *UserCreate {
 	if u != nil {
-		mc.SetDeleteAt(*u)
+		uc.SetDeleteAt(*u)
 	}
-	return mc
+	return uc
 }
 
 // SetID sets the "id" field.
-func (mc *MemberCreate) SetID(u uuid.UUID) *MemberCreate {
-	mc.mutation.SetID(u)
-	return mc
+func (uc *UserCreate) SetID(u uuid.UUID) *UserCreate {
+	uc.mutation.SetID(u)
+	return uc
 }
 
-// Mutation returns the MemberMutation object of the builder.
-func (mc *MemberCreate) Mutation() *MemberMutation {
-	return mc.mutation
+// Mutation returns the UserMutation object of the builder.
+func (uc *UserCreate) Mutation() *UserMutation {
+	return uc.mutation
 }
 
-// Save creates the Member in the database.
-func (mc *MemberCreate) Save(ctx context.Context) (*Member, error) {
+// Save creates the User in the database.
+func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
 	var (
 		err  error
-		node *Member
+		node *User
 	)
-	mc.defaults()
-	if len(mc.hooks) == 0 {
-		if err = mc.check(); err != nil {
+	uc.defaults()
+	if len(uc.hooks) == 0 {
+		if err = uc.check(); err != nil {
 			return nil, err
 		}
-		node, err = mc.sqlSave(ctx)
+		node, err = uc.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*MemberMutation)
+			mutation, ok := m.(*UserMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
-			if err = mc.check(); err != nil {
+			if err = uc.check(); err != nil {
 				return nil, err
 			}
-			mc.mutation = mutation
-			if node, err = mc.sqlSave(ctx); err != nil {
+			uc.mutation = mutation
+			if node, err = uc.sqlSave(ctx); err != nil {
 				return nil, err
 			}
 			mutation.id = &node.ID
 			mutation.done = true
 			return node, err
 		})
-		for i := len(mc.hooks) - 1; i >= 0; i-- {
-			if mc.hooks[i] == nil {
+		for i := len(uc.hooks) - 1; i >= 0; i-- {
+			if uc.hooks[i] == nil {
 				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
 			}
-			mut = mc.hooks[i](mut)
+			mut = uc.hooks[i](mut)
 		}
-		if _, err := mut.Mutate(ctx, mc.mutation); err != nil {
+		if _, err := mut.Mutate(ctx, uc.mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -137,8 +137,8 @@ func (mc *MemberCreate) Save(ctx context.Context) (*Member, error) {
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mc *MemberCreate) SaveX(ctx context.Context) *Member {
-	v, err := mc.Save(ctx)
+func (uc *UserCreate) SaveX(ctx context.Context) *User {
+	v, err := uc.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,64 +146,64 @@ func (mc *MemberCreate) SaveX(ctx context.Context) *Member {
 }
 
 // Exec executes the query.
-func (mc *MemberCreate) Exec(ctx context.Context) error {
-	_, err := mc.Save(ctx)
+func (uc *UserCreate) Exec(ctx context.Context) error {
+	_, err := uc.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mc *MemberCreate) ExecX(ctx context.Context) {
-	if err := mc.Exec(ctx); err != nil {
+func (uc *UserCreate) ExecX(ctx context.Context) {
+	if err := uc.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mc *MemberCreate) defaults() {
-	if _, ok := mc.mutation.CreateAt(); !ok {
-		v := member.DefaultCreateAt()
-		mc.mutation.SetCreateAt(v)
+func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.CreateAt(); !ok {
+		v := user.DefaultCreateAt()
+		uc.mutation.SetCreateAt(v)
 	}
-	if _, ok := mc.mutation.UpdateAt(); !ok {
-		v := member.DefaultUpdateAt()
-		mc.mutation.SetUpdateAt(v)
+	if _, ok := uc.mutation.UpdateAt(); !ok {
+		v := user.DefaultUpdateAt()
+		uc.mutation.SetUpdateAt(v)
 	}
-	if _, ok := mc.mutation.DeleteAt(); !ok {
-		v := member.DefaultDeleteAt()
-		mc.mutation.SetDeleteAt(v)
+	if _, ok := uc.mutation.DeleteAt(); !ok {
+		v := user.DefaultDeleteAt()
+		uc.mutation.SetDeleteAt(v)
 	}
-	if _, ok := mc.mutation.ID(); !ok {
-		v := member.DefaultID()
-		mc.mutation.SetID(v)
+	if _, ok := uc.mutation.ID(); !ok {
+		v := user.DefaultID()
+		uc.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mc *MemberCreate) check() error {
-	if _, ok := mc.mutation.FirstName(); !ok {
+func (uc *UserCreate) check() error {
+	if _, ok := uc.mutation.FirstName(); !ok {
 		return &ValidationError{Name: "first_name", err: errors.New(`ent: missing required field "first_name"`)}
 	}
-	if _, ok := mc.mutation.LastName(); !ok {
+	if _, ok := uc.mutation.LastName(); !ok {
 		return &ValidationError{Name: "last_name", err: errors.New(`ent: missing required field "last_name"`)}
 	}
-	if _, ok := mc.mutation.Introduction(); !ok {
+	if _, ok := uc.mutation.Introduction(); !ok {
 		return &ValidationError{Name: "introduction", err: errors.New(`ent: missing required field "introduction"`)}
 	}
-	if _, ok := mc.mutation.CreateAt(); !ok {
+	if _, ok := uc.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
 	}
-	if _, ok := mc.mutation.UpdateAt(); !ok {
+	if _, ok := uc.mutation.UpdateAt(); !ok {
 		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "update_at"`)}
 	}
-	if _, ok := mc.mutation.DeleteAt(); !ok {
+	if _, ok := uc.mutation.DeleteAt(); !ok {
 		return &ValidationError{Name: "delete_at", err: errors.New(`ent: missing required field "delete_at"`)}
 	}
 	return nil
 }
 
-func (mc *MemberCreate) sqlSave(ctx context.Context) (*Member, error) {
-	_node, _spec := mc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mc.driver, _spec); err != nil {
+func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
+	_node, _spec := uc.createSpec()
+	if err := sqlgraph.CreateNode(ctx, uc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{err.Error(), err}
 		}
@@ -215,67 +215,67 @@ func (mc *MemberCreate) sqlSave(ctx context.Context) (*Member, error) {
 	return _node, nil
 }
 
-func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
+func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Member{config: mc.config}
+		_node = &User{config: uc.config}
 		_spec = &sqlgraph.CreateSpec{
-			Table: member.Table,
+			Table: user.Table,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeUUID,
-				Column: member.FieldID,
+				Column: user.FieldID,
 			},
 		}
 	)
-	_spec.OnConflict = mc.conflict
-	if id, ok := mc.mutation.ID(); ok {
+	_spec.OnConflict = uc.conflict
+	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := mc.mutation.FirstName(); ok {
+	if value, ok := uc.mutation.FirstName(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: member.FieldFirstName,
+			Column: user.FieldFirstName,
 		})
 		_node.FirstName = value
 	}
-	if value, ok := mc.mutation.LastName(); ok {
+	if value, ok := uc.mutation.LastName(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: member.FieldLastName,
+			Column: user.FieldLastName,
 		})
 		_node.LastName = value
 	}
-	if value, ok := mc.mutation.Introduction(); ok {
+	if value, ok := uc.mutation.Introduction(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: member.FieldIntroduction,
+			Column: user.FieldIntroduction,
 		})
 		_node.Introduction = value
 	}
-	if value, ok := mc.mutation.CreateAt(); ok {
+	if value, ok := uc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
 			Value:  value,
-			Column: member.FieldCreateAt,
+			Column: user.FieldCreateAt,
 		})
 		_node.CreateAt = value
 	}
-	if value, ok := mc.mutation.UpdateAt(); ok {
+	if value, ok := uc.mutation.UpdateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
 			Value:  value,
-			Column: member.FieldUpdateAt,
+			Column: user.FieldUpdateAt,
 		})
 		_node.UpdateAt = value
 	}
-	if value, ok := mc.mutation.DeleteAt(); ok {
+	if value, ok := uc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
 			Value:  value,
-			Column: member.FieldDeleteAt,
+			Column: user.FieldDeleteAt,
 		})
 		_node.DeleteAt = value
 	}
@@ -285,7 +285,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Member.Create().
+//	client.User.Create().
 //		SetFirstName(v).
 //		OnConflict(
 //			// Update the row with the new values
@@ -294,134 +294,134 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.MemberUpsert) {
+//		Update(func(u *ent.UserUpsert) {
 //			SetFirstName(v+v).
 //		}).
 //		Exec(ctx)
 //
-func (mc *MemberCreate) OnConflict(opts ...sql.ConflictOption) *MemberUpsertOne {
-	mc.conflict = opts
-	return &MemberUpsertOne{
-		create: mc,
+func (uc *UserCreate) OnConflict(opts ...sql.ConflictOption) *UserUpsertOne {
+	uc.conflict = opts
+	return &UserUpsertOne{
+		create: uc,
 	}
 }
 
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Member.Create().
+//	client.User.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 //
-func (mc *MemberCreate) OnConflictColumns(columns ...string) *MemberUpsertOne {
-	mc.conflict = append(mc.conflict, sql.ConflictColumns(columns...))
-	return &MemberUpsertOne{
-		create: mc,
+func (uc *UserCreate) OnConflictColumns(columns ...string) *UserUpsertOne {
+	uc.conflict = append(uc.conflict, sql.ConflictColumns(columns...))
+	return &UserUpsertOne{
+		create: uc,
 	}
 }
 
 type (
-	// MemberUpsertOne is the builder for "upsert"-ing
-	//  one Member node.
-	MemberUpsertOne struct {
-		create *MemberCreate
+	// UserUpsertOne is the builder for "upsert"-ing
+	//  one User node.
+	UserUpsertOne struct {
+		create *UserCreate
 	}
 
-	// MemberUpsert is the "OnConflict" setter.
-	MemberUpsert struct {
+	// UserUpsert is the "OnConflict" setter.
+	UserUpsert struct {
 		*sql.UpdateSet
 	}
 )
 
 // SetFirstName sets the "first_name" field.
-func (u *MemberUpsert) SetFirstName(v string) *MemberUpsert {
-	u.Set(member.FieldFirstName, v)
+func (u *UserUpsert) SetFirstName(v string) *UserUpsert {
+	u.Set(user.FieldFirstName, v)
 	return u
 }
 
 // UpdateFirstName sets the "first_name" field to the value that was provided on create.
-func (u *MemberUpsert) UpdateFirstName() *MemberUpsert {
-	u.SetExcluded(member.FieldFirstName)
+func (u *UserUpsert) UpdateFirstName() *UserUpsert {
+	u.SetExcluded(user.FieldFirstName)
 	return u
 }
 
 // SetLastName sets the "last_name" field.
-func (u *MemberUpsert) SetLastName(v string) *MemberUpsert {
-	u.Set(member.FieldLastName, v)
+func (u *UserUpsert) SetLastName(v string) *UserUpsert {
+	u.Set(user.FieldLastName, v)
 	return u
 }
 
 // UpdateLastName sets the "last_name" field to the value that was provided on create.
-func (u *MemberUpsert) UpdateLastName() *MemberUpsert {
-	u.SetExcluded(member.FieldLastName)
+func (u *UserUpsert) UpdateLastName() *UserUpsert {
+	u.SetExcluded(user.FieldLastName)
 	return u
 }
 
 // SetIntroduction sets the "introduction" field.
-func (u *MemberUpsert) SetIntroduction(v string) *MemberUpsert {
-	u.Set(member.FieldIntroduction, v)
+func (u *UserUpsert) SetIntroduction(v string) *UserUpsert {
+	u.Set(user.FieldIntroduction, v)
 	return u
 }
 
 // UpdateIntroduction sets the "introduction" field to the value that was provided on create.
-func (u *MemberUpsert) UpdateIntroduction() *MemberUpsert {
-	u.SetExcluded(member.FieldIntroduction)
+func (u *UserUpsert) UpdateIntroduction() *UserUpsert {
+	u.SetExcluded(user.FieldIntroduction)
 	return u
 }
 
 // SetCreateAt sets the "create_at" field.
-func (u *MemberUpsert) SetCreateAt(v uint32) *MemberUpsert {
-	u.Set(member.FieldCreateAt, v)
+func (u *UserUpsert) SetCreateAt(v uint32) *UserUpsert {
+	u.Set(user.FieldCreateAt, v)
 	return u
 }
 
 // UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *MemberUpsert) UpdateCreateAt() *MemberUpsert {
-	u.SetExcluded(member.FieldCreateAt)
+func (u *UserUpsert) UpdateCreateAt() *UserUpsert {
+	u.SetExcluded(user.FieldCreateAt)
 	return u
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (u *MemberUpsert) SetUpdateAt(v uint32) *MemberUpsert {
-	u.Set(member.FieldUpdateAt, v)
+func (u *UserUpsert) SetUpdateAt(v uint32) *UserUpsert {
+	u.Set(user.FieldUpdateAt, v)
 	return u
 }
 
 // UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *MemberUpsert) UpdateUpdateAt() *MemberUpsert {
-	u.SetExcluded(member.FieldUpdateAt)
+func (u *UserUpsert) UpdateUpdateAt() *UserUpsert {
+	u.SetExcluded(user.FieldUpdateAt)
 	return u
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (u *MemberUpsert) SetDeleteAt(v uint32) *MemberUpsert {
-	u.Set(member.FieldDeleteAt, v)
+func (u *UserUpsert) SetDeleteAt(v uint32) *UserUpsert {
+	u.Set(user.FieldDeleteAt, v)
 	return u
 }
 
 // UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
-func (u *MemberUpsert) UpdateDeleteAt() *MemberUpsert {
-	u.SetExcluded(member.FieldDeleteAt)
+func (u *UserUpsert) UpdateDeleteAt() *UserUpsert {
+	u.SetExcluded(user.FieldDeleteAt)
 	return u
 }
 
 // UpdateNewValues updates the fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
-//	client.Member.Create().
+//	client.User.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(member.FieldID)
+//				u.SetIgnore(user.FieldID)
 //			}),
 //		).
 //		Exec(ctx)
 //
-func (u *MemberUpsertOne) UpdateNewValues() *MemberUpsertOne {
+func (u *UserUpsertOne) UpdateNewValues() *UserUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		if _, exists := u.create.mutation.ID(); exists {
-			s.SetIgnore(member.FieldID)
+			s.SetIgnore(user.FieldID)
 		}
 	}))
 	return u
@@ -430,136 +430,136 @@ func (u *MemberUpsertOne) UpdateNewValues() *MemberUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//  client.Member.Create().
+//  client.User.Create().
 //      OnConflict(sql.ResolveWithIgnore()).
 //      Exec(ctx)
 //
-func (u *MemberUpsertOne) Ignore() *MemberUpsertOne {
+func (u *UserUpsertOne) Ignore() *UserUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
 	return u
 }
 
 // DoNothing configures the conflict_action to `DO NOTHING`.
 // Supported only by SQLite and PostgreSQL.
-func (u *MemberUpsertOne) DoNothing() *MemberUpsertOne {
+func (u *UserUpsertOne) DoNothing() *UserUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.DoNothing())
 	return u
 }
 
-// Update allows overriding fields `UPDATE` values. See the MemberCreate.OnConflict
+// Update allows overriding fields `UPDATE` values. See the UserCreate.OnConflict
 // documentation for more info.
-func (u *MemberUpsertOne) Update(set func(*MemberUpsert)) *MemberUpsertOne {
+func (u *UserUpsertOne) Update(set func(*UserUpsert)) *UserUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
-		set(&MemberUpsert{UpdateSet: update})
+		set(&UserUpsert{UpdateSet: update})
 	}))
 	return u
 }
 
 // SetFirstName sets the "first_name" field.
-func (u *MemberUpsertOne) SetFirstName(v string) *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) SetFirstName(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.SetFirstName(v)
 	})
 }
 
 // UpdateFirstName sets the "first_name" field to the value that was provided on create.
-func (u *MemberUpsertOne) UpdateFirstName() *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) UpdateFirstName() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateFirstName()
 	})
 }
 
 // SetLastName sets the "last_name" field.
-func (u *MemberUpsertOne) SetLastName(v string) *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) SetLastName(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.SetLastName(v)
 	})
 }
 
 // UpdateLastName sets the "last_name" field to the value that was provided on create.
-func (u *MemberUpsertOne) UpdateLastName() *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) UpdateLastName() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateLastName()
 	})
 }
 
 // SetIntroduction sets the "introduction" field.
-func (u *MemberUpsertOne) SetIntroduction(v string) *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) SetIntroduction(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.SetIntroduction(v)
 	})
 }
 
 // UpdateIntroduction sets the "introduction" field to the value that was provided on create.
-func (u *MemberUpsertOne) UpdateIntroduction() *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) UpdateIntroduction() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateIntroduction()
 	})
 }
 
 // SetCreateAt sets the "create_at" field.
-func (u *MemberUpsertOne) SetCreateAt(v uint32) *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) SetCreateAt(v uint32) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.SetCreateAt(v)
 	})
 }
 
 // UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *MemberUpsertOne) UpdateCreateAt() *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) UpdateCreateAt() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateCreateAt()
 	})
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (u *MemberUpsertOne) SetUpdateAt(v uint32) *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) SetUpdateAt(v uint32) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.SetUpdateAt(v)
 	})
 }
 
 // UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *MemberUpsertOne) UpdateUpdateAt() *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) UpdateUpdateAt() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateUpdateAt()
 	})
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (u *MemberUpsertOne) SetDeleteAt(v uint32) *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) SetDeleteAt(v uint32) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.SetDeleteAt(v)
 	})
 }
 
 // UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
-func (u *MemberUpsertOne) UpdateDeleteAt() *MemberUpsertOne {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertOne) UpdateDeleteAt() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateDeleteAt()
 	})
 }
 
 // Exec executes the query.
-func (u *MemberUpsertOne) Exec(ctx context.Context) error {
+func (u *UserUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
-		return errors.New("ent: missing options for MemberCreate.OnConflict")
+		return errors.New("ent: missing options for UserCreate.OnConflict")
 	}
 	return u.create.Exec(ctx)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (u *MemberUpsertOne) ExecX(ctx context.Context) {
+func (u *UserUpsertOne) ExecX(ctx context.Context) {
 	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *MemberUpsertOne) ID(ctx context.Context) (id uuid.UUID, err error) {
+func (u *UserUpsertOne) ID(ctx context.Context) (id uuid.UUID, err error) {
 	if u.create.driver.Dialect() == dialect.MySQL {
 		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
 		// fields from the database since MySQL does not support the RETURNING clause.
-		return id, errors.New("ent: MemberUpsertOne.ID is not supported by MySQL driver. Use MemberUpsertOne.Exec instead")
+		return id, errors.New("ent: UserUpsertOne.ID is not supported by MySQL driver. Use UserUpsertOne.Exec instead")
 	}
 	node, err := u.create.Save(ctx)
 	if err != nil {
@@ -569,7 +569,7 @@ func (u *MemberUpsertOne) ID(ctx context.Context) (id uuid.UUID, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *MemberUpsertOne) IDX(ctx context.Context) uuid.UUID {
+func (u *UserUpsertOne) IDX(ctx context.Context) uuid.UUID {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -577,24 +577,24 @@ func (u *MemberUpsertOne) IDX(ctx context.Context) uuid.UUID {
 	return id
 }
 
-// MemberCreateBulk is the builder for creating many Member entities in bulk.
-type MemberCreateBulk struct {
+// UserCreateBulk is the builder for creating many User entities in bulk.
+type UserCreateBulk struct {
 	config
-	builders []*MemberCreate
+	builders []*UserCreate
 	conflict []sql.ConflictOption
 }
 
-// Save creates the Member entities in the database.
-func (mcb *MemberCreateBulk) Save(ctx context.Context) ([]*Member, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(mcb.builders))
-	nodes := make([]*Member, len(mcb.builders))
-	mutators := make([]Mutator, len(mcb.builders))
-	for i := range mcb.builders {
+// Save creates the User entities in the database.
+func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
+	specs := make([]*sqlgraph.CreateSpec, len(ucb.builders))
+	nodes := make([]*User, len(ucb.builders))
+	mutators := make([]Mutator, len(ucb.builders))
+	for i := range ucb.builders {
 		func(i int, root context.Context) {
-			builder := mcb.builders[i]
+			builder := ucb.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-				mutation, ok := m.(*MemberMutation)
+				mutation, ok := m.(*UserMutation)
 				if !ok {
 					return nil, fmt.Errorf("unexpected mutation type %T", m)
 				}
@@ -605,12 +605,12 @@ func (mcb *MemberCreateBulk) Save(ctx context.Context) ([]*Member, error) {
 				nodes[i], specs[i] = builder.createSpec()
 				var err error
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, ucb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
-					spec.OnConflict = mcb.conflict
+					spec.OnConflict = ucb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, ucb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{err.Error(), err}
 						}
@@ -630,7 +630,7 @@ func (mcb *MemberCreateBulk) Save(ctx context.Context) ([]*Member, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, ucb.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -638,8 +638,8 @@ func (mcb *MemberCreateBulk) Save(ctx context.Context) ([]*Member, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mcb *MemberCreateBulk) SaveX(ctx context.Context) []*Member {
-	v, err := mcb.Save(ctx)
+func (ucb *UserCreateBulk) SaveX(ctx context.Context) []*User {
+	v, err := ucb.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -647,14 +647,14 @@ func (mcb *MemberCreateBulk) SaveX(ctx context.Context) []*Member {
 }
 
 // Exec executes the query.
-func (mcb *MemberCreateBulk) Exec(ctx context.Context) error {
-	_, err := mcb.Save(ctx)
+func (ucb *UserCreateBulk) Exec(ctx context.Context) error {
+	_, err := ucb.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mcb *MemberCreateBulk) ExecX(ctx context.Context) {
-	if err := mcb.Exec(ctx); err != nil {
+func (ucb *UserCreateBulk) ExecX(ctx context.Context) {
+	if err := ucb.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
@@ -662,7 +662,7 @@ func (mcb *MemberCreateBulk) ExecX(ctx context.Context) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Member.CreateBulk(builders...).
+//	client.User.CreateBulk(builders...).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -670,56 +670,56 @@ func (mcb *MemberCreateBulk) ExecX(ctx context.Context) {
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.MemberUpsert) {
+//		Update(func(u *ent.UserUpsert) {
 //			SetFirstName(v+v).
 //		}).
 //		Exec(ctx)
 //
-func (mcb *MemberCreateBulk) OnConflict(opts ...sql.ConflictOption) *MemberUpsertBulk {
-	mcb.conflict = opts
-	return &MemberUpsertBulk{
-		create: mcb,
+func (ucb *UserCreateBulk) OnConflict(opts ...sql.ConflictOption) *UserUpsertBulk {
+	ucb.conflict = opts
+	return &UserUpsertBulk{
+		create: ucb,
 	}
 }
 
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Member.Create().
+//	client.User.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 //
-func (mcb *MemberCreateBulk) OnConflictColumns(columns ...string) *MemberUpsertBulk {
-	mcb.conflict = append(mcb.conflict, sql.ConflictColumns(columns...))
-	return &MemberUpsertBulk{
-		create: mcb,
+func (ucb *UserCreateBulk) OnConflictColumns(columns ...string) *UserUpsertBulk {
+	ucb.conflict = append(ucb.conflict, sql.ConflictColumns(columns...))
+	return &UserUpsertBulk{
+		create: ucb,
 	}
 }
 
-// MemberUpsertBulk is the builder for "upsert"-ing
-// a bulk of Member nodes.
-type MemberUpsertBulk struct {
-	create *MemberCreateBulk
+// UserUpsertBulk is the builder for "upsert"-ing
+// a bulk of User nodes.
+type UserUpsertBulk struct {
+	create *UserCreateBulk
 }
 
 // UpdateNewValues updates the fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.Member.Create().
+//	client.User.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(member.FieldID)
+//				u.SetIgnore(user.FieldID)
 //			}),
 //		).
 //		Exec(ctx)
 //
-func (u *MemberUpsertBulk) UpdateNewValues() *MemberUpsertBulk {
+func (u *UserUpsertBulk) UpdateNewValues() *UserUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		for _, b := range u.create.builders {
 			if _, exists := b.mutation.ID(); exists {
-				s.SetIgnore(member.FieldID)
+				s.SetIgnore(user.FieldID)
 				return
 			}
 		}
@@ -730,130 +730,130 @@ func (u *MemberUpsertBulk) UpdateNewValues() *MemberUpsertBulk {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Member.Create().
+//	client.User.Create().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
 //
-func (u *MemberUpsertBulk) Ignore() *MemberUpsertBulk {
+func (u *UserUpsertBulk) Ignore() *UserUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
 	return u
 }
 
 // DoNothing configures the conflict_action to `DO NOTHING`.
 // Supported only by SQLite and PostgreSQL.
-func (u *MemberUpsertBulk) DoNothing() *MemberUpsertBulk {
+func (u *UserUpsertBulk) DoNothing() *UserUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.DoNothing())
 	return u
 }
 
-// Update allows overriding fields `UPDATE` values. See the MemberCreateBulk.OnConflict
+// Update allows overriding fields `UPDATE` values. See the UserCreateBulk.OnConflict
 // documentation for more info.
-func (u *MemberUpsertBulk) Update(set func(*MemberUpsert)) *MemberUpsertBulk {
+func (u *UserUpsertBulk) Update(set func(*UserUpsert)) *UserUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
-		set(&MemberUpsert{UpdateSet: update})
+		set(&UserUpsert{UpdateSet: update})
 	}))
 	return u
 }
 
 // SetFirstName sets the "first_name" field.
-func (u *MemberUpsertBulk) SetFirstName(v string) *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) SetFirstName(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.SetFirstName(v)
 	})
 }
 
 // UpdateFirstName sets the "first_name" field to the value that was provided on create.
-func (u *MemberUpsertBulk) UpdateFirstName() *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) UpdateFirstName() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateFirstName()
 	})
 }
 
 // SetLastName sets the "last_name" field.
-func (u *MemberUpsertBulk) SetLastName(v string) *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) SetLastName(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.SetLastName(v)
 	})
 }
 
 // UpdateLastName sets the "last_name" field to the value that was provided on create.
-func (u *MemberUpsertBulk) UpdateLastName() *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) UpdateLastName() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateLastName()
 	})
 }
 
 // SetIntroduction sets the "introduction" field.
-func (u *MemberUpsertBulk) SetIntroduction(v string) *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) SetIntroduction(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.SetIntroduction(v)
 	})
 }
 
 // UpdateIntroduction sets the "introduction" field to the value that was provided on create.
-func (u *MemberUpsertBulk) UpdateIntroduction() *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) UpdateIntroduction() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateIntroduction()
 	})
 }
 
 // SetCreateAt sets the "create_at" field.
-func (u *MemberUpsertBulk) SetCreateAt(v uint32) *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) SetCreateAt(v uint32) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.SetCreateAt(v)
 	})
 }
 
 // UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *MemberUpsertBulk) UpdateCreateAt() *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) UpdateCreateAt() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateCreateAt()
 	})
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (u *MemberUpsertBulk) SetUpdateAt(v uint32) *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) SetUpdateAt(v uint32) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.SetUpdateAt(v)
 	})
 }
 
 // UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *MemberUpsertBulk) UpdateUpdateAt() *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) UpdateUpdateAt() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateUpdateAt()
 	})
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (u *MemberUpsertBulk) SetDeleteAt(v uint32) *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) SetDeleteAt(v uint32) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.SetDeleteAt(v)
 	})
 }
 
 // UpdateDeleteAt sets the "delete_at" field to the value that was provided on create.
-func (u *MemberUpsertBulk) UpdateDeleteAt() *MemberUpsertBulk {
-	return u.Update(func(s *MemberUpsert) {
+func (u *UserUpsertBulk) UpdateDeleteAt() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
 		s.UpdateDeleteAt()
 	})
 }
 
 // Exec executes the query.
-func (u *MemberUpsertBulk) Exec(ctx context.Context) error {
+func (u *UserUpsertBulk) Exec(ctx context.Context) error {
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
-			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the MemberCreateBulk instead", i)
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the UserCreateBulk instead", i)
 		}
 	}
 	if len(u.create.conflict) == 0 {
-		return errors.New("ent: missing options for MemberCreateBulk.OnConflict")
+		return errors.New("ent: missing options for UserCreateBulk.OnConflict")
 	}
 	return u.create.Exec(ctx)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (u *MemberUpsertBulk) ExecX(ctx context.Context) {
+func (u *UserUpsertBulk) ExecX(ctx context.Context) {
 	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}

@@ -9,19 +9,6 @@ import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent"
 )
 
-// The AuthorFunc type is an adapter to allow the use of ordinary
-// function as Author mutator.
-type AuthorFunc func(context.Context, *ent.AuthorMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f AuthorFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.AuthorMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AuthorMutation", m)
-	}
-	return f(ctx, mv)
-}
-
 // The CapitalFunc type is an adapter to allow the use of ordinary
 // function as Capital mutator.
 type CapitalFunc func(context.Context, *ent.CapitalMutation) (ent.Value, error)
@@ -31,19 +18,6 @@ func (f CapitalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	mv, ok := m.(*ent.CapitalMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CapitalMutation", m)
-	}
-	return f(ctx, mv)
-}
-
-// The MemberFunc type is an adapter to allow the use of ordinary
-// function as Member mutator.
-type MemberFunc func(context.Context, *ent.MemberMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f MemberFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.MemberMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemberMutation", m)
 	}
 	return f(ctx, mv)
 }
@@ -70,6 +44,19 @@ func (f TeamFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	mv, ok := m.(*ent.TeamMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TeamMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The UserFunc type is an adapter to allow the use of ordinary
+// function as User mutator.
+type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.UserMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
 	}
 	return f(ctx, mv)
 }
