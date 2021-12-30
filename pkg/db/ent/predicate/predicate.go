@@ -12,6 +12,9 @@ type Author func(*sql.Selector)
 // Capital is the predicate function for capital builders.
 type Capital func(*sql.Selector)
 
+// Member is the predicate function for member builders.
+type Member func(*sql.Selector)
+
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
 

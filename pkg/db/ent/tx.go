@@ -16,6 +16,8 @@ type Tx struct {
 	Author *AuthorClient
 	// Capital is the client for interacting with the Capital builders.
 	Capital *CapitalClient
+	// Member is the client for interacting with the Member builders.
+	Member *MemberClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// Team is the client for interacting with the Team builders.
@@ -157,6 +159,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.Author = NewAuthorClient(tx.config)
 	tx.Capital = NewCapitalClient(tx.config)
+	tx.Member = NewMemberClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
 	tx.Team = NewTeamClient(tx.config)
 }

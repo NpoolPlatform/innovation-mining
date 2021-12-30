@@ -26,6 +26,7 @@ type config struct {
 type hooks struct {
 	Author  []ent.Hook
 	Capital []ent.Hook
+	Member  []ent.Hook
 	Project []ent.Hook
 	Team    []ent.Hook
 }

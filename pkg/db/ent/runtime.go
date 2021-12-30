@@ -2,8 +2,34 @@
 
 package ent
 
+import (
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/member"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/schema"
+	"github.com/google/uuid"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	memberFields := schema.Member{}.Fields()
+	_ = memberFields
+	// memberDescCreateAt is the schema descriptor for create_at field.
+	memberDescCreateAt := memberFields[4].Descriptor()
+	// member.DefaultCreateAt holds the default value on creation for the create_at field.
+	member.DefaultCreateAt = memberDescCreateAt.Default.(func() uint32)
+	// memberDescUpdateAt is the schema descriptor for update_at field.
+	memberDescUpdateAt := memberFields[5].Descriptor()
+	// member.DefaultUpdateAt holds the default value on creation for the update_at field.
+	member.DefaultUpdateAt = memberDescUpdateAt.Default.(func() uint32)
+	// member.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	member.UpdateDefaultUpdateAt = memberDescUpdateAt.UpdateDefault.(func() uint32)
+	// memberDescDeleteAt is the schema descriptor for delete_at field.
+	memberDescDeleteAt := memberFields[6].Descriptor()
+	// member.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	member.DefaultDeleteAt = memberDescDeleteAt.Default.(func() uint32)
+	// memberDescID is the schema descriptor for id field.
+	memberDescID := memberFields[0].Descriptor()
+	// member.DefaultID holds the default value on creation for the id field.
+	member.DefaultID = memberDescID.Default.(func() uuid.UUID)
 }
