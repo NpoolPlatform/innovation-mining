@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
+	"github.com/google/uuid"
 )
 
 // CapitalQuery is the builder for querying Capital entities.
@@ -84,8 +85,8 @@ func (cq *CapitalQuery) FirstX(ctx context.Context) *Capital {
 
 // FirstID returns the first Capital ID from the query.
 // Returns a *NotFoundError when no Capital ID was found.
-func (cq *CapitalQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (cq *CapitalQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = cq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -97,7 +98,7 @@ func (cq *CapitalQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *CapitalQuery) FirstIDX(ctx context.Context) int {
+func (cq *CapitalQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := cq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -135,8 +136,8 @@ func (cq *CapitalQuery) OnlyX(ctx context.Context) *Capital {
 // OnlyID is like Only, but returns the only Capital ID in the query.
 // Returns a *NotSingularError when exactly one Capital ID is not found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *CapitalQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (cq *CapitalQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = cq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -152,7 +153,7 @@ func (cq *CapitalQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *CapitalQuery) OnlyIDX(ctx context.Context) int {
+func (cq *CapitalQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := cq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,8 +179,8 @@ func (cq *CapitalQuery) AllX(ctx context.Context) []*Capital {
 }
 
 // IDs executes the query and returns a list of Capital IDs.
-func (cq *CapitalQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (cq *CapitalQuery) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	var ids []uuid.UUID
 	if err := cq.Select(capital.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -187,7 +188,7 @@ func (cq *CapitalQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *CapitalQuery) IDsX(ctx context.Context) []int {
+func (cq *CapitalQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := cq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +250,19 @@ func (cq *CapitalQuery) Clone() *CapitalQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Capital.Query().
+//		GroupBy(capital.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
+//
 func (cq *CapitalQuery) GroupBy(field string, fields ...string) *CapitalGroupBy {
 	group := &CapitalGroupBy{config: cq.config}
 	group.fields = append([]string{field}, fields...)
@@ -263,6 +277,17 @@ func (cq *CapitalQuery) GroupBy(field string, fields ...string) *CapitalGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Capital.Query().
+//		Select(capital.FieldName).
+//		Scan(ctx, &v)
+//
 func (cq *CapitalQuery) Select(fields ...string) *CapitalSelect {
 	cq.fields = append(cq.fields, fields...)
 	return &CapitalSelect{CapitalQuery: cq}
@@ -329,7 +354,7 @@ func (cq *CapitalQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   capital.Table,
 			Columns: capital.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUUID,
 				Column: capital.FieldID,
 			},
 		},

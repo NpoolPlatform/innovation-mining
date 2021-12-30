@@ -10,7 +10,13 @@ import (
 var (
 	// CapitalsColumns holds the columns for the "capitals" table.
 	CapitalsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "introduction", Type: field.TypeString},
+		{Name: "logo", Type: field.TypeString},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// CapitalsTable holds the schema information for the "capitals" table.
 	CapitalsTable = &schema.Table{
@@ -36,6 +42,7 @@ var (
 		{Name: "leader_id", Type: field.TypeUUID},
 		{Name: "member_ids", Type: field.TypeJSON},
 		{Name: "introduction", Type: field.TypeString},
+		{Name: "logo", Type: field.TypeString},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 		{Name: "delete_at", Type: field.TypeUint32},

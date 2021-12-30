@@ -57,6 +57,12 @@ func (tu *TeamUpdate) SetIntroduction(s string) *TeamUpdate {
 	return tu
 }
 
+// SetLogo sets the "logo" field.
+func (tu *TeamUpdate) SetLogo(s string) *TeamUpdate {
+	tu.mutation.SetLogo(s)
+	return tu
+}
+
 // SetCreateAt sets the "create_at" field.
 func (tu *TeamUpdate) SetCreateAt(u uint32) *TeamUpdate {
 	tu.mutation.ResetCreateAt()
@@ -233,6 +239,13 @@ func (tu *TeamUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: team.FieldIntroduction,
 		})
 	}
+	if value, ok := tu.mutation.Logo(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldLogo,
+		})
+	}
 	if value, ok := tu.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -321,6 +334,12 @@ func (tuo *TeamUpdateOne) SetMemberIds(u []uuid.UUID) *TeamUpdateOne {
 // SetIntroduction sets the "introduction" field.
 func (tuo *TeamUpdateOne) SetIntroduction(s string) *TeamUpdateOne {
 	tuo.mutation.SetIntroduction(s)
+	return tuo
+}
+
+// SetLogo sets the "logo" field.
+func (tuo *TeamUpdateOne) SetLogo(s string) *TeamUpdateOne {
+	tuo.mutation.SetLogo(s)
 	return tuo
 }
 
@@ -522,6 +541,13 @@ func (tuo *TeamUpdateOne) sqlSave(ctx context.Context) (_node *Team, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: team.FieldIntroduction,
+		})
+	}
+	if value, ok := tuo.mutation.Logo(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldLogo,
 		})
 	}
 	if value, ok := tuo.mutation.CreateAt(); ok {

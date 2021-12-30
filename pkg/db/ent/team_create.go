@@ -53,6 +53,12 @@ func (tc *TeamCreate) SetIntroduction(s string) *TeamCreate {
 	return tc
 }
 
+// SetLogo sets the "logo" field.
+func (tc *TeamCreate) SetLogo(s string) *TeamCreate {
+	tc.mutation.SetLogo(s)
+	return tc
+}
+
 // SetCreateAt sets the "create_at" field.
 func (tc *TeamCreate) SetCreateAt(u uint32) *TeamCreate {
 	tc.mutation.SetCreateAt(u)
@@ -207,6 +213,9 @@ func (tc *TeamCreate) check() error {
 	if _, ok := tc.mutation.Introduction(); !ok {
 		return &ValidationError{Name: "introduction", err: errors.New(`ent: missing required field "introduction"`)}
 	}
+	if _, ok := tc.mutation.Logo(); !ok {
+		return &ValidationError{Name: "logo", err: errors.New(`ent: missing required field "logo"`)}
+	}
 	if _, ok := tc.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
 	}
@@ -288,6 +297,14 @@ func (tc *TeamCreate) createSpec() (*Team, *sqlgraph.CreateSpec) {
 			Column: team.FieldIntroduction,
 		})
 		_node.Introduction = value
+	}
+	if value, ok := tc.mutation.Logo(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: team.FieldLogo,
+		})
+		_node.Logo = value
 	}
 	if value, ok := tc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -424,6 +441,18 @@ func (u *TeamUpsert) SetIntroduction(v string) *TeamUpsert {
 // UpdateIntroduction sets the "introduction" field to the value that was provided on create.
 func (u *TeamUpsert) UpdateIntroduction() *TeamUpsert {
 	u.SetExcluded(team.FieldIntroduction)
+	return u
+}
+
+// SetLogo sets the "logo" field.
+func (u *TeamUpsert) SetLogo(v string) *TeamUpsert {
+	u.Set(team.FieldLogo, v)
+	return u
+}
+
+// UpdateLogo sets the "logo" field to the value that was provided on create.
+func (u *TeamUpsert) UpdateLogo() *TeamUpsert {
+	u.SetExcluded(team.FieldLogo)
 	return u
 }
 
@@ -580,6 +609,20 @@ func (u *TeamUpsertOne) SetIntroduction(v string) *TeamUpsertOne {
 func (u *TeamUpsertOne) UpdateIntroduction() *TeamUpsertOne {
 	return u.Update(func(s *TeamUpsert) {
 		s.UpdateIntroduction()
+	})
+}
+
+// SetLogo sets the "logo" field.
+func (u *TeamUpsertOne) SetLogo(v string) *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetLogo(v)
+	})
+}
+
+// UpdateLogo sets the "logo" field to the value that was provided on create.
+func (u *TeamUpsertOne) UpdateLogo() *TeamUpsertOne {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateLogo()
 	})
 }
 
@@ -908,6 +951,20 @@ func (u *TeamUpsertBulk) SetIntroduction(v string) *TeamUpsertBulk {
 func (u *TeamUpsertBulk) UpdateIntroduction() *TeamUpsertBulk {
 	return u.Update(func(s *TeamUpsert) {
 		s.UpdateIntroduction()
+	})
+}
+
+// SetLogo sets the "logo" field.
+func (u *TeamUpsertBulk) SetLogo(v string) *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.SetLogo(v)
+	})
+}
+
+// UpdateLogo sets the "logo" field to the value that was provided on create.
+func (u *TeamUpsertBulk) UpdateLogo() *TeamUpsertBulk {
+	return u.Update(func(s *TeamUpsert) {
+		s.UpdateLogo()
 	})
 }
 

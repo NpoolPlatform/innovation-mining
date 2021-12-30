@@ -183,7 +183,7 @@ func (c *CapitalClient) UpdateOne(ca *Capital) *CapitalUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CapitalClient) UpdateOneID(id int) *CapitalUpdateOne {
+func (c *CapitalClient) UpdateOneID(id uuid.UUID) *CapitalUpdateOne {
 	mutation := newCapitalMutation(c.config, OpUpdateOne, withCapitalID(id))
 	return &CapitalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -200,7 +200,7 @@ func (c *CapitalClient) DeleteOne(ca *Capital) *CapitalDeleteOne {
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *CapitalClient) DeleteOneID(id int) *CapitalDeleteOne {
+func (c *CapitalClient) DeleteOneID(id uuid.UUID) *CapitalDeleteOne {
 	builder := c.Delete().Where(capital.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -215,12 +215,12 @@ func (c *CapitalClient) Query() *CapitalQuery {
 }
 
 // Get returns a Capital entity by its id.
-func (c *CapitalClient) Get(ctx context.Context, id int) (*Capital, error) {
+func (c *CapitalClient) Get(ctx context.Context, id uuid.UUID) (*Capital, error) {
 	return c.Query().Where(capital.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CapitalClient) GetX(ctx context.Context, id int) *Capital {
+func (c *CapitalClient) GetX(ctx context.Context, id uuid.UUID) *Capital {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

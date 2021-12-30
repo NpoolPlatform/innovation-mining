@@ -26,6 +26,7 @@ func (Team) Fields() []ent.Field {
 		field.UUID("leader_id", uuid.UUID{}),
 		field.JSON("member_ids", []uuid.UUID{}),
 		field.String("introduction"),
+		field.String("logo"),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {
 				return uint32(time.Now().Unix())

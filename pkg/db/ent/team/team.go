@@ -21,6 +21,8 @@ const (
 	FieldMemberIds = "member_ids"
 	// FieldIntroduction holds the string denoting the introduction field in the database.
 	FieldIntroduction = "introduction"
+	// FieldLogo holds the string denoting the logo field in the database.
+	FieldLogo = "logo"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldUpdateAt holds the string denoting the update_at field in the database.
@@ -39,6 +41,7 @@ var Columns = []string{
 	FieldLeaderID,
 	FieldMemberIds,
 	FieldIntroduction,
+	FieldLogo,
 	FieldCreateAt,
 	FieldUpdateAt,
 	FieldDeleteAt,

@@ -8,13 +8,26 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/google/uuid"
 )
 
 // Capital is the model entity for the Capital schema.
 type Capital struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// Introduction holds the value of the "introduction" field.
+	Introduction string `json:"introduction,omitempty"`
+	// Logo holds the value of the "logo" field.
+	Logo string `json:"logo,omitempty"`
+	// CreateAt holds the value of the "create_at" field.
+	CreateAt uint32 `json:"create_at,omitempty"`
+	// UpdateAt holds the value of the "update_at" field.
+	UpdateAt uint32 `json:"update_at,omitempty"`
+	// DeleteAt holds the value of the "delete_at" field.
+	DeleteAt uint32 `json:"delete_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -22,8 +35,12 @@ func (*Capital) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case capital.FieldID:
+		case capital.FieldCreateAt, capital.FieldUpdateAt, capital.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
+		case capital.FieldName, capital.FieldIntroduction, capital.FieldLogo:
+			values[i] = new(sql.NullString)
+		case capital.FieldID:
+			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Capital", columns[i])
 		}
@@ -40,11 +57,47 @@ func (c *Capital) assignValues(columns []string, values []interface{}) error {
 	for i := range columns {
 		switch columns[i] {
 		case capital.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				c.ID = *value
 			}
-			c.ID = int(value.Int64)
+		case capital.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				c.Name = value.String
+			}
+		case capital.FieldIntroduction:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field introduction", values[i])
+			} else if value.Valid {
+				c.Introduction = value.String
+			}
+		case capital.FieldLogo:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo", values[i])
+			} else if value.Valid {
+				c.Logo = value.String
+			}
+		case capital.FieldCreateAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field create_at", values[i])
+			} else if value.Valid {
+				c.CreateAt = uint32(value.Int64)
+			}
+		case capital.FieldUpdateAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field update_at", values[i])
+			} else if value.Valid {
+				c.UpdateAt = uint32(value.Int64)
+			}
+		case capital.FieldDeleteAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
+			} else if value.Valid {
+				c.DeleteAt = uint32(value.Int64)
+			}
 		}
 	}
 	return nil
@@ -73,6 +126,18 @@ func (c *Capital) String() string {
 	var builder strings.Builder
 	builder.WriteString("Capital(")
 	builder.WriteString(fmt.Sprintf("id=%v", c.ID))
+	builder.WriteString(", name=")
+	builder.WriteString(c.Name)
+	builder.WriteString(", introduction=")
+	builder.WriteString(c.Introduction)
+	builder.WriteString(", logo=")
+	builder.WriteString(c.Logo)
+	builder.WriteString(", create_at=")
+	builder.WriteString(fmt.Sprintf("%v", c.CreateAt))
+	builder.WriteString(", update_at=")
+	builder.WriteString(fmt.Sprintf("%v", c.UpdateAt))
+	builder.WriteString(", delete_at=")
+	builder.WriteString(fmt.Sprintf("%v", c.DeleteAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

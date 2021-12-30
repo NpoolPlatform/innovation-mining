@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
@@ -35,7 +36,16 @@ type CapitalMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uuid.UUID
+	name          *string
+	introduction  *string
+	logo          *string
+	create_at     *uint32
+	addcreate_at  *uint32
+	update_at     *uint32
+	addupdate_at  *uint32
+	delete_at     *uint32
+	adddelete_at  *uint32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Capital, error)
@@ -62,7 +72,7 @@ func newCapitalMutation(c config, op Op, opts ...capitalOption) *CapitalMutation
 }
 
 // withCapitalID sets the ID field of the mutation.
-func withCapitalID(id int) capitalOption {
+func withCapitalID(id uuid.UUID) capitalOption {
 	return func(m *CapitalMutation) {
 		var (
 			err   error
@@ -112,13 +122,295 @@ func (m CapitalMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Capital entities.
+func (m *CapitalMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CapitalMutation) ID() (id int, exists bool) {
+func (m *CapitalMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
 	return *m.id, true
+}
+
+// SetName sets the "name" field.
+func (m *CapitalMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *CapitalMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Capital entity.
+// If the Capital object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CapitalMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *CapitalMutation) ResetName() {
+	m.name = nil
+}
+
+// SetIntroduction sets the "introduction" field.
+func (m *CapitalMutation) SetIntroduction(s string) {
+	m.introduction = &s
+}
+
+// Introduction returns the value of the "introduction" field in the mutation.
+func (m *CapitalMutation) Introduction() (r string, exists bool) {
+	v := m.introduction
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntroduction returns the old "introduction" field's value of the Capital entity.
+// If the Capital object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CapitalMutation) OldIntroduction(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldIntroduction is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldIntroduction requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntroduction: %w", err)
+	}
+	return oldValue.Introduction, nil
+}
+
+// ResetIntroduction resets all changes to the "introduction" field.
+func (m *CapitalMutation) ResetIntroduction() {
+	m.introduction = nil
+}
+
+// SetLogo sets the "logo" field.
+func (m *CapitalMutation) SetLogo(s string) {
+	m.logo = &s
+}
+
+// Logo returns the value of the "logo" field in the mutation.
+func (m *CapitalMutation) Logo() (r string, exists bool) {
+	v := m.logo
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLogo returns the old "logo" field's value of the Capital entity.
+// If the Capital object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CapitalMutation) OldLogo(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldLogo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldLogo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLogo: %w", err)
+	}
+	return oldValue.Logo, nil
+}
+
+// ResetLogo resets all changes to the "logo" field.
+func (m *CapitalMutation) ResetLogo() {
+	m.logo = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *CapitalMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *CapitalMutation) CreateAt() (r uint32, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the Capital entity.
+// If the Capital object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CapitalMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds u to the "create_at" field.
+func (m *CapitalMutation) AddCreateAt(u uint32) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += u
+	} else {
+		m.addcreate_at = &u
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *CapitalMutation) AddedCreateAt() (r uint32, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *CapitalMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (m *CapitalMutation) SetUpdateAt(u uint32) {
+	m.update_at = &u
+	m.addupdate_at = nil
+}
+
+// UpdateAt returns the value of the "update_at" field in the mutation.
+func (m *CapitalMutation) UpdateAt() (r uint32, exists bool) {
+	v := m.update_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateAt returns the old "update_at" field's value of the Capital entity.
+// If the Capital object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CapitalMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
+	}
+	return oldValue.UpdateAt, nil
+}
+
+// AddUpdateAt adds u to the "update_at" field.
+func (m *CapitalMutation) AddUpdateAt(u uint32) {
+	if m.addupdate_at != nil {
+		*m.addupdate_at += u
+	} else {
+		m.addupdate_at = &u
+	}
+}
+
+// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
+func (m *CapitalMutation) AddedUpdateAt() (r uint32, exists bool) {
+	v := m.addupdate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdateAt resets all changes to the "update_at" field.
+func (m *CapitalMutation) ResetUpdateAt() {
+	m.update_at = nil
+	m.addupdate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *CapitalMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *CapitalMutation) DeleteAt() (r uint32, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the Capital entity.
+// If the Capital object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CapitalMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *CapitalMutation) AddDeleteAt(u uint32) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += u
+	} else {
+		m.adddelete_at = &u
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *CapitalMutation) AddedDeleteAt() (r uint32, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *CapitalMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
 }
 
 // Where appends a list predicates to the CapitalMutation builder.
@@ -140,7 +432,25 @@ func (m *CapitalMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CapitalMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 6)
+	if m.name != nil {
+		fields = append(fields, capital.FieldName)
+	}
+	if m.introduction != nil {
+		fields = append(fields, capital.FieldIntroduction)
+	}
+	if m.logo != nil {
+		fields = append(fields, capital.FieldLogo)
+	}
+	if m.create_at != nil {
+		fields = append(fields, capital.FieldCreateAt)
+	}
+	if m.update_at != nil {
+		fields = append(fields, capital.FieldUpdateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, capital.FieldDeleteAt)
+	}
 	return fields
 }
 
@@ -148,6 +458,20 @@ func (m *CapitalMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *CapitalMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case capital.FieldName:
+		return m.Name()
+	case capital.FieldIntroduction:
+		return m.Introduction()
+	case capital.FieldLogo:
+		return m.Logo()
+	case capital.FieldCreateAt:
+		return m.CreateAt()
+	case capital.FieldUpdateAt:
+		return m.UpdateAt()
+	case capital.FieldDeleteAt:
+		return m.DeleteAt()
+	}
 	return nil, false
 }
 
@@ -155,6 +479,20 @@ func (m *CapitalMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *CapitalMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case capital.FieldName:
+		return m.OldName(ctx)
+	case capital.FieldIntroduction:
+		return m.OldIntroduction(ctx)
+	case capital.FieldLogo:
+		return m.OldLogo(ctx)
+	case capital.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case capital.FieldUpdateAt:
+		return m.OldUpdateAt(ctx)
+	case capital.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
 	return nil, fmt.Errorf("unknown Capital field %s", name)
 }
 
@@ -163,6 +501,48 @@ func (m *CapitalMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *CapitalMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case capital.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case capital.FieldIntroduction:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntroduction(v)
+		return nil
+	case capital.FieldLogo:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLogo(v)
+		return nil
+	case capital.FieldCreateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case capital.FieldUpdateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateAt(v)
+		return nil
+	case capital.FieldDeleteAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Capital field %s", name)
 }
@@ -170,13 +550,31 @@ func (m *CapitalMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *CapitalMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, capital.FieldCreateAt)
+	}
+	if m.addupdate_at != nil {
+		fields = append(fields, capital.FieldUpdateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, capital.FieldDeleteAt)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *CapitalMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case capital.FieldCreateAt:
+		return m.AddedCreateAt()
+	case capital.FieldUpdateAt:
+		return m.AddedUpdateAt()
+	case capital.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
 	return nil, false
 }
 
@@ -184,6 +582,29 @@ func (m *CapitalMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *CapitalMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case capital.FieldCreateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case capital.FieldUpdateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateAt(v)
+		return nil
+	case capital.FieldDeleteAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
 	return fmt.Errorf("unknown Capital numeric field %s", name)
 }
 
@@ -209,6 +630,26 @@ func (m *CapitalMutation) ClearField(name string) error {
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *CapitalMutation) ResetField(name string) error {
+	switch name {
+	case capital.FieldName:
+		m.ResetName()
+		return nil
+	case capital.FieldIntroduction:
+		m.ResetIntroduction()
+		return nil
+	case capital.FieldLogo:
+		m.ResetLogo()
+		return nil
+	case capital.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case capital.FieldUpdateAt:
+		m.ResetUpdateAt()
+		return nil
+	case capital.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
 	return fmt.Errorf("unknown Capital field %s", name)
 }
 
@@ -501,6 +942,7 @@ type TeamMutation struct {
 	leader_id     *uuid.UUID
 	member_ids    *[]uuid.UUID
 	introduction  *string
+	logo          *string
 	create_at     *uint32
 	addcreate_at  *uint32
 	update_at     *uint32
@@ -778,6 +1220,42 @@ func (m *TeamMutation) ResetIntroduction() {
 	m.introduction = nil
 }
 
+// SetLogo sets the "logo" field.
+func (m *TeamMutation) SetLogo(s string) {
+	m.logo = &s
+}
+
+// Logo returns the value of the "logo" field in the mutation.
+func (m *TeamMutation) Logo() (r string, exists bool) {
+	v := m.logo
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLogo returns the old "logo" field's value of the Team entity.
+// If the Team object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TeamMutation) OldLogo(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldLogo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldLogo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLogo: %w", err)
+	}
+	return oldValue.Logo, nil
+}
+
+// ResetLogo resets all changes to the "logo" field.
+func (m *TeamMutation) ResetLogo() {
+	m.logo = nil
+}
+
 // SetCreateAt sets the "create_at" field.
 func (m *TeamMutation) SetCreateAt(u uint32) {
 	m.create_at = &u
@@ -965,7 +1443,7 @@ func (m *TeamMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TeamMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.team_name != nil {
 		fields = append(fields, team.FieldTeamName)
 	}
@@ -980,6 +1458,9 @@ func (m *TeamMutation) Fields() []string {
 	}
 	if m.introduction != nil {
 		fields = append(fields, team.FieldIntroduction)
+	}
+	if m.logo != nil {
+		fields = append(fields, team.FieldLogo)
 	}
 	if m.create_at != nil {
 		fields = append(fields, team.FieldCreateAt)
@@ -1008,6 +1489,8 @@ func (m *TeamMutation) Field(name string) (ent.Value, bool) {
 		return m.MemberIds()
 	case team.FieldIntroduction:
 		return m.Introduction()
+	case team.FieldLogo:
+		return m.Logo()
 	case team.FieldCreateAt:
 		return m.CreateAt()
 	case team.FieldUpdateAt:
@@ -1033,6 +1516,8 @@ func (m *TeamMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldMemberIds(ctx)
 	case team.FieldIntroduction:
 		return m.OldIntroduction(ctx)
+	case team.FieldLogo:
+		return m.OldLogo(ctx)
 	case team.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case team.FieldUpdateAt:
@@ -1082,6 +1567,13 @@ func (m *TeamMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntroduction(v)
+		return nil
+	case team.FieldLogo:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLogo(v)
 		return nil
 	case team.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -1206,6 +1698,9 @@ func (m *TeamMutation) ResetField(name string) error {
 		return nil
 	case team.FieldIntroduction:
 		m.ResetIntroduction()
+		return nil
+	case team.FieldLogo:
+		m.ResetLogo()
 		return nil
 	case team.FieldCreateAt:
 		m.ResetCreateAt()
