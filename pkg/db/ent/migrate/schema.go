@@ -8,19 +8,19 @@ import (
 )
 
 var (
-	// EmptiesColumns holds the columns for the "empties" table.
-	EmptiesColumns = []*schema.Column{
+	// TeamsColumns holds the columns for the "teams" table.
+	TeamsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 	}
-	// EmptiesTable holds the schema information for the "empties" table.
-	EmptiesTable = &schema.Table{
-		Name:       "empties",
-		Columns:    EmptiesColumns,
-		PrimaryKey: []*schema.Column{EmptiesColumns[0]},
+	// TeamsTable holds the schema information for the "teams" table.
+	TeamsTable = &schema.Table{
+		Name:       "teams",
+		Columns:    TeamsColumns,
+		PrimaryKey: []*schema.Column{TeamsColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		EmptiesTable,
+		TeamsTable,
 	}
 )
 
