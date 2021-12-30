@@ -8,6 +8,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/author"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
 )
 
@@ -29,7 +32,10 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		team.Table: team.ValidColumn,
+		author.Table:  author.ValidColumn,
+		capital.Table: capital.ValidColumn,
+		project.Table: project.ValidColumn,
+		team.Table:    team.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

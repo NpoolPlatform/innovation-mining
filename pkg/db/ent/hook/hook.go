@@ -9,6 +9,45 @@ import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent"
 )
 
+// The AuthorFunc type is an adapter to allow the use of ordinary
+// function as Author mutator.
+type AuthorFunc func(context.Context, *ent.AuthorMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AuthorFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.AuthorMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AuthorMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The CapitalFunc type is an adapter to allow the use of ordinary
+// function as Capital mutator.
+type CapitalFunc func(context.Context, *ent.CapitalMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CapitalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.CapitalMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CapitalMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ProjectFunc type is an adapter to allow the use of ordinary
+// function as Project mutator.
+type ProjectFunc func(context.Context, *ent.ProjectMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProjectFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ProjectMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The TeamFunc type is an adapter to allow the use of ordinary
 // function as Team mutator.
 type TeamFunc func(context.Context, *ent.TeamMutation) (ent.Value, error)

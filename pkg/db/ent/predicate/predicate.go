@@ -6,5 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Author is the predicate function for author builders.
+type Author func(*sql.Selector)
+
+// Capital is the predicate function for capital builders.
+type Capital func(*sql.Selector)
+
+// Project is the predicate function for project builders.
+type Project func(*sql.Selector)
+
 // Team is the predicate function for team builders.
 type Team func(*sql.Selector)

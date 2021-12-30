@@ -9,6 +9,9 @@ import (
 
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/migrate"
 
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/author"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
 
 	"entgo.io/ent/dialect"
@@ -20,6 +23,12 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Author is the client for interacting with the Author builders.
+	Author *AuthorClient
+	// Capital is the client for interacting with the Capital builders.
+	Capital *CapitalClient
+	// Project is the client for interacting with the Project builders.
+	Project *ProjectClient
 	// Team is the client for interacting with the Team builders.
 	Team *TeamClient
 }
@@ -35,6 +44,9 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Author = NewAuthorClient(c.config)
+	c.Capital = NewCapitalClient(c.config)
+	c.Project = NewProjectClient(c.config)
 	c.Team = NewTeamClient(c.config)
 }
 
@@ -67,9 +79,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Team:   NewTeamClient(cfg),
+		ctx:     ctx,
+		config:  cfg,
+		Author:  NewAuthorClient(cfg),
+		Capital: NewCapitalClient(cfg),
+		Project: NewProjectClient(cfg),
+		Team:    NewTeamClient(cfg),
 	}, nil
 }
 
@@ -87,15 +102,18 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		config: cfg,
-		Team:   NewTeamClient(cfg),
+		config:  cfg,
+		Author:  NewAuthorClient(cfg),
+		Capital: NewCapitalClient(cfg),
+		Project: NewProjectClient(cfg),
+		Team:    NewTeamClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Team.
+//		Author.
 //		Query().
 //		Count(ctx)
 //
@@ -118,7 +136,280 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.Author.Use(hooks...)
+	c.Capital.Use(hooks...)
+	c.Project.Use(hooks...)
 	c.Team.Use(hooks...)
+}
+
+// AuthorClient is a client for the Author schema.
+type AuthorClient struct {
+	config
+}
+
+// NewAuthorClient returns a client for the Author from the given config.
+func NewAuthorClient(c config) *AuthorClient {
+	return &AuthorClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `author.Hooks(f(g(h())))`.
+func (c *AuthorClient) Use(hooks ...Hook) {
+	c.hooks.Author = append(c.hooks.Author, hooks...)
+}
+
+// Create returns a create builder for Author.
+func (c *AuthorClient) Create() *AuthorCreate {
+	mutation := newAuthorMutation(c.config, OpCreate)
+	return &AuthorCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Author entities.
+func (c *AuthorClient) CreateBulk(builders ...*AuthorCreate) *AuthorCreateBulk {
+	return &AuthorCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Author.
+func (c *AuthorClient) Update() *AuthorUpdate {
+	mutation := newAuthorMutation(c.config, OpUpdate)
+	return &AuthorUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AuthorClient) UpdateOne(a *Author) *AuthorUpdateOne {
+	mutation := newAuthorMutation(c.config, OpUpdateOne, withAuthor(a))
+	return &AuthorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AuthorClient) UpdateOneID(id int) *AuthorUpdateOne {
+	mutation := newAuthorMutation(c.config, OpUpdateOne, withAuthorID(id))
+	return &AuthorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Author.
+func (c *AuthorClient) Delete() *AuthorDelete {
+	mutation := newAuthorMutation(c.config, OpDelete)
+	return &AuthorDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *AuthorClient) DeleteOne(a *Author) *AuthorDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *AuthorClient) DeleteOneID(id int) *AuthorDeleteOne {
+	builder := c.Delete().Where(author.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AuthorDeleteOne{builder}
+}
+
+// Query returns a query builder for Author.
+func (c *AuthorClient) Query() *AuthorQuery {
+	return &AuthorQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Author entity by its id.
+func (c *AuthorClient) Get(ctx context.Context, id int) (*Author, error) {
+	return c.Query().Where(author.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AuthorClient) GetX(ctx context.Context, id int) *Author {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AuthorClient) Hooks() []Hook {
+	return c.hooks.Author
+}
+
+// CapitalClient is a client for the Capital schema.
+type CapitalClient struct {
+	config
+}
+
+// NewCapitalClient returns a client for the Capital from the given config.
+func NewCapitalClient(c config) *CapitalClient {
+	return &CapitalClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `capital.Hooks(f(g(h())))`.
+func (c *CapitalClient) Use(hooks ...Hook) {
+	c.hooks.Capital = append(c.hooks.Capital, hooks...)
+}
+
+// Create returns a create builder for Capital.
+func (c *CapitalClient) Create() *CapitalCreate {
+	mutation := newCapitalMutation(c.config, OpCreate)
+	return &CapitalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Capital entities.
+func (c *CapitalClient) CreateBulk(builders ...*CapitalCreate) *CapitalCreateBulk {
+	return &CapitalCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Capital.
+func (c *CapitalClient) Update() *CapitalUpdate {
+	mutation := newCapitalMutation(c.config, OpUpdate)
+	return &CapitalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CapitalClient) UpdateOne(ca *Capital) *CapitalUpdateOne {
+	mutation := newCapitalMutation(c.config, OpUpdateOne, withCapital(ca))
+	return &CapitalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CapitalClient) UpdateOneID(id int) *CapitalUpdateOne {
+	mutation := newCapitalMutation(c.config, OpUpdateOne, withCapitalID(id))
+	return &CapitalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Capital.
+func (c *CapitalClient) Delete() *CapitalDelete {
+	mutation := newCapitalMutation(c.config, OpDelete)
+	return &CapitalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *CapitalClient) DeleteOne(ca *Capital) *CapitalDeleteOne {
+	return c.DeleteOneID(ca.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *CapitalClient) DeleteOneID(id int) *CapitalDeleteOne {
+	builder := c.Delete().Where(capital.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CapitalDeleteOne{builder}
+}
+
+// Query returns a query builder for Capital.
+func (c *CapitalClient) Query() *CapitalQuery {
+	return &CapitalQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Capital entity by its id.
+func (c *CapitalClient) Get(ctx context.Context, id int) (*Capital, error) {
+	return c.Query().Where(capital.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CapitalClient) GetX(ctx context.Context, id int) *Capital {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CapitalClient) Hooks() []Hook {
+	return c.hooks.Capital
+}
+
+// ProjectClient is a client for the Project schema.
+type ProjectClient struct {
+	config
+}
+
+// NewProjectClient returns a client for the Project from the given config.
+func NewProjectClient(c config) *ProjectClient {
+	return &ProjectClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `project.Hooks(f(g(h())))`.
+func (c *ProjectClient) Use(hooks ...Hook) {
+	c.hooks.Project = append(c.hooks.Project, hooks...)
+}
+
+// Create returns a create builder for Project.
+func (c *ProjectClient) Create() *ProjectCreate {
+	mutation := newProjectMutation(c.config, OpCreate)
+	return &ProjectCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Project entities.
+func (c *ProjectClient) CreateBulk(builders ...*ProjectCreate) *ProjectCreateBulk {
+	return &ProjectCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Project.
+func (c *ProjectClient) Update() *ProjectUpdate {
+	mutation := newProjectMutation(c.config, OpUpdate)
+	return &ProjectUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProjectClient) UpdateOne(pr *Project) *ProjectUpdateOne {
+	mutation := newProjectMutation(c.config, OpUpdateOne, withProject(pr))
+	return &ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProjectClient) UpdateOneID(id int) *ProjectUpdateOne {
+	mutation := newProjectMutation(c.config, OpUpdateOne, withProjectID(id))
+	return &ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Project.
+func (c *ProjectClient) Delete() *ProjectDelete {
+	mutation := newProjectMutation(c.config, OpDelete)
+	return &ProjectDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ProjectClient) DeleteOne(pr *Project) *ProjectDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ProjectClient) DeleteOneID(id int) *ProjectDeleteOne {
+	builder := c.Delete().Where(project.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProjectDeleteOne{builder}
+}
+
+// Query returns a query builder for Project.
+func (c *ProjectClient) Query() *ProjectQuery {
+	return &ProjectQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Project entity by its id.
+func (c *ProjectClient) Get(ctx context.Context, id int) (*Project, error) {
+	return c.Query().Where(project.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProjectClient) GetX(ctx context.Context, id int) *Project {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ProjectClient) Hooks() []Hook {
+	return c.hooks.Project
 }
 
 // TeamClient is a client for the Team schema.
