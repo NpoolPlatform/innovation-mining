@@ -48,4 +48,14 @@ func TestCRUD(t *testing.T) {
 		assert.NotEqual(t, resp.Info.ID, uuid.UUID{}.String())
 		assertUser(t, resp.Info, &user)
 	}
+
+	user.ID = resp.Info.ID
+
+	resp1, err := Update(context.Background(), &npool.UpdateUserRequest{
+		Info: &user,
+	})
+	if assert.Nil(t, err) {
+		assert.Equal(t, resp1.Info.ID, resp.Info.ID)
+		assertUser(t, resp.Info, &user)
+	}
 }

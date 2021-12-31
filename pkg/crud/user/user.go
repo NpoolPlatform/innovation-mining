@@ -9,6 +9,8 @@ import (
 	"github.com/NpoolPlatform/innovation-minning/pkg/db"
 	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent"
 
+	"github.com/google/uuid"
+
 	"golang.org/x/xerrors"
 )
 
@@ -65,5 +67,35 @@ func Create(ctx context.Context, in *npool.CreateUserRequest) (*npool.CreateUser
 }
 
 func Update(ctx context.Context, in *npool.UpdateUserRequest) (*npool.UpdateUserResponse, error) {
-	return nil, nil
+	if err := validateUser(in.GetInfo()); err != nil {
+		return nil, xerrors.Errorf("invalid parameter: %v", err)
+	}
+
+	id, err := uuid.Parse(in.GetInfo().GetID())
+	if err != nil {
+		return nil, xerrors.Errorf("invalid id: %v", err)
+	}
+
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, dbTimeout)
+	defer cancel()
+
+	info, err := cli.
+		User.
+		UpdateOneID(id).
+		SetFirstName(in.GetInfo().GetFirstName()).
+		SetLastName(in.GetInfo().GetLastName()).
+		SetIntroduction(in.GetInfo().GetIntroduction()).
+		Save(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail update user: %v", err)
+	}
+
+	return &npool.UpdateUserResponse{
+		Info: dbRowToUser(info),
+	}, nil
 }
