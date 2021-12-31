@@ -119,6 +119,13 @@ func Content(v string) predicate.TrendAnalysis {
 	})
 }
 
+// Abstract applies equality check predicate on the "abstract" field. It's identical to AbstractEQ.
+func Abstract(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAbstract), v))
+	})
+}
+
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v uint32) predicate.TrendAnalysis {
 	return predicate.TrendAnalysis(func(s *sql.Selector) {
@@ -511,6 +518,117 @@ func ContentEqualFold(v string) predicate.TrendAnalysis {
 func ContentContainsFold(v string) predicate.TrendAnalysis {
 	return predicate.TrendAnalysis(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldContent), v))
+	})
+}
+
+// AbstractEQ applies the EQ predicate on the "abstract" field.
+func AbstractEQ(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractNEQ applies the NEQ predicate on the "abstract" field.
+func AbstractNEQ(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractIn applies the In predicate on the "abstract" field.
+func AbstractIn(vs ...string) predicate.TrendAnalysis {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldAbstract), v...))
+	})
+}
+
+// AbstractNotIn applies the NotIn predicate on the "abstract" field.
+func AbstractNotIn(vs ...string) predicate.TrendAnalysis {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldAbstract), v...))
+	})
+}
+
+// AbstractGT applies the GT predicate on the "abstract" field.
+func AbstractGT(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractGTE applies the GTE predicate on the "abstract" field.
+func AbstractGTE(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractLT applies the LT predicate on the "abstract" field.
+func AbstractLT(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractLTE applies the LTE predicate on the "abstract" field.
+func AbstractLTE(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractContains applies the Contains predicate on the "abstract" field.
+func AbstractContains(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractHasPrefix applies the HasPrefix predicate on the "abstract" field.
+func AbstractHasPrefix(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractHasSuffix applies the HasSuffix predicate on the "abstract" field.
+func AbstractHasSuffix(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractEqualFold applies the EqualFold predicate on the "abstract" field.
+func AbstractEqualFold(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldAbstract), v))
+	})
+}
+
+// AbstractContainsFold applies the ContainsFold predicate on the "abstract" field.
+func AbstractContainsFold(v string) predicate.TrendAnalysis {
+	return predicate.TrendAnalysis(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldAbstract), v))
 	})
 }
 

@@ -169,6 +169,7 @@ message TechniqueAnalysis {
     string Content = 40;
     string ProjectID = 50;
     uint32 CreateAt = 60;
+    string Abstract = 70;
 }
 
 message CreateTechniqueAnalysisRequest {
@@ -194,6 +195,7 @@ message TrendAnalysis {
     string Title = 40;
     string Content = 50;
     string CreateAt = 60;
+    string Abstract = 70;
 }
 
 message CreateTrendAnalysisRequest {

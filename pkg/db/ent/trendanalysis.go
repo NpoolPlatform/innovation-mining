@@ -24,6 +24,8 @@ type TrendAnalysis struct {
 	Title string `json:"title,omitempty"`
 	// Content holds the value of the "content" field.
 	Content string `json:"content,omitempty"`
+	// Abstract holds the value of the "abstract" field.
+	Abstract string `json:"abstract,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -39,7 +41,7 @@ func (*TrendAnalysis) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case trendanalysis.FieldCreateAt, trendanalysis.FieldUpdateAt, trendanalysis.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case trendanalysis.FieldTitle, trendanalysis.FieldContent:
+		case trendanalysis.FieldTitle, trendanalysis.FieldContent, trendanalysis.FieldAbstract:
 			values[i] = new(sql.NullString)
 		case trendanalysis.FieldID, trendanalysis.FieldProjectID, trendanalysis.FieldAuthorID:
 			values[i] = new(uuid.UUID)
@@ -87,6 +89,12 @@ func (ta *TrendAnalysis) assignValues(columns []string, values []interface{}) er
 				return fmt.Errorf("unexpected type %T for field content", values[i])
 			} else if value.Valid {
 				ta.Content = value.String
+			}
+		case trendanalysis.FieldAbstract:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abstract", values[i])
+			} else if value.Valid {
+				ta.Abstract = value.String
 			}
 		case trendanalysis.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -142,6 +150,8 @@ func (ta *TrendAnalysis) String() string {
 	builder.WriteString(ta.Title)
 	builder.WriteString(", content=")
 	builder.WriteString(ta.Content)
+	builder.WriteString(", abstract=")
+	builder.WriteString(ta.Abstract)
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", ta.CreateAt))
 	builder.WriteString(", update_at=")

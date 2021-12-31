@@ -101,17 +101,17 @@ func init() {
 	techniqueanalysisFields := schema.TechniqueAnalysis{}.Fields()
 	_ = techniqueanalysisFields
 	// techniqueanalysisDescCreateAt is the schema descriptor for create_at field.
-	techniqueanalysisDescCreateAt := techniqueanalysisFields[5].Descriptor()
+	techniqueanalysisDescCreateAt := techniqueanalysisFields[6].Descriptor()
 	// techniqueanalysis.DefaultCreateAt holds the default value on creation for the create_at field.
 	techniqueanalysis.DefaultCreateAt = techniqueanalysisDescCreateAt.Default.(func() uint32)
 	// techniqueanalysisDescUpdateAt is the schema descriptor for update_at field.
-	techniqueanalysisDescUpdateAt := techniqueanalysisFields[6].Descriptor()
+	techniqueanalysisDescUpdateAt := techniqueanalysisFields[7].Descriptor()
 	// techniqueanalysis.DefaultUpdateAt holds the default value on creation for the update_at field.
 	techniqueanalysis.DefaultUpdateAt = techniqueanalysisDescUpdateAt.Default.(func() uint32)
 	// techniqueanalysis.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
 	techniqueanalysis.UpdateDefaultUpdateAt = techniqueanalysisDescUpdateAt.UpdateDefault.(func() uint32)
 	// techniqueanalysisDescDeleteAt is the schema descriptor for delete_at field.
-	techniqueanalysisDescDeleteAt := techniqueanalysisFields[7].Descriptor()
+	techniqueanalysisDescDeleteAt := techniqueanalysisFields[8].Descriptor()
 	// techniqueanalysis.DefaultDeleteAt holds the default value on creation for the delete_at field.
 	techniqueanalysis.DefaultDeleteAt = techniqueanalysisDescDeleteAt.Default.(func() uint32)
 	// techniqueanalysisDescID is the schema descriptor for id field.
@@ -121,17 +121,17 @@ func init() {
 	trendanalysisFields := schema.TrendAnalysis{}.Fields()
 	_ = trendanalysisFields
 	// trendanalysisDescCreateAt is the schema descriptor for create_at field.
-	trendanalysisDescCreateAt := trendanalysisFields[5].Descriptor()
+	trendanalysisDescCreateAt := trendanalysisFields[6].Descriptor()
 	// trendanalysis.DefaultCreateAt holds the default value on creation for the create_at field.
 	trendanalysis.DefaultCreateAt = trendanalysisDescCreateAt.Default.(func() uint32)
 	// trendanalysisDescUpdateAt is the schema descriptor for update_at field.
-	trendanalysisDescUpdateAt := trendanalysisFields[6].Descriptor()
+	trendanalysisDescUpdateAt := trendanalysisFields[7].Descriptor()
 	// trendanalysis.DefaultUpdateAt holds the default value on creation for the update_at field.
 	trendanalysis.DefaultUpdateAt = trendanalysisDescUpdateAt.Default.(func() uint32)
 	// trendanalysis.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
 	trendanalysis.UpdateDefaultUpdateAt = trendanalysisDescUpdateAt.UpdateDefault.(func() uint32)
 	// trendanalysisDescDeleteAt is the schema descriptor for delete_at field.
-	trendanalysisDescDeleteAt := trendanalysisFields[7].Descriptor()
+	trendanalysisDescDeleteAt := trendanalysisFields[8].Descriptor()
 	// trendanalysis.DefaultDeleteAt holds the default value on creation for the delete_at field.
 	trendanalysis.DefaultDeleteAt = trendanalysisDescDeleteAt.Default.(func() uint32)
 	// trendanalysisDescID is the schema descriptor for id field.

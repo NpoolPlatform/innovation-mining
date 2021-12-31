@@ -359,6 +359,7 @@
 | Content | [string](#string) |  |  |
 | ProjectID | [string](#string) |  |  |
 | CreateAt | [uint32](#uint32) |  |  |
+| Abstract | [string](#string) |  |  |
 
 
 
@@ -379,6 +380,7 @@
 | Title | [string](#string) |  |  |
 | Content | [string](#string) |  |  |
 | CreateAt | [string](#string) |  |  |
+| Abstract | [string](#string) |  |  |
 
 
 

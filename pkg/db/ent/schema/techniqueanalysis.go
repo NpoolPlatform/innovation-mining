@@ -23,6 +23,7 @@ func (TechniqueAnalysis) Fields() []ent.Field {
 		field.UUID("author_id", uuid.UUID{}),
 		field.String("title"),
 		field.String("content"),
+		field.String("abstract"),
 		field.UUID("project_id", uuid.UUID{}),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {

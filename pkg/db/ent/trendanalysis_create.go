@@ -47,6 +47,12 @@ func (tac *TrendAnalysisCreate) SetContent(s string) *TrendAnalysisCreate {
 	return tac
 }
 
+// SetAbstract sets the "abstract" field.
+func (tac *TrendAnalysisCreate) SetAbstract(s string) *TrendAnalysisCreate {
+	tac.mutation.SetAbstract(s)
+	return tac
+}
+
 // SetCreateAt sets the "create_at" field.
 func (tac *TrendAnalysisCreate) SetCreateAt(u uint32) *TrendAnalysisCreate {
 	tac.mutation.SetCreateAt(u)
@@ -198,6 +204,9 @@ func (tac *TrendAnalysisCreate) check() error {
 	if _, ok := tac.mutation.Content(); !ok {
 		return &ValidationError{Name: "content", err: errors.New(`ent: missing required field "content"`)}
 	}
+	if _, ok := tac.mutation.Abstract(); !ok {
+		return &ValidationError{Name: "abstract", err: errors.New(`ent: missing required field "abstract"`)}
+	}
 	if _, ok := tac.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
 	}
@@ -271,6 +280,14 @@ func (tac *TrendAnalysisCreate) createSpec() (*TrendAnalysis, *sqlgraph.CreateSp
 			Column: trendanalysis.FieldContent,
 		})
 		_node.Content = value
+	}
+	if value, ok := tac.mutation.Abstract(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: trendanalysis.FieldAbstract,
+		})
+		_node.Abstract = value
 	}
 	if value, ok := tac.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -395,6 +412,18 @@ func (u *TrendAnalysisUpsert) SetContent(v string) *TrendAnalysisUpsert {
 // UpdateContent sets the "content" field to the value that was provided on create.
 func (u *TrendAnalysisUpsert) UpdateContent() *TrendAnalysisUpsert {
 	u.SetExcluded(trendanalysis.FieldContent)
+	return u
+}
+
+// SetAbstract sets the "abstract" field.
+func (u *TrendAnalysisUpsert) SetAbstract(v string) *TrendAnalysisUpsert {
+	u.Set(trendanalysis.FieldAbstract, v)
+	return u
+}
+
+// UpdateAbstract sets the "abstract" field to the value that was provided on create.
+func (u *TrendAnalysisUpsert) UpdateAbstract() *TrendAnalysisUpsert {
+	u.SetExcluded(trendanalysis.FieldAbstract)
 	return u
 }
 
@@ -537,6 +566,20 @@ func (u *TrendAnalysisUpsertOne) SetContent(v string) *TrendAnalysisUpsertOne {
 func (u *TrendAnalysisUpsertOne) UpdateContent() *TrendAnalysisUpsertOne {
 	return u.Update(func(s *TrendAnalysisUpsert) {
 		s.UpdateContent()
+	})
+}
+
+// SetAbstract sets the "abstract" field.
+func (u *TrendAnalysisUpsertOne) SetAbstract(v string) *TrendAnalysisUpsertOne {
+	return u.Update(func(s *TrendAnalysisUpsert) {
+		s.SetAbstract(v)
+	})
+}
+
+// UpdateAbstract sets the "abstract" field to the value that was provided on create.
+func (u *TrendAnalysisUpsertOne) UpdateAbstract() *TrendAnalysisUpsertOne {
+	return u.Update(func(s *TrendAnalysisUpsert) {
+		s.UpdateAbstract()
 	})
 }
 
@@ -851,6 +894,20 @@ func (u *TrendAnalysisUpsertBulk) SetContent(v string) *TrendAnalysisUpsertBulk 
 func (u *TrendAnalysisUpsertBulk) UpdateContent() *TrendAnalysisUpsertBulk {
 	return u.Update(func(s *TrendAnalysisUpsert) {
 		s.UpdateContent()
+	})
+}
+
+// SetAbstract sets the "abstract" field.
+func (u *TrendAnalysisUpsertBulk) SetAbstract(v string) *TrendAnalysisUpsertBulk {
+	return u.Update(func(s *TrendAnalysisUpsert) {
+		s.SetAbstract(v)
+	})
+}
+
+// UpdateAbstract sets the "abstract" field to the value that was provided on create.
+func (u *TrendAnalysisUpsertBulk) UpdateAbstract() *TrendAnalysisUpsertBulk {
+	return u.Update(func(s *TrendAnalysisUpsert) {
+		s.UpdateAbstract()
 	})
 }
 

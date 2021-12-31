@@ -45,6 +45,12 @@ func (tau *TechniqueAnalysisUpdate) SetContent(s string) *TechniqueAnalysisUpdat
 	return tau
 }
 
+// SetAbstract sets the "abstract" field.
+func (tau *TechniqueAnalysisUpdate) SetAbstract(s string) *TechniqueAnalysisUpdate {
+	tau.mutation.SetAbstract(s)
+	return tau
+}
+
 // SetProjectID sets the "project_id" field.
 func (tau *TechniqueAnalysisUpdate) SetProjectID(u uuid.UUID) *TechniqueAnalysisUpdate {
 	tau.mutation.SetProjectID(u)
@@ -213,6 +219,13 @@ func (tau *TechniqueAnalysisUpdate) sqlSave(ctx context.Context) (n int, err err
 			Column: techniqueanalysis.FieldContent,
 		})
 	}
+	if value, ok := tau.mutation.Abstract(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: techniqueanalysis.FieldAbstract,
+		})
+	}
 	if value, ok := tau.mutation.ProjectID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -296,6 +309,12 @@ func (tauo *TechniqueAnalysisUpdateOne) SetTitle(s string) *TechniqueAnalysisUpd
 // SetContent sets the "content" field.
 func (tauo *TechniqueAnalysisUpdateOne) SetContent(s string) *TechniqueAnalysisUpdateOne {
 	tauo.mutation.SetContent(s)
+	return tauo
+}
+
+// SetAbstract sets the "abstract" field.
+func (tauo *TechniqueAnalysisUpdateOne) SetAbstract(s string) *TechniqueAnalysisUpdateOne {
+	tauo.mutation.SetAbstract(s)
 	return tauo
 }
 
@@ -489,6 +508,13 @@ func (tauo *TechniqueAnalysisUpdateOne) sqlSave(ctx context.Context) (_node *Tec
 			Type:   field.TypeString,
 			Value:  value,
 			Column: techniqueanalysis.FieldContent,
+		})
+	}
+	if value, ok := tauo.mutation.Abstract(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: techniqueanalysis.FieldAbstract,
 		})
 	}
 	if value, ok := tauo.mutation.ProjectID(); ok {

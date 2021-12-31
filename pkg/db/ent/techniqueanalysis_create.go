@@ -41,6 +41,12 @@ func (tac *TechniqueAnalysisCreate) SetContent(s string) *TechniqueAnalysisCreat
 	return tac
 }
 
+// SetAbstract sets the "abstract" field.
+func (tac *TechniqueAnalysisCreate) SetAbstract(s string) *TechniqueAnalysisCreate {
+	tac.mutation.SetAbstract(s)
+	return tac
+}
+
 // SetProjectID sets the "project_id" field.
 func (tac *TechniqueAnalysisCreate) SetProjectID(u uuid.UUID) *TechniqueAnalysisCreate {
 	tac.mutation.SetProjectID(u)
@@ -195,6 +201,9 @@ func (tac *TechniqueAnalysisCreate) check() error {
 	if _, ok := tac.mutation.Content(); !ok {
 		return &ValidationError{Name: "content", err: errors.New(`ent: missing required field "content"`)}
 	}
+	if _, ok := tac.mutation.Abstract(); !ok {
+		return &ValidationError{Name: "abstract", err: errors.New(`ent: missing required field "abstract"`)}
+	}
 	if _, ok := tac.mutation.ProjectID(); !ok {
 		return &ValidationError{Name: "project_id", err: errors.New(`ent: missing required field "project_id"`)}
 	}
@@ -263,6 +272,14 @@ func (tac *TechniqueAnalysisCreate) createSpec() (*TechniqueAnalysis, *sqlgraph.
 			Column: techniqueanalysis.FieldContent,
 		})
 		_node.Content = value
+	}
+	if value, ok := tac.mutation.Abstract(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: techniqueanalysis.FieldAbstract,
+		})
+		_node.Abstract = value
 	}
 	if value, ok := tac.mutation.ProjectID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -383,6 +400,18 @@ func (u *TechniqueAnalysisUpsert) SetContent(v string) *TechniqueAnalysisUpsert 
 // UpdateContent sets the "content" field to the value that was provided on create.
 func (u *TechniqueAnalysisUpsert) UpdateContent() *TechniqueAnalysisUpsert {
 	u.SetExcluded(techniqueanalysis.FieldContent)
+	return u
+}
+
+// SetAbstract sets the "abstract" field.
+func (u *TechniqueAnalysisUpsert) SetAbstract(v string) *TechniqueAnalysisUpsert {
+	u.Set(techniqueanalysis.FieldAbstract, v)
+	return u
+}
+
+// UpdateAbstract sets the "abstract" field to the value that was provided on create.
+func (u *TechniqueAnalysisUpsert) UpdateAbstract() *TechniqueAnalysisUpsert {
+	u.SetExcluded(techniqueanalysis.FieldAbstract)
 	return u
 }
 
@@ -523,6 +552,20 @@ func (u *TechniqueAnalysisUpsertOne) SetContent(v string) *TechniqueAnalysisUpse
 func (u *TechniqueAnalysisUpsertOne) UpdateContent() *TechniqueAnalysisUpsertOne {
 	return u.Update(func(s *TechniqueAnalysisUpsert) {
 		s.UpdateContent()
+	})
+}
+
+// SetAbstract sets the "abstract" field.
+func (u *TechniqueAnalysisUpsertOne) SetAbstract(v string) *TechniqueAnalysisUpsertOne {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.SetAbstract(v)
+	})
+}
+
+// UpdateAbstract sets the "abstract" field to the value that was provided on create.
+func (u *TechniqueAnalysisUpsertOne) UpdateAbstract() *TechniqueAnalysisUpsertOne {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.UpdateAbstract()
 	})
 }
 
@@ -837,6 +880,20 @@ func (u *TechniqueAnalysisUpsertBulk) SetContent(v string) *TechniqueAnalysisUps
 func (u *TechniqueAnalysisUpsertBulk) UpdateContent() *TechniqueAnalysisUpsertBulk {
 	return u.Update(func(s *TechniqueAnalysisUpsert) {
 		s.UpdateContent()
+	})
+}
+
+// SetAbstract sets the "abstract" field.
+func (u *TechniqueAnalysisUpsertBulk) SetAbstract(v string) *TechniqueAnalysisUpsertBulk {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.SetAbstract(v)
+	})
+}
+
+// UpdateAbstract sets the "abstract" field to the value that was provided on create.
+func (u *TechniqueAnalysisUpsertBulk) UpdateAbstract() *TechniqueAnalysisUpsertBulk {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.UpdateAbstract()
 	})
 }
 

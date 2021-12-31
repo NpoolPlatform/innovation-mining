@@ -51,6 +51,12 @@ func (tau *TrendAnalysisUpdate) SetContent(s string) *TrendAnalysisUpdate {
 	return tau
 }
 
+// SetAbstract sets the "abstract" field.
+func (tau *TrendAnalysisUpdate) SetAbstract(s string) *TrendAnalysisUpdate {
+	tau.mutation.SetAbstract(s)
+	return tau
+}
+
 // SetCreateAt sets the "create_at" field.
 func (tau *TrendAnalysisUpdate) SetCreateAt(u uint32) *TrendAnalysisUpdate {
 	tau.mutation.ResetCreateAt()
@@ -220,6 +226,13 @@ func (tau *TrendAnalysisUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Column: trendanalysis.FieldContent,
 		})
 	}
+	if value, ok := tau.mutation.Abstract(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: trendanalysis.FieldAbstract,
+		})
+	}
 	if value, ok := tau.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -302,6 +315,12 @@ func (tauo *TrendAnalysisUpdateOne) SetTitle(s string) *TrendAnalysisUpdateOne {
 // SetContent sets the "content" field.
 func (tauo *TrendAnalysisUpdateOne) SetContent(s string) *TrendAnalysisUpdateOne {
 	tauo.mutation.SetContent(s)
+	return tauo
+}
+
+// SetAbstract sets the "abstract" field.
+func (tauo *TrendAnalysisUpdateOne) SetAbstract(s string) *TrendAnalysisUpdateOne {
+	tauo.mutation.SetAbstract(s)
 	return tauo
 }
 
@@ -496,6 +515,13 @@ func (tauo *TrendAnalysisUpdateOne) sqlSave(ctx context.Context) (_node *TrendAn
 			Type:   field.TypeString,
 			Value:  value,
 			Column: trendanalysis.FieldContent,
+		})
+	}
+	if value, ok := tauo.mutation.Abstract(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: trendanalysis.FieldAbstract,
 		})
 	}
 	if value, ok := tauo.mutation.CreateAt(); ok {

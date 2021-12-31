@@ -3279,6 +3279,7 @@ type TechniqueAnalysisMutation struct {
 	author_id     *uuid.UUID
 	title         *string
 	content       *string
+	abstract      *string
 	project_id    *uuid.UUID
 	create_at     *uint32
 	addcreate_at  *uint32
@@ -3483,6 +3484,42 @@ func (m *TechniqueAnalysisMutation) OldContent(ctx context.Context) (v string, e
 // ResetContent resets all changes to the "content" field.
 func (m *TechniqueAnalysisMutation) ResetContent() {
 	m.content = nil
+}
+
+// SetAbstract sets the "abstract" field.
+func (m *TechniqueAnalysisMutation) SetAbstract(s string) {
+	m.abstract = &s
+}
+
+// Abstract returns the value of the "abstract" field in the mutation.
+func (m *TechniqueAnalysisMutation) Abstract() (r string, exists bool) {
+	v := m.abstract
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbstract returns the old "abstract" field's value of the TechniqueAnalysis entity.
+// If the TechniqueAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TechniqueAnalysisMutation) OldAbstract(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAbstract is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAbstract requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbstract: %w", err)
+	}
+	return oldValue.Abstract, nil
+}
+
+// ResetAbstract resets all changes to the "abstract" field.
+func (m *TechniqueAnalysisMutation) ResetAbstract() {
+	m.abstract = nil
 }
 
 // SetProjectID sets the "project_id" field.
@@ -3708,7 +3745,7 @@ func (m *TechniqueAnalysisMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TechniqueAnalysisMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.author_id != nil {
 		fields = append(fields, techniqueanalysis.FieldAuthorID)
 	}
@@ -3717,6 +3754,9 @@ func (m *TechniqueAnalysisMutation) Fields() []string {
 	}
 	if m.content != nil {
 		fields = append(fields, techniqueanalysis.FieldContent)
+	}
+	if m.abstract != nil {
+		fields = append(fields, techniqueanalysis.FieldAbstract)
 	}
 	if m.project_id != nil {
 		fields = append(fields, techniqueanalysis.FieldProjectID)
@@ -3744,6 +3784,8 @@ func (m *TechniqueAnalysisMutation) Field(name string) (ent.Value, bool) {
 		return m.Title()
 	case techniqueanalysis.FieldContent:
 		return m.Content()
+	case techniqueanalysis.FieldAbstract:
+		return m.Abstract()
 	case techniqueanalysis.FieldProjectID:
 		return m.ProjectID()
 	case techniqueanalysis.FieldCreateAt:
@@ -3767,6 +3809,8 @@ func (m *TechniqueAnalysisMutation) OldField(ctx context.Context, name string) (
 		return m.OldTitle(ctx)
 	case techniqueanalysis.FieldContent:
 		return m.OldContent(ctx)
+	case techniqueanalysis.FieldAbstract:
+		return m.OldAbstract(ctx)
 	case techniqueanalysis.FieldProjectID:
 		return m.OldProjectID(ctx)
 	case techniqueanalysis.FieldCreateAt:
@@ -3804,6 +3848,13 @@ func (m *TechniqueAnalysisMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetContent(v)
+		return nil
+	case techniqueanalysis.FieldAbstract:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbstract(v)
 		return nil
 	case techniqueanalysis.FieldProjectID:
 		v, ok := value.(uuid.UUID)
@@ -3930,6 +3981,9 @@ func (m *TechniqueAnalysisMutation) ResetField(name string) error {
 	case techniqueanalysis.FieldContent:
 		m.ResetContent()
 		return nil
+	case techniqueanalysis.FieldAbstract:
+		m.ResetAbstract()
+		return nil
 	case techniqueanalysis.FieldProjectID:
 		m.ResetProjectID()
 		return nil
@@ -4004,6 +4058,7 @@ type TrendAnalysisMutation struct {
 	author_id     *uuid.UUID
 	title         *string
 	content       *string
+	abstract      *string
 	create_at     *uint32
 	addcreate_at  *uint32
 	update_at     *uint32
@@ -4245,6 +4300,42 @@ func (m *TrendAnalysisMutation) ResetContent() {
 	m.content = nil
 }
 
+// SetAbstract sets the "abstract" field.
+func (m *TrendAnalysisMutation) SetAbstract(s string) {
+	m.abstract = &s
+}
+
+// Abstract returns the value of the "abstract" field in the mutation.
+func (m *TrendAnalysisMutation) Abstract() (r string, exists bool) {
+	v := m.abstract
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbstract returns the old "abstract" field's value of the TrendAnalysis entity.
+// If the TrendAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrendAnalysisMutation) OldAbstract(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAbstract is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAbstract requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbstract: %w", err)
+	}
+	return oldValue.Abstract, nil
+}
+
+// ResetAbstract resets all changes to the "abstract" field.
+func (m *TrendAnalysisMutation) ResetAbstract() {
+	m.abstract = nil
+}
+
 // SetCreateAt sets the "create_at" field.
 func (m *TrendAnalysisMutation) SetCreateAt(u uint32) {
 	m.create_at = &u
@@ -4432,7 +4523,7 @@ func (m *TrendAnalysisMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrendAnalysisMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.project_id != nil {
 		fields = append(fields, trendanalysis.FieldProjectID)
 	}
@@ -4444,6 +4535,9 @@ func (m *TrendAnalysisMutation) Fields() []string {
 	}
 	if m.content != nil {
 		fields = append(fields, trendanalysis.FieldContent)
+	}
+	if m.abstract != nil {
+		fields = append(fields, trendanalysis.FieldAbstract)
 	}
 	if m.create_at != nil {
 		fields = append(fields, trendanalysis.FieldCreateAt)
@@ -4470,6 +4564,8 @@ func (m *TrendAnalysisMutation) Field(name string) (ent.Value, bool) {
 		return m.Title()
 	case trendanalysis.FieldContent:
 		return m.Content()
+	case trendanalysis.FieldAbstract:
+		return m.Abstract()
 	case trendanalysis.FieldCreateAt:
 		return m.CreateAt()
 	case trendanalysis.FieldUpdateAt:
@@ -4493,6 +4589,8 @@ func (m *TrendAnalysisMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldTitle(ctx)
 	case trendanalysis.FieldContent:
 		return m.OldContent(ctx)
+	case trendanalysis.FieldAbstract:
+		return m.OldAbstract(ctx)
 	case trendanalysis.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case trendanalysis.FieldUpdateAt:
@@ -4535,6 +4633,13 @@ func (m *TrendAnalysisMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetContent(v)
+		return nil
+	case trendanalysis.FieldAbstract:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbstract(v)
 		return nil
 	case trendanalysis.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -4656,6 +4761,9 @@ func (m *TrendAnalysisMutation) ResetField(name string) error {
 		return nil
 	case trendanalysis.FieldContent:
 		m.ResetContent()
+		return nil
+	case trendanalysis.FieldAbstract:
+		m.ResetAbstract()
 		return nil
 	case trendanalysis.FieldCreateAt:
 		m.ResetCreateAt()
