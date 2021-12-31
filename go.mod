@@ -1,4 +1,4 @@
-module github.com/NpoolPlatform/innovation-mining
+module github.com/NpoolPlatform/innovation-minning
 
 go 1.16
 

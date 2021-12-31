@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/launchtime"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/launchtime"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/predicate"
 )
 
 // LaunchTimeDelete is the builder for deleting a LaunchTime entity.

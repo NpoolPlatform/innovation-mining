@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package innovation.minning.v1;
 
-option go_package = "github.com/NpoolPlatform/innovation-mining/message/npool";
+option go_package = "github.com/NpoolPlatform/innovation-minning/message/npool";
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";

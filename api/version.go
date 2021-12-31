@@ -5,8 +5,8 @@ package api
 import (
 	"context"
 
-	"github.com/NpoolPlatform/innovation-mining/message/npool"
-	"github.com/NpoolPlatform/innovation-mining/pkg/version"
+	"github.com/NpoolPlatform/innovation-minning/message/npool"
+	"github.com/NpoolPlatform/innovation-minning/pkg/version"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

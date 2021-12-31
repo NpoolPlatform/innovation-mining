@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent"
 )
 
 // The CapitalFunc type is an adapter to allow the use of ordinary

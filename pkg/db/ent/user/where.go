@@ -4,7 +4,7 @@ package user
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/predicate"
 	"github.com/google/uuid"
 )
 

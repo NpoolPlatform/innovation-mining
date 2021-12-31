@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/team"
 	"github.com/google/uuid"
 )
 

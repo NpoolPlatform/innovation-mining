@@ -3,12 +3,12 @@ package main
 import (
 	"time"
 
-	"github.com/NpoolPlatform/innovation-mining/api"
-	db "github.com/NpoolPlatform/innovation-mining/pkg/db"
-	msgcli "github.com/NpoolPlatform/innovation-mining/pkg/message/client"
-	msglistener "github.com/NpoolPlatform/innovation-mining/pkg/message/listener"
-	msg "github.com/NpoolPlatform/innovation-mining/pkg/message/message"
-	msgsrv "github.com/NpoolPlatform/innovation-mining/pkg/message/server"
+	"github.com/NpoolPlatform/innovation-minning/api"
+	db "github.com/NpoolPlatform/innovation-minning/pkg/db"
+	msgcli "github.com/NpoolPlatform/innovation-minning/pkg/message/client"
+	msglistener "github.com/NpoolPlatform/innovation-minning/pkg/message/listener"
+	msg "github.com/NpoolPlatform/innovation-minning/pkg/message/message"
+	msgsrv "github.com/NpoolPlatform/innovation-minning/pkg/message/server"
 
 	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"

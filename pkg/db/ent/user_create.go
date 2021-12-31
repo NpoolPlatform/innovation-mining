@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/user"
 	"github.com/google/uuid"
 )
 

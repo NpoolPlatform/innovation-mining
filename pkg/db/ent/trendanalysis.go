@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/trendanalysis"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/trendanalysis"
 	"github.com/google/uuid"
 )
 

@@ -1,7 +1,7 @@
 package version
 
 import (
-	"github.com/NpoolPlatform/innovation-mining/message/npool"
+	"github.com/NpoolPlatform/innovation-minning/message/npool"
 
 	cv "github.com/NpoolPlatform/go-service-framework/pkg/version" //nolint
 	logger "github.com/NpoolPlatform/go-service-framework/pkg/logger" //nolint

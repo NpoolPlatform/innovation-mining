@@ -3,14 +3,14 @@
 package ent
 
 import (
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/launchtime"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/schema"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/techniqueanalysis"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/trendanalysis"
-	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/user"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/launchtime"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/project"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/schema"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/team"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/techniqueanalysis"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/trendanalysis"
+	"github.com/NpoolPlatform/innovation-minning/pkg/db/ent/user"
 	"github.com/google/uuid"
 )
 
