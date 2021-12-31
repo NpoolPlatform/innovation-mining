@@ -98,10 +98,10 @@ func TeamName(v string) predicate.Team {
 	})
 }
 
-// TeamLogo applies equality check predicate on the "team_logo" field. It's identical to TeamLogoEQ.
-func TeamLogo(v string) predicate.Team {
+// Logo applies equality check predicate on the "logo" field. It's identical to LogoEQ.
+func Logo(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTeamLogo), v))
+		s.Where(sql.EQ(s.C(FieldLogo), v))
 	})
 }
 
@@ -116,13 +116,6 @@ func LeaderID(v uuid.UUID) predicate.Team {
 func Introduction(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldIntroduction), v))
-	})
-}
-
-// Logo applies equality check predicate on the "logo" field. It's identical to LogoEQ.
-func Logo(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLogo), v))
 	})
 }
 
@@ -258,22 +251,22 @@ func TeamNameContainsFold(v string) predicate.Team {
 	})
 }
 
-// TeamLogoEQ applies the EQ predicate on the "team_logo" field.
-func TeamLogoEQ(v string) predicate.Team {
+// LogoEQ applies the EQ predicate on the "logo" field.
+func LogoEQ(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTeamLogo), v))
+		s.Where(sql.EQ(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoNEQ applies the NEQ predicate on the "team_logo" field.
-func TeamLogoNEQ(v string) predicate.Team {
+// LogoNEQ applies the NEQ predicate on the "logo" field.
+func LogoNEQ(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldTeamLogo), v))
+		s.Where(sql.NEQ(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoIn applies the In predicate on the "team_logo" field.
-func TeamLogoIn(vs ...string) predicate.Team {
+// LogoIn applies the In predicate on the "logo" field.
+func LogoIn(vs ...string) predicate.Team {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -285,12 +278,12 @@ func TeamLogoIn(vs ...string) predicate.Team {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldTeamLogo), v...))
+		s.Where(sql.In(s.C(FieldLogo), v...))
 	})
 }
 
-// TeamLogoNotIn applies the NotIn predicate on the "team_logo" field.
-func TeamLogoNotIn(vs ...string) predicate.Team {
+// LogoNotIn applies the NotIn predicate on the "logo" field.
+func LogoNotIn(vs ...string) predicate.Team {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -302,70 +295,70 @@ func TeamLogoNotIn(vs ...string) predicate.Team {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldTeamLogo), v...))
+		s.Where(sql.NotIn(s.C(FieldLogo), v...))
 	})
 }
 
-// TeamLogoGT applies the GT predicate on the "team_logo" field.
-func TeamLogoGT(v string) predicate.Team {
+// LogoGT applies the GT predicate on the "logo" field.
+func LogoGT(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldTeamLogo), v))
+		s.Where(sql.GT(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoGTE applies the GTE predicate on the "team_logo" field.
-func TeamLogoGTE(v string) predicate.Team {
+// LogoGTE applies the GTE predicate on the "logo" field.
+func LogoGTE(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldTeamLogo), v))
+		s.Where(sql.GTE(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoLT applies the LT predicate on the "team_logo" field.
-func TeamLogoLT(v string) predicate.Team {
+// LogoLT applies the LT predicate on the "logo" field.
+func LogoLT(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldTeamLogo), v))
+		s.Where(sql.LT(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoLTE applies the LTE predicate on the "team_logo" field.
-func TeamLogoLTE(v string) predicate.Team {
+// LogoLTE applies the LTE predicate on the "logo" field.
+func LogoLTE(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldTeamLogo), v))
+		s.Where(sql.LTE(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoContains applies the Contains predicate on the "team_logo" field.
-func TeamLogoContains(v string) predicate.Team {
+// LogoContains applies the Contains predicate on the "logo" field.
+func LogoContains(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldTeamLogo), v))
+		s.Where(sql.Contains(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoHasPrefix applies the HasPrefix predicate on the "team_logo" field.
-func TeamLogoHasPrefix(v string) predicate.Team {
+// LogoHasPrefix applies the HasPrefix predicate on the "logo" field.
+func LogoHasPrefix(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldTeamLogo), v))
+		s.Where(sql.HasPrefix(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoHasSuffix applies the HasSuffix predicate on the "team_logo" field.
-func TeamLogoHasSuffix(v string) predicate.Team {
+// LogoHasSuffix applies the HasSuffix predicate on the "logo" field.
+func LogoHasSuffix(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldTeamLogo), v))
+		s.Where(sql.HasSuffix(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoEqualFold applies the EqualFold predicate on the "team_logo" field.
-func TeamLogoEqualFold(v string) predicate.Team {
+// LogoEqualFold applies the EqualFold predicate on the "logo" field.
+func LogoEqualFold(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldTeamLogo), v))
+		s.Where(sql.EqualFold(s.C(FieldLogo), v))
 	})
 }
 
-// TeamLogoContainsFold applies the ContainsFold predicate on the "team_logo" field.
-func TeamLogoContainsFold(v string) predicate.Team {
+// LogoContainsFold applies the ContainsFold predicate on the "logo" field.
+func LogoContainsFold(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldTeamLogo), v))
+		s.Where(sql.ContainsFold(s.C(FieldLogo), v))
 	})
 }
 
@@ -553,117 +546,6 @@ func IntroductionEqualFold(v string) predicate.Team {
 func IntroductionContainsFold(v string) predicate.Team {
 	return predicate.Team(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldIntroduction), v))
-	})
-}
-
-// LogoEQ applies the EQ predicate on the "logo" field.
-func LogoEQ(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLogo), v))
-	})
-}
-
-// LogoNEQ applies the NEQ predicate on the "logo" field.
-func LogoNEQ(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldLogo), v))
-	})
-}
-
-// LogoIn applies the In predicate on the "logo" field.
-func LogoIn(vs ...string) predicate.Team {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Team(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldLogo), v...))
-	})
-}
-
-// LogoNotIn applies the NotIn predicate on the "logo" field.
-func LogoNotIn(vs ...string) predicate.Team {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Team(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldLogo), v...))
-	})
-}
-
-// LogoGT applies the GT predicate on the "logo" field.
-func LogoGT(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldLogo), v))
-	})
-}
-
-// LogoGTE applies the GTE predicate on the "logo" field.
-func LogoGTE(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldLogo), v))
-	})
-}
-
-// LogoLT applies the LT predicate on the "logo" field.
-func LogoLT(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldLogo), v))
-	})
-}
-
-// LogoLTE applies the LTE predicate on the "logo" field.
-func LogoLTE(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldLogo), v))
-	})
-}
-
-// LogoContains applies the Contains predicate on the "logo" field.
-func LogoContains(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldLogo), v))
-	})
-}
-
-// LogoHasPrefix applies the HasPrefix predicate on the "logo" field.
-func LogoHasPrefix(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldLogo), v))
-	})
-}
-
-// LogoHasSuffix applies the HasSuffix predicate on the "logo" field.
-func LogoHasSuffix(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldLogo), v))
-	})
-}
-
-// LogoEqualFold applies the EqualFold predicate on the "logo" field.
-func LogoEqualFold(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldLogo), v))
-	})
-}
-
-// LogoContainsFold applies the ContainsFold predicate on the "logo" field.
-func LogoContainsFold(v string) predicate.Team {
-	return predicate.Team(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldLogo), v))
 	})
 }
 

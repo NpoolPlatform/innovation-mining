@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/launchtime"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/techniqueanalysis"
@@ -28,6 +29,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Capital is the client for interacting with the Capital builders.
 	Capital *CapitalClient
+	// LaunchTime is the client for interacting with the LaunchTime builders.
+	LaunchTime *LaunchTimeClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// Team is the client for interacting with the Team builders.
@@ -52,6 +55,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Capital = NewCapitalClient(c.config)
+	c.LaunchTime = NewLaunchTimeClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.Team = NewTeamClient(c.config)
 	c.TechniqueAnalysis = NewTechniqueAnalysisClient(c.config)
@@ -91,6 +95,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:               ctx,
 		config:            cfg,
 		Capital:           NewCapitalClient(cfg),
+		LaunchTime:        NewLaunchTimeClient(cfg),
 		Project:           NewProjectClient(cfg),
 		Team:              NewTeamClient(cfg),
 		TechniqueAnalysis: NewTechniqueAnalysisClient(cfg),
@@ -115,6 +120,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		config:            cfg,
 		Capital:           NewCapitalClient(cfg),
+		LaunchTime:        NewLaunchTimeClient(cfg),
 		Project:           NewProjectClient(cfg),
 		Team:              NewTeamClient(cfg),
 		TechniqueAnalysis: NewTechniqueAnalysisClient(cfg),
@@ -150,6 +156,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.Capital.Use(hooks...)
+	c.LaunchTime.Use(hooks...)
 	c.Project.Use(hooks...)
 	c.Team.Use(hooks...)
 	c.TechniqueAnalysis.Use(hooks...)
@@ -245,6 +252,96 @@ func (c *CapitalClient) GetX(ctx context.Context, id uuid.UUID) *Capital {
 // Hooks returns the client hooks.
 func (c *CapitalClient) Hooks() []Hook {
 	return c.hooks.Capital
+}
+
+// LaunchTimeClient is a client for the LaunchTime schema.
+type LaunchTimeClient struct {
+	config
+}
+
+// NewLaunchTimeClient returns a client for the LaunchTime from the given config.
+func NewLaunchTimeClient(c config) *LaunchTimeClient {
+	return &LaunchTimeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `launchtime.Hooks(f(g(h())))`.
+func (c *LaunchTimeClient) Use(hooks ...Hook) {
+	c.hooks.LaunchTime = append(c.hooks.LaunchTime, hooks...)
+}
+
+// Create returns a create builder for LaunchTime.
+func (c *LaunchTimeClient) Create() *LaunchTimeCreate {
+	mutation := newLaunchTimeMutation(c.config, OpCreate)
+	return &LaunchTimeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LaunchTime entities.
+func (c *LaunchTimeClient) CreateBulk(builders ...*LaunchTimeCreate) *LaunchTimeCreateBulk {
+	return &LaunchTimeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LaunchTime.
+func (c *LaunchTimeClient) Update() *LaunchTimeUpdate {
+	mutation := newLaunchTimeMutation(c.config, OpUpdate)
+	return &LaunchTimeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LaunchTimeClient) UpdateOne(lt *LaunchTime) *LaunchTimeUpdateOne {
+	mutation := newLaunchTimeMutation(c.config, OpUpdateOne, withLaunchTime(lt))
+	return &LaunchTimeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LaunchTimeClient) UpdateOneID(id uuid.UUID) *LaunchTimeUpdateOne {
+	mutation := newLaunchTimeMutation(c.config, OpUpdateOne, withLaunchTimeID(id))
+	return &LaunchTimeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LaunchTime.
+func (c *LaunchTimeClient) Delete() *LaunchTimeDelete {
+	mutation := newLaunchTimeMutation(c.config, OpDelete)
+	return &LaunchTimeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *LaunchTimeClient) DeleteOne(lt *LaunchTime) *LaunchTimeDeleteOne {
+	return c.DeleteOneID(lt.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *LaunchTimeClient) DeleteOneID(id uuid.UUID) *LaunchTimeDeleteOne {
+	builder := c.Delete().Where(launchtime.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LaunchTimeDeleteOne{builder}
+}
+
+// Query returns a query builder for LaunchTime.
+func (c *LaunchTimeClient) Query() *LaunchTimeQuery {
+	return &LaunchTimeQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a LaunchTime entity by its id.
+func (c *LaunchTimeClient) Get(ctx context.Context, id uuid.UUID) (*LaunchTime, error) {
+	return c.Query().Where(launchtime.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LaunchTimeClient) GetX(ctx context.Context, id uuid.UUID) *LaunchTime {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LaunchTimeClient) Hooks() []Hook {
+	return c.hooks.LaunchTime
 }
 
 // ProjectClient is a client for the Project schema.

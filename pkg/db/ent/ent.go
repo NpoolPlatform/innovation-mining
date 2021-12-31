@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/launchtime"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/techniqueanalysis"
@@ -35,6 +36,7 @@ type OrderFunc func(*sql.Selector)
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		capital.Table:           capital.ValidColumn,
+		launchtime.Table:        launchtime.ValidColumn,
 		project.Table:           project.ValidColumn,
 		team.Table:              team.ValidColumn,
 		techniqueanalysis.Table: techniqueanalysis.ValidColumn,

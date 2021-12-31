@@ -19,16 +19,14 @@ type Team struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// TeamName holds the value of the "team_name" field.
 	TeamName string `json:"team_name,omitempty"`
-	// TeamLogo holds the value of the "team_logo" field.
-	TeamLogo string `json:"team_logo,omitempty"`
+	// Logo holds the value of the "logo" field.
+	Logo string `json:"logo,omitempty"`
 	// LeaderID holds the value of the "leader_id" field.
 	LeaderID uuid.UUID `json:"leader_id,omitempty"`
 	// MemberIds holds the value of the "member_ids" field.
 	MemberIds []uuid.UUID `json:"member_ids,omitempty"`
 	// Introduction holds the value of the "introduction" field.
 	Introduction string `json:"introduction,omitempty"`
-	// Logo holds the value of the "logo" field.
-	Logo string `json:"logo,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -46,7 +44,7 @@ func (*Team) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new([]byte)
 		case team.FieldCreateAt, team.FieldUpdateAt, team.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case team.FieldTeamName, team.FieldTeamLogo, team.FieldIntroduction, team.FieldLogo:
+		case team.FieldTeamName, team.FieldLogo, team.FieldIntroduction:
 			values[i] = new(sql.NullString)
 		case team.FieldID, team.FieldLeaderID:
 			values[i] = new(uuid.UUID)
@@ -77,11 +75,11 @@ func (t *Team) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				t.TeamName = value.String
 			}
-		case team.FieldTeamLogo:
+		case team.FieldLogo:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field team_logo", values[i])
+				return fmt.Errorf("unexpected type %T for field logo", values[i])
 			} else if value.Valid {
-				t.TeamLogo = value.String
+				t.Logo = value.String
 			}
 		case team.FieldLeaderID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -102,12 +100,6 @@ func (t *Team) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field introduction", values[i])
 			} else if value.Valid {
 				t.Introduction = value.String
-			}
-		case team.FieldLogo:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field logo", values[i])
-			} else if value.Valid {
-				t.Logo = value.String
 			}
 		case team.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -157,16 +149,14 @@ func (t *Team) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", t.ID))
 	builder.WriteString(", team_name=")
 	builder.WriteString(t.TeamName)
-	builder.WriteString(", team_logo=")
-	builder.WriteString(t.TeamLogo)
+	builder.WriteString(", logo=")
+	builder.WriteString(t.Logo)
 	builder.WriteString(", leader_id=")
 	builder.WriteString(fmt.Sprintf("%v", t.LeaderID))
 	builder.WriteString(", member_ids=")
 	builder.WriteString(fmt.Sprintf("%v", t.MemberIds))
 	builder.WriteString(", introduction=")
 	builder.WriteString(t.Introduction)
-	builder.WriteString(", logo=")
-	builder.WriteString(t.Logo)
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", t.CreateAt))
 	builder.WriteString(", update_at=")

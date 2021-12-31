@@ -254,12 +254,12 @@ func (taq *TechniqueAnalysisQuery) Clone() *TechniqueAnalysisQuery {
 // Example:
 //
 //	var v []struct {
-//		ProjectID uuid.UUID `json:"project_id,omitempty"`
+//		AuthorID uuid.UUID `json:"author_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.TechniqueAnalysis.Query().
-//		GroupBy(techniqueanalysis.FieldProjectID).
+//		GroupBy(techniqueanalysis.FieldAuthorID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -281,11 +281,11 @@ func (taq *TechniqueAnalysisQuery) GroupBy(field string, fields ...string) *Tech
 // Example:
 //
 //	var v []struct {
-//		ProjectID uuid.UUID `json:"project_id,omitempty"`
+//		AuthorID uuid.UUID `json:"author_id,omitempty"`
 //	}
 //
 //	client.TechniqueAnalysis.Query().
-//		Select(techniqueanalysis.FieldProjectID).
+//		Select(techniqueanalysis.FieldAuthorID).
 //		Scan(ctx, &v)
 //
 func (taq *TechniqueAnalysisQuery) Select(fields ...string) *TechniqueAnalysisSelect {

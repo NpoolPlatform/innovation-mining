@@ -21,6 +21,20 @@ const _ = grpc.SupportPackageIsVersion7
 type InnovationMinningClient interface {
 	// Method Version
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
+	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
+	CreateTeam(ctx context.Context, in *CreateTeamRequest, opts ...grpc.CallOption) (*CreateTeamResponse, error)
+	UpdateTeam(ctx context.Context, in *UpdateTeamRequest, opts ...grpc.CallOption) (*UpdateTeamResponse, error)
+	CreateTechniqueAnalysis(ctx context.Context, in *CreateTechniqueAnalysisRequest, opts ...grpc.CallOption) (*CreateTechniqueAnalysisResponse, error)
+	UpdateTechniqueAnalysis(ctx context.Context, in *UpdateTechniqueAnalysisRequest, opts ...grpc.CallOption) (*UpdateTechniqueAnalysisResponse, error)
+	CreateTrendAnalysis(ctx context.Context, in *CreateTrendAnalysisRequest, opts ...grpc.CallOption) (*CreateTrendAnalysisResponse, error)
+	UpdateTrendAnalysis(ctx context.Context, in *UpdateTrendAnalysisRequest, opts ...grpc.CallOption) (*UpdateTrendAnalysisResponse, error)
+	CreateCapital(ctx context.Context, in *CreateCapitalRequest, opts ...grpc.CallOption) (*CreateCapitalResponse, error)
+	UpdateCapital(ctx context.Context, in *UpdateCapitalRequest, opts ...grpc.CallOption) (*UpdateCapitalResponse, error)
+	CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*CreateProjectResponse, error)
+	UpdateProject(ctx context.Context, in *UpdateProjectRequest, opts ...grpc.CallOption) (*UpdateProjectResponse, error)
+	CreateLaunchTime(ctx context.Context, in *CreateLaunchTimeRequest, opts ...grpc.CallOption) (*CreateLaunchTimeResponse, error)
+	UpdateLaunchTime(ctx context.Context, in *UpdateLaunchTimeRequest, opts ...grpc.CallOption) (*UpdateLaunchTimeResponse, error)
 }
 
 type innovationMinningClient struct {
@@ -40,12 +54,152 @@ func (c *innovationMinningClient) Version(ctx context.Context, in *emptypb.Empty
 	return out, nil
 }
 
+func (c *innovationMinningClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+	out := new(CreateUserResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error) {
+	out := new(UpdateUserResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) CreateTeam(ctx context.Context, in *CreateTeamRequest, opts ...grpc.CallOption) (*CreateTeamResponse, error) {
+	out := new(CreateTeamResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateTeam", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateTeam(ctx context.Context, in *UpdateTeamRequest, opts ...grpc.CallOption) (*UpdateTeamResponse, error) {
+	out := new(UpdateTeamResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateTeam", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) CreateTechniqueAnalysis(ctx context.Context, in *CreateTechniqueAnalysisRequest, opts ...grpc.CallOption) (*CreateTechniqueAnalysisResponse, error) {
+	out := new(CreateTechniqueAnalysisResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateTechniqueAnalysis", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateTechniqueAnalysis(ctx context.Context, in *UpdateTechniqueAnalysisRequest, opts ...grpc.CallOption) (*UpdateTechniqueAnalysisResponse, error) {
+	out := new(UpdateTechniqueAnalysisResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateTechniqueAnalysis", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) CreateTrendAnalysis(ctx context.Context, in *CreateTrendAnalysisRequest, opts ...grpc.CallOption) (*CreateTrendAnalysisResponse, error) {
+	out := new(CreateTrendAnalysisResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateTrendAnalysis", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateTrendAnalysis(ctx context.Context, in *UpdateTrendAnalysisRequest, opts ...grpc.CallOption) (*UpdateTrendAnalysisResponse, error) {
+	out := new(UpdateTrendAnalysisResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateTrendAnalysis", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) CreateCapital(ctx context.Context, in *CreateCapitalRequest, opts ...grpc.CallOption) (*CreateCapitalResponse, error) {
+	out := new(CreateCapitalResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateCapital", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateCapital(ctx context.Context, in *UpdateCapitalRequest, opts ...grpc.CallOption) (*UpdateCapitalResponse, error) {
+	out := new(UpdateCapitalResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateCapital", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*CreateProjectResponse, error) {
+	out := new(CreateProjectResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateProject(ctx context.Context, in *UpdateProjectRequest, opts ...grpc.CallOption) (*UpdateProjectResponse, error) {
+	out := new(UpdateProjectResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) CreateLaunchTime(ctx context.Context, in *CreateLaunchTimeRequest, opts ...grpc.CallOption) (*CreateLaunchTimeResponse, error) {
+	out := new(CreateLaunchTimeResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/CreateLaunchTime", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *innovationMinningClient) UpdateLaunchTime(ctx context.Context, in *UpdateLaunchTimeRequest, opts ...grpc.CallOption) (*UpdateLaunchTimeResponse, error) {
+	out := new(UpdateLaunchTimeResponse)
+	err := c.cc.Invoke(ctx, "/innovation.minning.v1.InnovationMinning/UpdateLaunchTime", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InnovationMinningServer is the server API for InnovationMinning service.
 // All implementations must embed UnimplementedInnovationMinningServer
 // for forward compatibility
 type InnovationMinningServer interface {
 	// Method Version
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
+	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
+	CreateTeam(context.Context, *CreateTeamRequest) (*CreateTeamResponse, error)
+	UpdateTeam(context.Context, *UpdateTeamRequest) (*UpdateTeamResponse, error)
+	CreateTechniqueAnalysis(context.Context, *CreateTechniqueAnalysisRequest) (*CreateTechniqueAnalysisResponse, error)
+	UpdateTechniqueAnalysis(context.Context, *UpdateTechniqueAnalysisRequest) (*UpdateTechniqueAnalysisResponse, error)
+	CreateTrendAnalysis(context.Context, *CreateTrendAnalysisRequest) (*CreateTrendAnalysisResponse, error)
+	UpdateTrendAnalysis(context.Context, *UpdateTrendAnalysisRequest) (*UpdateTrendAnalysisResponse, error)
+	CreateCapital(context.Context, *CreateCapitalRequest) (*CreateCapitalResponse, error)
+	UpdateCapital(context.Context, *UpdateCapitalRequest) (*UpdateCapitalResponse, error)
+	CreateProject(context.Context, *CreateProjectRequest) (*CreateProjectResponse, error)
+	UpdateProject(context.Context, *UpdateProjectRequest) (*UpdateProjectResponse, error)
+	CreateLaunchTime(context.Context, *CreateLaunchTimeRequest) (*CreateLaunchTimeResponse, error)
+	UpdateLaunchTime(context.Context, *UpdateLaunchTimeRequest) (*UpdateLaunchTimeResponse, error)
 	mustEmbedUnimplementedInnovationMinningServer()
 }
 
@@ -55,6 +209,48 @@ type UnimplementedInnovationMinningServer struct {
 
 func (UnimplementedInnovationMinningServer) Version(context.Context, *emptypb.Empty) (*VersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateTeam(context.Context, *CreateTeamRequest) (*CreateTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTeam not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateTeam(context.Context, *UpdateTeamRequest) (*UpdateTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTeam not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateTechniqueAnalysis(context.Context, *CreateTechniqueAnalysisRequest) (*CreateTechniqueAnalysisResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTechniqueAnalysis not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateTechniqueAnalysis(context.Context, *UpdateTechniqueAnalysisRequest) (*UpdateTechniqueAnalysisResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTechniqueAnalysis not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateTrendAnalysis(context.Context, *CreateTrendAnalysisRequest) (*CreateTrendAnalysisResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTrendAnalysis not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateTrendAnalysis(context.Context, *UpdateTrendAnalysisRequest) (*UpdateTrendAnalysisResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrendAnalysis not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateCapital(context.Context, *CreateCapitalRequest) (*CreateCapitalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCapital not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateCapital(context.Context, *UpdateCapitalRequest) (*UpdateCapitalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCapital not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateProject(context.Context, *CreateProjectRequest) (*CreateProjectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProject not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateProject(context.Context, *UpdateProjectRequest) (*UpdateProjectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProject not implemented")
+}
+func (UnimplementedInnovationMinningServer) CreateLaunchTime(context.Context, *CreateLaunchTimeRequest) (*CreateLaunchTimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateLaunchTime not implemented")
+}
+func (UnimplementedInnovationMinningServer) UpdateLaunchTime(context.Context, *UpdateLaunchTimeRequest) (*UpdateLaunchTimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateLaunchTime not implemented")
 }
 func (UnimplementedInnovationMinningServer) mustEmbedUnimplementedInnovationMinningServer() {}
 
@@ -87,6 +283,258 @@ func _InnovationMinning_Version_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InnovationMinning_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateUser(ctx, req.(*CreateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateUser(ctx, req.(*UpdateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_CreateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateTeam(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateTeam(ctx, req.(*CreateTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateTeam(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateTeam(ctx, req.(*UpdateTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_CreateTechniqueAnalysis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTechniqueAnalysisRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateTechniqueAnalysis(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateTechniqueAnalysis",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateTechniqueAnalysis(ctx, req.(*CreateTechniqueAnalysisRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateTechniqueAnalysis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTechniqueAnalysisRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateTechniqueAnalysis(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateTechniqueAnalysis",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateTechniqueAnalysis(ctx, req.(*UpdateTechniqueAnalysisRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_CreateTrendAnalysis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTrendAnalysisRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateTrendAnalysis(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateTrendAnalysis",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateTrendAnalysis(ctx, req.(*CreateTrendAnalysisRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateTrendAnalysis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTrendAnalysisRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateTrendAnalysis(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateTrendAnalysis",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateTrendAnalysis(ctx, req.(*UpdateTrendAnalysisRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_CreateCapital_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCapitalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateCapital(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateCapital",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateCapital(ctx, req.(*CreateCapitalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateCapital_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCapitalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateCapital(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateCapital",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateCapital(ctx, req.(*UpdateCapitalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_CreateProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateProject(ctx, req.(*CreateProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateProject(ctx, req.(*UpdateProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_CreateLaunchTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateLaunchTimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).CreateLaunchTime(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/CreateLaunchTime",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).CreateLaunchTime(ctx, req.(*CreateLaunchTimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InnovationMinning_UpdateLaunchTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLaunchTimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InnovationMinningServer).UpdateLaunchTime(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/innovation.minning.v1.InnovationMinning/UpdateLaunchTime",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InnovationMinningServer).UpdateLaunchTime(ctx, req.(*UpdateLaunchTimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InnovationMinning_ServiceDesc is the grpc.ServiceDesc for InnovationMinning service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -97,6 +545,62 @@ var InnovationMinning_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Version",
 			Handler:    _InnovationMinning_Version_Handler,
+		},
+		{
+			MethodName: "CreateUser",
+			Handler:    _InnovationMinning_CreateUser_Handler,
+		},
+		{
+			MethodName: "UpdateUser",
+			Handler:    _InnovationMinning_UpdateUser_Handler,
+		},
+		{
+			MethodName: "CreateTeam",
+			Handler:    _InnovationMinning_CreateTeam_Handler,
+		},
+		{
+			MethodName: "UpdateTeam",
+			Handler:    _InnovationMinning_UpdateTeam_Handler,
+		},
+		{
+			MethodName: "CreateTechniqueAnalysis",
+			Handler:    _InnovationMinning_CreateTechniqueAnalysis_Handler,
+		},
+		{
+			MethodName: "UpdateTechniqueAnalysis",
+			Handler:    _InnovationMinning_UpdateTechniqueAnalysis_Handler,
+		},
+		{
+			MethodName: "CreateTrendAnalysis",
+			Handler:    _InnovationMinning_CreateTrendAnalysis_Handler,
+		},
+		{
+			MethodName: "UpdateTrendAnalysis",
+			Handler:    _InnovationMinning_UpdateTrendAnalysis_Handler,
+		},
+		{
+			MethodName: "CreateCapital",
+			Handler:    _InnovationMinning_CreateCapital_Handler,
+		},
+		{
+			MethodName: "UpdateCapital",
+			Handler:    _InnovationMinning_UpdateCapital_Handler,
+		},
+		{
+			MethodName: "CreateProject",
+			Handler:    _InnovationMinning_CreateProject_Handler,
+		},
+		{
+			MethodName: "UpdateProject",
+			Handler:    _InnovationMinning_UpdateProject_Handler,
+		},
+		{
+			MethodName: "CreateLaunchTime",
+			Handler:    _InnovationMinning_CreateLaunchTime_Handler,
+		},
+		{
+			MethodName: "UpdateLaunchTime",
+			Handler:    _InnovationMinning_UpdateLaunchTime_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -16,14 +16,14 @@ type TechniqueAnalysis struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// ProjectID holds the value of the "project_id" field.
-	ProjectID uuid.UUID `json:"project_id,omitempty"`
 	// AuthorID holds the value of the "author_id" field.
 	AuthorID uuid.UUID `json:"author_id,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
 	// Content holds the value of the "content" field.
 	Content string `json:"content,omitempty"`
+	// ProjectID holds the value of the "project_id" field.
+	ProjectID uuid.UUID `json:"project_id,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -41,7 +41,7 @@ func (*TechniqueAnalysis) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case techniqueanalysis.FieldTitle, techniqueanalysis.FieldContent:
 			values[i] = new(sql.NullString)
-		case techniqueanalysis.FieldID, techniqueanalysis.FieldProjectID, techniqueanalysis.FieldAuthorID:
+		case techniqueanalysis.FieldID, techniqueanalysis.FieldAuthorID, techniqueanalysis.FieldProjectID:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type TechniqueAnalysis", columns[i])
@@ -64,12 +64,6 @@ func (ta *TechniqueAnalysis) assignValues(columns []string, values []interface{}
 			} else if value != nil {
 				ta.ID = *value
 			}
-		case techniqueanalysis.FieldProjectID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field project_id", values[i])
-			} else if value != nil {
-				ta.ProjectID = *value
-			}
 		case techniqueanalysis.FieldAuthorID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field author_id", values[i])
@@ -87,6 +81,12 @@ func (ta *TechniqueAnalysis) assignValues(columns []string, values []interface{}
 				return fmt.Errorf("unexpected type %T for field content", values[i])
 			} else if value.Valid {
 				ta.Content = value.String
+			}
+		case techniqueanalysis.FieldProjectID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field project_id", values[i])
+			} else if value != nil {
+				ta.ProjectID = *value
 			}
 		case techniqueanalysis.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -134,14 +134,14 @@ func (ta *TechniqueAnalysis) String() string {
 	var builder strings.Builder
 	builder.WriteString("TechniqueAnalysis(")
 	builder.WriteString(fmt.Sprintf("id=%v", ta.ID))
-	builder.WriteString(", project_id=")
-	builder.WriteString(fmt.Sprintf("%v", ta.ProjectID))
 	builder.WriteString(", author_id=")
 	builder.WriteString(fmt.Sprintf("%v", ta.AuthorID))
 	builder.WriteString(", title=")
 	builder.WriteString(ta.Title)
 	builder.WriteString(", content=")
 	builder.WriteString(ta.Content)
+	builder.WriteString(", project_id=")
+	builder.WriteString(fmt.Sprintf("%v", ta.ProjectID))
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", ta.CreateAt))
 	builder.WriteString(", update_at=")

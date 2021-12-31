@@ -27,12 +27,6 @@ func (tau *TechniqueAnalysisUpdate) Where(ps ...predicate.TechniqueAnalysis) *Te
 	return tau
 }
 
-// SetProjectID sets the "project_id" field.
-func (tau *TechniqueAnalysisUpdate) SetProjectID(u uuid.UUID) *TechniqueAnalysisUpdate {
-	tau.mutation.SetProjectID(u)
-	return tau
-}
-
 // SetAuthorID sets the "author_id" field.
 func (tau *TechniqueAnalysisUpdate) SetAuthorID(u uuid.UUID) *TechniqueAnalysisUpdate {
 	tau.mutation.SetAuthorID(u)
@@ -48,6 +42,12 @@ func (tau *TechniqueAnalysisUpdate) SetTitle(s string) *TechniqueAnalysisUpdate 
 // SetContent sets the "content" field.
 func (tau *TechniqueAnalysisUpdate) SetContent(s string) *TechniqueAnalysisUpdate {
 	tau.mutation.SetContent(s)
+	return tau
+}
+
+// SetProjectID sets the "project_id" field.
+func (tau *TechniqueAnalysisUpdate) SetProjectID(u uuid.UUID) *TechniqueAnalysisUpdate {
+	tau.mutation.SetProjectID(u)
 	return tau
 }
 
@@ -192,13 +192,6 @@ func (tau *TechniqueAnalysisUpdate) sqlSave(ctx context.Context) (n int, err err
 			}
 		}
 	}
-	if value, ok := tau.mutation.ProjectID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: techniqueanalysis.FieldProjectID,
-		})
-	}
 	if value, ok := tau.mutation.AuthorID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -218,6 +211,13 @@ func (tau *TechniqueAnalysisUpdate) sqlSave(ctx context.Context) (n int, err err
 			Type:   field.TypeString,
 			Value:  value,
 			Column: techniqueanalysis.FieldContent,
+		})
+	}
+	if value, ok := tau.mutation.ProjectID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: techniqueanalysis.FieldProjectID,
 		})
 	}
 	if value, ok := tau.mutation.CreateAt(); ok {
@@ -281,12 +281,6 @@ type TechniqueAnalysisUpdateOne struct {
 	mutation *TechniqueAnalysisMutation
 }
 
-// SetProjectID sets the "project_id" field.
-func (tauo *TechniqueAnalysisUpdateOne) SetProjectID(u uuid.UUID) *TechniqueAnalysisUpdateOne {
-	tauo.mutation.SetProjectID(u)
-	return tauo
-}
-
 // SetAuthorID sets the "author_id" field.
 func (tauo *TechniqueAnalysisUpdateOne) SetAuthorID(u uuid.UUID) *TechniqueAnalysisUpdateOne {
 	tauo.mutation.SetAuthorID(u)
@@ -302,6 +296,12 @@ func (tauo *TechniqueAnalysisUpdateOne) SetTitle(s string) *TechniqueAnalysisUpd
 // SetContent sets the "content" field.
 func (tauo *TechniqueAnalysisUpdateOne) SetContent(s string) *TechniqueAnalysisUpdateOne {
 	tauo.mutation.SetContent(s)
+	return tauo
+}
+
+// SetProjectID sets the "project_id" field.
+func (tauo *TechniqueAnalysisUpdateOne) SetProjectID(u uuid.UUID) *TechniqueAnalysisUpdateOne {
+	tauo.mutation.SetProjectID(u)
 	return tauo
 }
 
@@ -470,13 +470,6 @@ func (tauo *TechniqueAnalysisUpdateOne) sqlSave(ctx context.Context) (_node *Tec
 			}
 		}
 	}
-	if value, ok := tauo.mutation.ProjectID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: techniqueanalysis.FieldProjectID,
-		})
-	}
 	if value, ok := tauo.mutation.AuthorID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -496,6 +489,13 @@ func (tauo *TechniqueAnalysisUpdateOne) sqlSave(ctx context.Context) (_node *Tec
 			Type:   field.TypeString,
 			Value:  value,
 			Column: techniqueanalysis.FieldContent,
+		})
+	}
+	if value, ok := tauo.mutation.ProjectID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: techniqueanalysis.FieldProjectID,
 		})
 	}
 	if value, ok := tauo.mutation.CreateAt(); ok {

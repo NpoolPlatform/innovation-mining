@@ -9,23 +9,25 @@ import (
 	"github.com/google/uuid"
 )
 
-// Team holds the schema definition for the Team entity.
-type Team struct {
+// LaunchTime holds the schema definition for the LaunchTime entity.
+type LaunchTime struct {
 	ent.Schema
 }
 
-// Fields of the Team.
-func (Team) Fields() []ent.Field {
+// Fields of the LaunchTime.
+func (LaunchTime) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
-		field.String("team_name").
+		field.UUID("project_id", uuid.UUID{}).
 			Unique(),
-		field.String("logo"),
-		field.UUID("leader_id", uuid.UUID{}),
-		field.JSON("member_ids", []uuid.UUID{}),
+		field.String("network_name"),
+		field.String("network_version"),
 		field.String("introduction"),
+		field.Uint32("launch_time"),
+		field.Bool("incentive"),
+		field.Uint32("incentive_total"),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {
 				return uint32(time.Now().Unix())
@@ -44,7 +46,7 @@ func (Team) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Team.
-func (Team) Edges() []ent.Edge {
+// Edges of the LaunchTime.
+func (LaunchTime) Edges() []ent.Edge {
 	return nil
 }

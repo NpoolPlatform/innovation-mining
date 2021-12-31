@@ -4,6 +4,7 @@ package ent
 
 import (
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/launchtime"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/schema"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
@@ -37,6 +38,26 @@ func init() {
 	capitalDescID := capitalFields[0].Descriptor()
 	// capital.DefaultID holds the default value on creation for the id field.
 	capital.DefaultID = capitalDescID.Default.(func() uuid.UUID)
+	launchtimeFields := schema.LaunchTime{}.Fields()
+	_ = launchtimeFields
+	// launchtimeDescCreateAt is the schema descriptor for create_at field.
+	launchtimeDescCreateAt := launchtimeFields[8].Descriptor()
+	// launchtime.DefaultCreateAt holds the default value on creation for the create_at field.
+	launchtime.DefaultCreateAt = launchtimeDescCreateAt.Default.(func() uint32)
+	// launchtimeDescUpdateAt is the schema descriptor for update_at field.
+	launchtimeDescUpdateAt := launchtimeFields[9].Descriptor()
+	// launchtime.DefaultUpdateAt holds the default value on creation for the update_at field.
+	launchtime.DefaultUpdateAt = launchtimeDescUpdateAt.Default.(func() uint32)
+	// launchtime.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
+	launchtime.UpdateDefaultUpdateAt = launchtimeDescUpdateAt.UpdateDefault.(func() uint32)
+	// launchtimeDescDeleteAt is the schema descriptor for delete_at field.
+	launchtimeDescDeleteAt := launchtimeFields[10].Descriptor()
+	// launchtime.DefaultDeleteAt holds the default value on creation for the delete_at field.
+	launchtime.DefaultDeleteAt = launchtimeDescDeleteAt.Default.(func() uint32)
+	// launchtimeDescID is the schema descriptor for id field.
+	launchtimeDescID := launchtimeFields[0].Descriptor()
+	// launchtime.DefaultID holds the default value on creation for the id field.
+	launchtime.DefaultID = launchtimeDescID.Default.(func() uuid.UUID)
 	projectFields := schema.Project{}.Fields()
 	_ = projectFields
 	// projectDescCreateAt is the schema descriptor for create_at field.
@@ -60,17 +81,17 @@ func init() {
 	teamFields := schema.Team{}.Fields()
 	_ = teamFields
 	// teamDescCreateAt is the schema descriptor for create_at field.
-	teamDescCreateAt := teamFields[7].Descriptor()
+	teamDescCreateAt := teamFields[6].Descriptor()
 	// team.DefaultCreateAt holds the default value on creation for the create_at field.
 	team.DefaultCreateAt = teamDescCreateAt.Default.(func() uint32)
 	// teamDescUpdateAt is the schema descriptor for update_at field.
-	teamDescUpdateAt := teamFields[8].Descriptor()
+	teamDescUpdateAt := teamFields[7].Descriptor()
 	// team.DefaultUpdateAt holds the default value on creation for the update_at field.
 	team.DefaultUpdateAt = teamDescUpdateAt.Default.(func() uint32)
 	// team.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
 	team.UpdateDefaultUpdateAt = teamDescUpdateAt.UpdateDefault.(func() uint32)
 	// teamDescDeleteAt is the schema descriptor for delete_at field.
-	teamDescDeleteAt := teamFields[9].Descriptor()
+	teamDescDeleteAt := teamFields[8].Descriptor()
 	// team.DefaultDeleteAt holds the default value on creation for the delete_at field.
 	team.DefaultDeleteAt = teamDescDeleteAt.Default.(func() uint32)
 	// teamDescID is the schema descriptor for id field.

@@ -25,6 +25,7 @@ type config struct {
 // hooks per client, for fast access.
 type hooks struct {
 	Capital           []ent.Hook
+	LaunchTime        []ent.Hook
 	Project           []ent.Hook
 	Team              []ent.Hook
 	TechniqueAnalysis []ent.Hook

@@ -91,13 +91,6 @@ func IDLTE(id uuid.UUID) predicate.TechniqueAnalysis {
 	})
 }
 
-// ProjectID applies equality check predicate on the "project_id" field. It's identical to ProjectIDEQ.
-func ProjectID(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldProjectID), v))
-	})
-}
-
 // AuthorID applies equality check predicate on the "author_id" field. It's identical to AuthorIDEQ.
 func AuthorID(v uuid.UUID) predicate.TechniqueAnalysis {
 	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
@@ -119,6 +112,13 @@ func Content(v string) predicate.TechniqueAnalysis {
 	})
 }
 
+// ProjectID applies equality check predicate on the "project_id" field. It's identical to ProjectIDEQ.
+func ProjectID(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldProjectID), v))
+	})
+}
+
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v uint32) predicate.TechniqueAnalysis {
 	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
@@ -137,82 +137,6 @@ func UpdateAt(v uint32) predicate.TechniqueAnalysis {
 func DeleteAt(v uint32) predicate.TechniqueAnalysis {
 	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDeleteAt), v))
-	})
-}
-
-// ProjectIDEQ applies the EQ predicate on the "project_id" field.
-func ProjectIDEQ(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldProjectID), v))
-	})
-}
-
-// ProjectIDNEQ applies the NEQ predicate on the "project_id" field.
-func ProjectIDNEQ(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldProjectID), v))
-	})
-}
-
-// ProjectIDIn applies the In predicate on the "project_id" field.
-func ProjectIDIn(vs ...uuid.UUID) predicate.TechniqueAnalysis {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldProjectID), v...))
-	})
-}
-
-// ProjectIDNotIn applies the NotIn predicate on the "project_id" field.
-func ProjectIDNotIn(vs ...uuid.UUID) predicate.TechniqueAnalysis {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldProjectID), v...))
-	})
-}
-
-// ProjectIDGT applies the GT predicate on the "project_id" field.
-func ProjectIDGT(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldProjectID), v))
-	})
-}
-
-// ProjectIDGTE applies the GTE predicate on the "project_id" field.
-func ProjectIDGTE(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldProjectID), v))
-	})
-}
-
-// ProjectIDLT applies the LT predicate on the "project_id" field.
-func ProjectIDLT(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldProjectID), v))
-	})
-}
-
-// ProjectIDLTE applies the LTE predicate on the "project_id" field.
-func ProjectIDLTE(v uuid.UUID) predicate.TechniqueAnalysis {
-	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldProjectID), v))
 	})
 }
 
@@ -511,6 +435,82 @@ func ContentEqualFold(v string) predicate.TechniqueAnalysis {
 func ContentContainsFold(v string) predicate.TechniqueAnalysis {
 	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldContent), v))
+	})
+}
+
+// ProjectIDEQ applies the EQ predicate on the "project_id" field.
+func ProjectIDEQ(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldProjectID), v))
+	})
+}
+
+// ProjectIDNEQ applies the NEQ predicate on the "project_id" field.
+func ProjectIDNEQ(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldProjectID), v))
+	})
+}
+
+// ProjectIDIn applies the In predicate on the "project_id" field.
+func ProjectIDIn(vs ...uuid.UUID) predicate.TechniqueAnalysis {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldProjectID), v...))
+	})
+}
+
+// ProjectIDNotIn applies the NotIn predicate on the "project_id" field.
+func ProjectIDNotIn(vs ...uuid.UUID) predicate.TechniqueAnalysis {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldProjectID), v...))
+	})
+}
+
+// ProjectIDGT applies the GT predicate on the "project_id" field.
+func ProjectIDGT(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldProjectID), v))
+	})
+}
+
+// ProjectIDGTE applies the GTE predicate on the "project_id" field.
+func ProjectIDGTE(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldProjectID), v))
+	})
+}
+
+// ProjectIDLT applies the LT predicate on the "project_id" field.
+func ProjectIDLT(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldProjectID), v))
+	})
+}
+
+// ProjectIDLTE applies the LTE predicate on the "project_id" field.
+func ProjectIDLTE(v uuid.UUID) predicate.TechniqueAnalysis {
+	return predicate.TechniqueAnalysis(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldProjectID), v))
 	})
 }
 

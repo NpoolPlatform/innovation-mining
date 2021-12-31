@@ -11,14 +11,14 @@ const (
 	Label = "technique_analysis"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldProjectID holds the string denoting the project_id field in the database.
-	FieldProjectID = "project_id"
 	// FieldAuthorID holds the string denoting the author_id field in the database.
 	FieldAuthorID = "author_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
+	// FieldProjectID holds the string denoting the project_id field in the database.
+	FieldProjectID = "project_id"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldUpdateAt holds the string denoting the update_at field in the database.
@@ -32,10 +32,10 @@ const (
 // Columns holds all SQL columns for techniqueanalysis fields.
 var Columns = []string{
 	FieldID,
-	FieldProjectID,
 	FieldAuthorID,
 	FieldTitle,
 	FieldContent,
+	FieldProjectID,
 	FieldCreateAt,
 	FieldUpdateAt,
 	FieldDeleteAt,

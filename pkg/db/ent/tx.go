@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Capital is the client for interacting with the Capital builders.
 	Capital *CapitalClient
+	// LaunchTime is the client for interacting with the LaunchTime builders.
+	LaunchTime *LaunchTimeClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// Team is the client for interacting with the Team builders.
@@ -160,6 +162,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Capital = NewCapitalClient(tx.config)
+	tx.LaunchTime = NewLaunchTimeClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
 	tx.Team = NewTeamClient(tx.config)
 	tx.TechniqueAnalysis = NewTechniqueAnalysisClient(tx.config)

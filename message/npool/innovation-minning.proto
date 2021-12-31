@@ -16,9 +16,273 @@ service InnovationMinning {
             body: "*"
         };
     }
+
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/user"
+            body: "*"
+        };
+    }
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/user"
+            body: "*"
+        };
+    }
+
+    rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/team"
+            body: "*"
+        };
+    }
+    rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/team"
+            body: "*"
+        };
+    }
+
+    rpc CreateTechniqueAnalysis(CreateTechniqueAnalysisRequest) returns (CreateTechniqueAnalysisResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/technique/analysis"
+            body: "*"
+        };
+    }
+    rpc UpdateTechniqueAnalysis(UpdateTechniqueAnalysisRequest) returns (UpdateTechniqueAnalysisResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/technique/analysis"
+            body: "*"
+        };
+    }
+
+    rpc CreateTrendAnalysis(CreateTrendAnalysisRequest) returns (CreateTrendAnalysisResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/trend/analysis"
+            body: "*"
+        };
+    }
+    rpc UpdateTrendAnalysis(UpdateTrendAnalysisRequest) returns (UpdateTrendAnalysisResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/trend/analysis"
+            body: "*"
+        };
+    }
+
+    rpc CreateCapital(CreateCapitalRequest) returns (CreateCapitalResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/capital"
+            body: "*"
+        };
+    }
+    rpc UpdateCapital(UpdateCapitalRequest) returns (UpdateCapitalResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/capital"
+            body: "*"
+        };
+    }
+
+    rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/project"
+            body: "*"
+        };
+    }
+    rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/project"
+            body: "*"
+        };
+    }
+
+    rpc CreateLaunchTime(CreateLaunchTimeRequest) returns (CreateLaunchTimeResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/launch/time"
+            body: "*"
+        };
+    }
+    rpc UpdateLaunchTime(UpdateLaunchTimeRequest) returns (UpdateLaunchTimeResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/launch/time"
+            body: "*"
+        };
+    }
 }
 
 // request body and response
 message VersionResponse {
-    string Info = 100;
+    string Info = 10;
+}
+
+message User {
+    string ID = 10;
+    string FirstName = 20;
+    string LastName = 30;
+    string Introduction = 40;
+}
+
+message CreateUserRequest {
+    User Info = 10;
+}
+
+message CreateUserResponse {
+    User Info = 10;
+}
+
+message UpdateUserRequest {
+    User Info = 10;
+}
+
+message UpdateUserResponse {
+    User Info = 10;
+}
+
+message Team {
+    string ID = 10;
+    string TeamName = 20;
+    string Logo = 30;
+    string LeaderID = 40;
+    repeated string MemberIDs = 50;
+}
+
+message CreateTeamRequest {
+    Team Info = 10;
+}
+
+message CreateTeamResponse {
+    Team Info = 10;
+}
+
+message UpdateTeamRequest {
+    Team Info = 10;
+}
+
+message UpdateTeamResponse {
+    Team Info = 10;
+}
+
+message TechniqueAnalysis {
+    string ID = 10;
+    string AuthorID = 20;
+    string Title = 30;
+    string Content = 40;
+    string ProjectID = 50;
+    uint32 CreateAt = 60;
+}
+
+message CreateTechniqueAnalysisRequest {
+    TechniqueAnalysis Info = 10;
+}
+
+message CreateTechniqueAnalysisResponse {
+    TechniqueAnalysis Info = 20;
+}
+
+message UpdateTechniqueAnalysisRequest {
+    TechniqueAnalysis Info = 10;
+}
+
+message UpdateTechniqueAnalysisResponse {
+    TechniqueAnalysis Info = 20;
+}
+
+message TrendAnalysis {
+    string ID = 10;
+    string ProjectID = 20;
+    string AuthorID = 30;
+    string Title = 40;
+    string Content = 50;
+    string CreateAt = 60;
+}
+
+message CreateTrendAnalysisRequest {
+    TrendAnalysis Info = 10;
+}
+
+message CreateTrendAnalysisResponse {
+    TrendAnalysis Info = 10;
+}
+
+message UpdateTrendAnalysisRequest {
+    TrendAnalysis Info = 10;
+}
+
+message UpdateTrendAnalysisResponse {
+    TrendAnalysis Info = 10;
+}
+
+message Capital {
+    string ID = 10;
+    string Name = 20;
+    string Introduction = 30;
+    string Logo = 40;
+}
+
+message CreateCapitalRequest {
+    Capital Info = 10;
+}
+
+message CreateCapitalResponse {
+    Capital Info = 10;
+}
+
+message UpdateCapitalRequest {
+    Capital Info = 10;
+}
+
+message UpdateCapitalResponse {
+    Capital Info = 10;
+}
+
+message Project {
+    string ID = 10;
+    string Name = 20;
+    string GoodID = 30;
+    string TeamID = 40;
+    repeated string CapitalIDs = 50;
+    string Introduction = 60;
+    string Logo = 70;
+}
+
+message CreateProjectRequest {
+    Project Info = 10;
+}
+
+message CreateProjectResponse {
+    Project Info = 10;
+}
+
+message UpdateProjectRequest {
+    Project Info = 10;
+}
+
+message UpdateProjectResponse {
+    Project Info = 10;
+}
+
+message LaunchTime {
+    string ID = 10;
+    string ProjectID = 20;
+    string NetworkName = 30;
+    string NetworkVersion = 40;
+    string Introduction = 50;
+    uint32 LaunchTime = 60;
+    bool Incentive = 70;
+    uint32 IncentiveTotal = 80;
+}
+
+message CreateLaunchTimeRequest {
+    LaunchTime Info = 10;
+}
+
+message CreateLaunchTimeResponse {
+    LaunchTime Info = 10;
+}
+
+message UpdateLaunchTimeRequest {
+    LaunchTime Info = 10;
+}
+
+message UpdateLaunchTimeResponse {
+    LaunchTime Info = 10;
 }

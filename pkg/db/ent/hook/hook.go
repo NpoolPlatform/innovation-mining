@@ -22,6 +22,19 @@ func (f CapitalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return f(ctx, mv)
 }
 
+// The LaunchTimeFunc type is an adapter to allow the use of ordinary
+// function as LaunchTime mutator.
+type LaunchTimeFunc func(context.Context, *ent.LaunchTimeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LaunchTimeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.LaunchTimeMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LaunchTimeMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The ProjectFunc type is an adapter to allow the use of ordinary
 // function as Project mutator.
 type ProjectFunc func(context.Context, *ent.ProjectMutation) (ent.Value, error)

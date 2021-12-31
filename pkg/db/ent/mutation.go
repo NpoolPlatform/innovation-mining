@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/capital"
+	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/launchtime"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/predicate"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/project"
 	"github.com/NpoolPlatform/innovation-mining/pkg/db/ent/team"
@@ -29,6 +30,7 @@ const (
 
 	// Node types.
 	TypeCapital           = "Capital"
+	TypeLaunchTime        = "LaunchTime"
 	TypeProject           = "Project"
 	TypeTeam              = "Team"
 	TypeTechniqueAnalysis = "TechniqueAnalysis"
@@ -704,6 +706,958 @@ func (m *CapitalMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *CapitalMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Capital edge %s", name)
+}
+
+// LaunchTimeMutation represents an operation that mutates the LaunchTime nodes in the graph.
+type LaunchTimeMutation struct {
+	config
+	op                 Op
+	typ                string
+	id                 *uuid.UUID
+	project_id         *uuid.UUID
+	network_name       *string
+	network_version    *string
+	introduction       *string
+	launch_time        *uint32
+	addlaunch_time     *uint32
+	incentive          *bool
+	incentive_total    *uint32
+	addincentive_total *uint32
+	create_at          *uint32
+	addcreate_at       *uint32
+	update_at          *uint32
+	addupdate_at       *uint32
+	delete_at          *uint32
+	adddelete_at       *uint32
+	clearedFields      map[string]struct{}
+	done               bool
+	oldValue           func(context.Context) (*LaunchTime, error)
+	predicates         []predicate.LaunchTime
+}
+
+var _ ent.Mutation = (*LaunchTimeMutation)(nil)
+
+// launchtimeOption allows management of the mutation configuration using functional options.
+type launchtimeOption func(*LaunchTimeMutation)
+
+// newLaunchTimeMutation creates new mutation for the LaunchTime entity.
+func newLaunchTimeMutation(c config, op Op, opts ...launchtimeOption) *LaunchTimeMutation {
+	m := &LaunchTimeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeLaunchTime,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withLaunchTimeID sets the ID field of the mutation.
+func withLaunchTimeID(id uuid.UUID) launchtimeOption {
+	return func(m *LaunchTimeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *LaunchTime
+		)
+		m.oldValue = func(ctx context.Context) (*LaunchTime, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().LaunchTime.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withLaunchTime sets the old LaunchTime of the mutation.
+func withLaunchTime(node *LaunchTime) launchtimeOption {
+	return func(m *LaunchTimeMutation) {
+		m.oldValue = func(context.Context) (*LaunchTime, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m LaunchTimeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m LaunchTimeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of LaunchTime entities.
+func (m *LaunchTimeMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *LaunchTimeMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetProjectID sets the "project_id" field.
+func (m *LaunchTimeMutation) SetProjectID(u uuid.UUID) {
+	m.project_id = &u
+}
+
+// ProjectID returns the value of the "project_id" field in the mutation.
+func (m *LaunchTimeMutation) ProjectID() (r uuid.UUID, exists bool) {
+	v := m.project_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProjectID returns the old "project_id" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldProjectID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldProjectID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldProjectID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProjectID: %w", err)
+	}
+	return oldValue.ProjectID, nil
+}
+
+// ResetProjectID resets all changes to the "project_id" field.
+func (m *LaunchTimeMutation) ResetProjectID() {
+	m.project_id = nil
+}
+
+// SetNetworkName sets the "network_name" field.
+func (m *LaunchTimeMutation) SetNetworkName(s string) {
+	m.network_name = &s
+}
+
+// NetworkName returns the value of the "network_name" field in the mutation.
+func (m *LaunchTimeMutation) NetworkName() (r string, exists bool) {
+	v := m.network_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNetworkName returns the old "network_name" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldNetworkName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldNetworkName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldNetworkName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNetworkName: %w", err)
+	}
+	return oldValue.NetworkName, nil
+}
+
+// ResetNetworkName resets all changes to the "network_name" field.
+func (m *LaunchTimeMutation) ResetNetworkName() {
+	m.network_name = nil
+}
+
+// SetNetworkVersion sets the "network_version" field.
+func (m *LaunchTimeMutation) SetNetworkVersion(s string) {
+	m.network_version = &s
+}
+
+// NetworkVersion returns the value of the "network_version" field in the mutation.
+func (m *LaunchTimeMutation) NetworkVersion() (r string, exists bool) {
+	v := m.network_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNetworkVersion returns the old "network_version" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldNetworkVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldNetworkVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldNetworkVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNetworkVersion: %w", err)
+	}
+	return oldValue.NetworkVersion, nil
+}
+
+// ResetNetworkVersion resets all changes to the "network_version" field.
+func (m *LaunchTimeMutation) ResetNetworkVersion() {
+	m.network_version = nil
+}
+
+// SetIntroduction sets the "introduction" field.
+func (m *LaunchTimeMutation) SetIntroduction(s string) {
+	m.introduction = &s
+}
+
+// Introduction returns the value of the "introduction" field in the mutation.
+func (m *LaunchTimeMutation) Introduction() (r string, exists bool) {
+	v := m.introduction
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntroduction returns the old "introduction" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldIntroduction(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldIntroduction is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldIntroduction requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntroduction: %w", err)
+	}
+	return oldValue.Introduction, nil
+}
+
+// ResetIntroduction resets all changes to the "introduction" field.
+func (m *LaunchTimeMutation) ResetIntroduction() {
+	m.introduction = nil
+}
+
+// SetLaunchTime sets the "launch_time" field.
+func (m *LaunchTimeMutation) SetLaunchTime(u uint32) {
+	m.launch_time = &u
+	m.addlaunch_time = nil
+}
+
+// LaunchTime returns the value of the "launch_time" field in the mutation.
+func (m *LaunchTimeMutation) LaunchTime() (r uint32, exists bool) {
+	v := m.launch_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLaunchTime returns the old "launch_time" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldLaunchTime(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldLaunchTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldLaunchTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLaunchTime: %w", err)
+	}
+	return oldValue.LaunchTime, nil
+}
+
+// AddLaunchTime adds u to the "launch_time" field.
+func (m *LaunchTimeMutation) AddLaunchTime(u uint32) {
+	if m.addlaunch_time != nil {
+		*m.addlaunch_time += u
+	} else {
+		m.addlaunch_time = &u
+	}
+}
+
+// AddedLaunchTime returns the value that was added to the "launch_time" field in this mutation.
+func (m *LaunchTimeMutation) AddedLaunchTime() (r uint32, exists bool) {
+	v := m.addlaunch_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetLaunchTime resets all changes to the "launch_time" field.
+func (m *LaunchTimeMutation) ResetLaunchTime() {
+	m.launch_time = nil
+	m.addlaunch_time = nil
+}
+
+// SetIncentive sets the "incentive" field.
+func (m *LaunchTimeMutation) SetIncentive(b bool) {
+	m.incentive = &b
+}
+
+// Incentive returns the value of the "incentive" field in the mutation.
+func (m *LaunchTimeMutation) Incentive() (r bool, exists bool) {
+	v := m.incentive
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIncentive returns the old "incentive" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldIncentive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldIncentive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldIncentive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIncentive: %w", err)
+	}
+	return oldValue.Incentive, nil
+}
+
+// ResetIncentive resets all changes to the "incentive" field.
+func (m *LaunchTimeMutation) ResetIncentive() {
+	m.incentive = nil
+}
+
+// SetIncentiveTotal sets the "incentive_total" field.
+func (m *LaunchTimeMutation) SetIncentiveTotal(u uint32) {
+	m.incentive_total = &u
+	m.addincentive_total = nil
+}
+
+// IncentiveTotal returns the value of the "incentive_total" field in the mutation.
+func (m *LaunchTimeMutation) IncentiveTotal() (r uint32, exists bool) {
+	v := m.incentive_total
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIncentiveTotal returns the old "incentive_total" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldIncentiveTotal(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldIncentiveTotal is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldIncentiveTotal requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIncentiveTotal: %w", err)
+	}
+	return oldValue.IncentiveTotal, nil
+}
+
+// AddIncentiveTotal adds u to the "incentive_total" field.
+func (m *LaunchTimeMutation) AddIncentiveTotal(u uint32) {
+	if m.addincentive_total != nil {
+		*m.addincentive_total += u
+	} else {
+		m.addincentive_total = &u
+	}
+}
+
+// AddedIncentiveTotal returns the value that was added to the "incentive_total" field in this mutation.
+func (m *LaunchTimeMutation) AddedIncentiveTotal() (r uint32, exists bool) {
+	v := m.addincentive_total
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetIncentiveTotal resets all changes to the "incentive_total" field.
+func (m *LaunchTimeMutation) ResetIncentiveTotal() {
+	m.incentive_total = nil
+	m.addincentive_total = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *LaunchTimeMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *LaunchTimeMutation) CreateAt() (r uint32, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds u to the "create_at" field.
+func (m *LaunchTimeMutation) AddCreateAt(u uint32) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += u
+	} else {
+		m.addcreate_at = &u
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *LaunchTimeMutation) AddedCreateAt() (r uint32, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *LaunchTimeMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (m *LaunchTimeMutation) SetUpdateAt(u uint32) {
+	m.update_at = &u
+	m.addupdate_at = nil
+}
+
+// UpdateAt returns the value of the "update_at" field in the mutation.
+func (m *LaunchTimeMutation) UpdateAt() (r uint32, exists bool) {
+	v := m.update_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateAt returns the old "update_at" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
+	}
+	return oldValue.UpdateAt, nil
+}
+
+// AddUpdateAt adds u to the "update_at" field.
+func (m *LaunchTimeMutation) AddUpdateAt(u uint32) {
+	if m.addupdate_at != nil {
+		*m.addupdate_at += u
+	} else {
+		m.addupdate_at = &u
+	}
+}
+
+// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
+func (m *LaunchTimeMutation) AddedUpdateAt() (r uint32, exists bool) {
+	v := m.addupdate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdateAt resets all changes to the "update_at" field.
+func (m *LaunchTimeMutation) ResetUpdateAt() {
+	m.update_at = nil
+	m.addupdate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *LaunchTimeMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *LaunchTimeMutation) DeleteAt() (r uint32, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the LaunchTime entity.
+// If the LaunchTime object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LaunchTimeMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *LaunchTimeMutation) AddDeleteAt(u uint32) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += u
+	} else {
+		m.adddelete_at = &u
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *LaunchTimeMutation) AddedDeleteAt() (r uint32, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *LaunchTimeMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the LaunchTimeMutation builder.
+func (m *LaunchTimeMutation) Where(ps ...predicate.LaunchTime) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *LaunchTimeMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (LaunchTime).
+func (m *LaunchTimeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *LaunchTimeMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.project_id != nil {
+		fields = append(fields, launchtime.FieldProjectID)
+	}
+	if m.network_name != nil {
+		fields = append(fields, launchtime.FieldNetworkName)
+	}
+	if m.network_version != nil {
+		fields = append(fields, launchtime.FieldNetworkVersion)
+	}
+	if m.introduction != nil {
+		fields = append(fields, launchtime.FieldIntroduction)
+	}
+	if m.launch_time != nil {
+		fields = append(fields, launchtime.FieldLaunchTime)
+	}
+	if m.incentive != nil {
+		fields = append(fields, launchtime.FieldIncentive)
+	}
+	if m.incentive_total != nil {
+		fields = append(fields, launchtime.FieldIncentiveTotal)
+	}
+	if m.create_at != nil {
+		fields = append(fields, launchtime.FieldCreateAt)
+	}
+	if m.update_at != nil {
+		fields = append(fields, launchtime.FieldUpdateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, launchtime.FieldDeleteAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *LaunchTimeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case launchtime.FieldProjectID:
+		return m.ProjectID()
+	case launchtime.FieldNetworkName:
+		return m.NetworkName()
+	case launchtime.FieldNetworkVersion:
+		return m.NetworkVersion()
+	case launchtime.FieldIntroduction:
+		return m.Introduction()
+	case launchtime.FieldLaunchTime:
+		return m.LaunchTime()
+	case launchtime.FieldIncentive:
+		return m.Incentive()
+	case launchtime.FieldIncentiveTotal:
+		return m.IncentiveTotal()
+	case launchtime.FieldCreateAt:
+		return m.CreateAt()
+	case launchtime.FieldUpdateAt:
+		return m.UpdateAt()
+	case launchtime.FieldDeleteAt:
+		return m.DeleteAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *LaunchTimeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case launchtime.FieldProjectID:
+		return m.OldProjectID(ctx)
+	case launchtime.FieldNetworkName:
+		return m.OldNetworkName(ctx)
+	case launchtime.FieldNetworkVersion:
+		return m.OldNetworkVersion(ctx)
+	case launchtime.FieldIntroduction:
+		return m.OldIntroduction(ctx)
+	case launchtime.FieldLaunchTime:
+		return m.OldLaunchTime(ctx)
+	case launchtime.FieldIncentive:
+		return m.OldIncentive(ctx)
+	case launchtime.FieldIncentiveTotal:
+		return m.OldIncentiveTotal(ctx)
+	case launchtime.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case launchtime.FieldUpdateAt:
+		return m.OldUpdateAt(ctx)
+	case launchtime.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown LaunchTime field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LaunchTimeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case launchtime.FieldProjectID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProjectID(v)
+		return nil
+	case launchtime.FieldNetworkName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNetworkName(v)
+		return nil
+	case launchtime.FieldNetworkVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNetworkVersion(v)
+		return nil
+	case launchtime.FieldIntroduction:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntroduction(v)
+		return nil
+	case launchtime.FieldLaunchTime:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLaunchTime(v)
+		return nil
+	case launchtime.FieldIncentive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIncentive(v)
+		return nil
+	case launchtime.FieldIncentiveTotal:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIncentiveTotal(v)
+		return nil
+	case launchtime.FieldCreateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case launchtime.FieldUpdateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateAt(v)
+		return nil
+	case launchtime.FieldDeleteAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown LaunchTime field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *LaunchTimeMutation) AddedFields() []string {
+	var fields []string
+	if m.addlaunch_time != nil {
+		fields = append(fields, launchtime.FieldLaunchTime)
+	}
+	if m.addincentive_total != nil {
+		fields = append(fields, launchtime.FieldIncentiveTotal)
+	}
+	if m.addcreate_at != nil {
+		fields = append(fields, launchtime.FieldCreateAt)
+	}
+	if m.addupdate_at != nil {
+		fields = append(fields, launchtime.FieldUpdateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, launchtime.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *LaunchTimeMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case launchtime.FieldLaunchTime:
+		return m.AddedLaunchTime()
+	case launchtime.FieldIncentiveTotal:
+		return m.AddedIncentiveTotal()
+	case launchtime.FieldCreateAt:
+		return m.AddedCreateAt()
+	case launchtime.FieldUpdateAt:
+		return m.AddedUpdateAt()
+	case launchtime.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LaunchTimeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case launchtime.FieldLaunchTime:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLaunchTime(v)
+		return nil
+	case launchtime.FieldIncentiveTotal:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIncentiveTotal(v)
+		return nil
+	case launchtime.FieldCreateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case launchtime.FieldUpdateAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateAt(v)
+		return nil
+	case launchtime.FieldDeleteAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown LaunchTime numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *LaunchTimeMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *LaunchTimeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *LaunchTimeMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown LaunchTime nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *LaunchTimeMutation) ResetField(name string) error {
+	switch name {
+	case launchtime.FieldProjectID:
+		m.ResetProjectID()
+		return nil
+	case launchtime.FieldNetworkName:
+		m.ResetNetworkName()
+		return nil
+	case launchtime.FieldNetworkVersion:
+		m.ResetNetworkVersion()
+		return nil
+	case launchtime.FieldIntroduction:
+		m.ResetIntroduction()
+		return nil
+	case launchtime.FieldLaunchTime:
+		m.ResetLaunchTime()
+		return nil
+	case launchtime.FieldIncentive:
+		m.ResetIncentive()
+		return nil
+	case launchtime.FieldIncentiveTotal:
+		m.ResetIncentiveTotal()
+		return nil
+	case launchtime.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case launchtime.FieldUpdateAt:
+		m.ResetUpdateAt()
+		return nil
+	case launchtime.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown LaunchTime field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *LaunchTimeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *LaunchTimeMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *LaunchTimeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *LaunchTimeMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *LaunchTimeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *LaunchTimeMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *LaunchTimeMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown LaunchTime unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *LaunchTimeMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown LaunchTime edge %s", name)
 }
 
 // ProjectMutation represents an operation that mutates the Project nodes in the graph.
@@ -1545,11 +2499,10 @@ type TeamMutation struct {
 	typ           string
 	id            *uuid.UUID
 	team_name     *string
-	team_logo     *string
+	logo          *string
 	leader_id     *uuid.UUID
 	member_ids    *[]uuid.UUID
 	introduction  *string
-	logo          *string
 	create_at     *uint32
 	addcreate_at  *uint32
 	update_at     *uint32
@@ -1683,40 +2636,40 @@ func (m *TeamMutation) ResetTeamName() {
 	m.team_name = nil
 }
 
-// SetTeamLogo sets the "team_logo" field.
-func (m *TeamMutation) SetTeamLogo(s string) {
-	m.team_logo = &s
+// SetLogo sets the "logo" field.
+func (m *TeamMutation) SetLogo(s string) {
+	m.logo = &s
 }
 
-// TeamLogo returns the value of the "team_logo" field in the mutation.
-func (m *TeamMutation) TeamLogo() (r string, exists bool) {
-	v := m.team_logo
+// Logo returns the value of the "logo" field in the mutation.
+func (m *TeamMutation) Logo() (r string, exists bool) {
+	v := m.logo
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldTeamLogo returns the old "team_logo" field's value of the Team entity.
+// OldLogo returns the old "logo" field's value of the Team entity.
 // If the Team object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TeamMutation) OldTeamLogo(ctx context.Context) (v string, err error) {
+func (m *TeamMutation) OldLogo(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldTeamLogo is only allowed on UpdateOne operations")
+		return v, fmt.Errorf("OldLogo is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldTeamLogo requires an ID field in the mutation")
+		return v, fmt.Errorf("OldLogo requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTeamLogo: %w", err)
+		return v, fmt.Errorf("querying old value for OldLogo: %w", err)
 	}
-	return oldValue.TeamLogo, nil
+	return oldValue.Logo, nil
 }
 
-// ResetTeamLogo resets all changes to the "team_logo" field.
-func (m *TeamMutation) ResetTeamLogo() {
-	m.team_logo = nil
+// ResetLogo resets all changes to the "logo" field.
+func (m *TeamMutation) ResetLogo() {
+	m.logo = nil
 }
 
 // SetLeaderID sets the "leader_id" field.
@@ -1825,42 +2778,6 @@ func (m *TeamMutation) OldIntroduction(ctx context.Context) (v string, err error
 // ResetIntroduction resets all changes to the "introduction" field.
 func (m *TeamMutation) ResetIntroduction() {
 	m.introduction = nil
-}
-
-// SetLogo sets the "logo" field.
-func (m *TeamMutation) SetLogo(s string) {
-	m.logo = &s
-}
-
-// Logo returns the value of the "logo" field in the mutation.
-func (m *TeamMutation) Logo() (r string, exists bool) {
-	v := m.logo
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLogo returns the old "logo" field's value of the Team entity.
-// If the Team object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TeamMutation) OldLogo(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldLogo is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldLogo requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLogo: %w", err)
-	}
-	return oldValue.Logo, nil
-}
-
-// ResetLogo resets all changes to the "logo" field.
-func (m *TeamMutation) ResetLogo() {
-	m.logo = nil
 }
 
 // SetCreateAt sets the "create_at" field.
@@ -2050,12 +2967,12 @@ func (m *TeamMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TeamMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 8)
 	if m.team_name != nil {
 		fields = append(fields, team.FieldTeamName)
 	}
-	if m.team_logo != nil {
-		fields = append(fields, team.FieldTeamLogo)
+	if m.logo != nil {
+		fields = append(fields, team.FieldLogo)
 	}
 	if m.leader_id != nil {
 		fields = append(fields, team.FieldLeaderID)
@@ -2065,9 +2982,6 @@ func (m *TeamMutation) Fields() []string {
 	}
 	if m.introduction != nil {
 		fields = append(fields, team.FieldIntroduction)
-	}
-	if m.logo != nil {
-		fields = append(fields, team.FieldLogo)
 	}
 	if m.create_at != nil {
 		fields = append(fields, team.FieldCreateAt)
@@ -2088,16 +3002,14 @@ func (m *TeamMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case team.FieldTeamName:
 		return m.TeamName()
-	case team.FieldTeamLogo:
-		return m.TeamLogo()
+	case team.FieldLogo:
+		return m.Logo()
 	case team.FieldLeaderID:
 		return m.LeaderID()
 	case team.FieldMemberIds:
 		return m.MemberIds()
 	case team.FieldIntroduction:
 		return m.Introduction()
-	case team.FieldLogo:
-		return m.Logo()
 	case team.FieldCreateAt:
 		return m.CreateAt()
 	case team.FieldUpdateAt:
@@ -2115,16 +3027,14 @@ func (m *TeamMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case team.FieldTeamName:
 		return m.OldTeamName(ctx)
-	case team.FieldTeamLogo:
-		return m.OldTeamLogo(ctx)
+	case team.FieldLogo:
+		return m.OldLogo(ctx)
 	case team.FieldLeaderID:
 		return m.OldLeaderID(ctx)
 	case team.FieldMemberIds:
 		return m.OldMemberIds(ctx)
 	case team.FieldIntroduction:
 		return m.OldIntroduction(ctx)
-	case team.FieldLogo:
-		return m.OldLogo(ctx)
 	case team.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case team.FieldUpdateAt:
@@ -2147,12 +3057,12 @@ func (m *TeamMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTeamName(v)
 		return nil
-	case team.FieldTeamLogo:
+	case team.FieldLogo:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetTeamLogo(v)
+		m.SetLogo(v)
 		return nil
 	case team.FieldLeaderID:
 		v, ok := value.(uuid.UUID)
@@ -2174,13 +3084,6 @@ func (m *TeamMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntroduction(v)
-		return nil
-	case team.FieldLogo:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLogo(v)
 		return nil
 	case team.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -2294,8 +3197,8 @@ func (m *TeamMutation) ResetField(name string) error {
 	case team.FieldTeamName:
 		m.ResetTeamName()
 		return nil
-	case team.FieldTeamLogo:
-		m.ResetTeamLogo()
+	case team.FieldLogo:
+		m.ResetLogo()
 		return nil
 	case team.FieldLeaderID:
 		m.ResetLeaderID()
@@ -2305,9 +3208,6 @@ func (m *TeamMutation) ResetField(name string) error {
 		return nil
 	case team.FieldIntroduction:
 		m.ResetIntroduction()
-		return nil
-	case team.FieldLogo:
-		m.ResetLogo()
 		return nil
 	case team.FieldCreateAt:
 		m.ResetCreateAt()
@@ -2376,10 +3276,10 @@ type TechniqueAnalysisMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	project_id    *uuid.UUID
 	author_id     *uuid.UUID
 	title         *string
 	content       *string
+	project_id    *uuid.UUID
 	create_at     *uint32
 	addcreate_at  *uint32
 	update_at     *uint32
@@ -2475,42 +3375,6 @@ func (m *TechniqueAnalysisMutation) ID() (id uuid.UUID, exists bool) {
 		return
 	}
 	return *m.id, true
-}
-
-// SetProjectID sets the "project_id" field.
-func (m *TechniqueAnalysisMutation) SetProjectID(u uuid.UUID) {
-	m.project_id = &u
-}
-
-// ProjectID returns the value of the "project_id" field in the mutation.
-func (m *TechniqueAnalysisMutation) ProjectID() (r uuid.UUID, exists bool) {
-	v := m.project_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldProjectID returns the old "project_id" field's value of the TechniqueAnalysis entity.
-// If the TechniqueAnalysis object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TechniqueAnalysisMutation) OldProjectID(ctx context.Context) (v uuid.UUID, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldProjectID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldProjectID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldProjectID: %w", err)
-	}
-	return oldValue.ProjectID, nil
-}
-
-// ResetProjectID resets all changes to the "project_id" field.
-func (m *TechniqueAnalysisMutation) ResetProjectID() {
-	m.project_id = nil
 }
 
 // SetAuthorID sets the "author_id" field.
@@ -2619,6 +3483,42 @@ func (m *TechniqueAnalysisMutation) OldContent(ctx context.Context) (v string, e
 // ResetContent resets all changes to the "content" field.
 func (m *TechniqueAnalysisMutation) ResetContent() {
 	m.content = nil
+}
+
+// SetProjectID sets the "project_id" field.
+func (m *TechniqueAnalysisMutation) SetProjectID(u uuid.UUID) {
+	m.project_id = &u
+}
+
+// ProjectID returns the value of the "project_id" field in the mutation.
+func (m *TechniqueAnalysisMutation) ProjectID() (r uuid.UUID, exists bool) {
+	v := m.project_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProjectID returns the old "project_id" field's value of the TechniqueAnalysis entity.
+// If the TechniqueAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TechniqueAnalysisMutation) OldProjectID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldProjectID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldProjectID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProjectID: %w", err)
+	}
+	return oldValue.ProjectID, nil
+}
+
+// ResetProjectID resets all changes to the "project_id" field.
+func (m *TechniqueAnalysisMutation) ResetProjectID() {
+	m.project_id = nil
 }
 
 // SetCreateAt sets the "create_at" field.
@@ -2809,9 +3709,6 @@ func (m *TechniqueAnalysisMutation) Type() string {
 // AddedFields().
 func (m *TechniqueAnalysisMutation) Fields() []string {
 	fields := make([]string, 0, 7)
-	if m.project_id != nil {
-		fields = append(fields, techniqueanalysis.FieldProjectID)
-	}
 	if m.author_id != nil {
 		fields = append(fields, techniqueanalysis.FieldAuthorID)
 	}
@@ -2820,6 +3717,9 @@ func (m *TechniqueAnalysisMutation) Fields() []string {
 	}
 	if m.content != nil {
 		fields = append(fields, techniqueanalysis.FieldContent)
+	}
+	if m.project_id != nil {
+		fields = append(fields, techniqueanalysis.FieldProjectID)
 	}
 	if m.create_at != nil {
 		fields = append(fields, techniqueanalysis.FieldCreateAt)
@@ -2838,14 +3738,14 @@ func (m *TechniqueAnalysisMutation) Fields() []string {
 // schema.
 func (m *TechniqueAnalysisMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case techniqueanalysis.FieldProjectID:
-		return m.ProjectID()
 	case techniqueanalysis.FieldAuthorID:
 		return m.AuthorID()
 	case techniqueanalysis.FieldTitle:
 		return m.Title()
 	case techniqueanalysis.FieldContent:
 		return m.Content()
+	case techniqueanalysis.FieldProjectID:
+		return m.ProjectID()
 	case techniqueanalysis.FieldCreateAt:
 		return m.CreateAt()
 	case techniqueanalysis.FieldUpdateAt:
@@ -2861,14 +3761,14 @@ func (m *TechniqueAnalysisMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *TechniqueAnalysisMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case techniqueanalysis.FieldProjectID:
-		return m.OldProjectID(ctx)
 	case techniqueanalysis.FieldAuthorID:
 		return m.OldAuthorID(ctx)
 	case techniqueanalysis.FieldTitle:
 		return m.OldTitle(ctx)
 	case techniqueanalysis.FieldContent:
 		return m.OldContent(ctx)
+	case techniqueanalysis.FieldProjectID:
+		return m.OldProjectID(ctx)
 	case techniqueanalysis.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case techniqueanalysis.FieldUpdateAt:
@@ -2884,13 +3784,6 @@ func (m *TechniqueAnalysisMutation) OldField(ctx context.Context, name string) (
 // type.
 func (m *TechniqueAnalysisMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case techniqueanalysis.FieldProjectID:
-		v, ok := value.(uuid.UUID)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetProjectID(v)
-		return nil
 	case techniqueanalysis.FieldAuthorID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
@@ -2911,6 +3804,13 @@ func (m *TechniqueAnalysisMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetContent(v)
+		return nil
+	case techniqueanalysis.FieldProjectID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProjectID(v)
 		return nil
 	case techniqueanalysis.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -3021,9 +3921,6 @@ func (m *TechniqueAnalysisMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *TechniqueAnalysisMutation) ResetField(name string) error {
 	switch name {
-	case techniqueanalysis.FieldProjectID:
-		m.ResetProjectID()
-		return nil
 	case techniqueanalysis.FieldAuthorID:
 		m.ResetAuthorID()
 		return nil
@@ -3032,6 +3929,9 @@ func (m *TechniqueAnalysisMutation) ResetField(name string) error {
 		return nil
 	case techniqueanalysis.FieldContent:
 		m.ResetContent()
+		return nil
+	case techniqueanalysis.FieldProjectID:
+		m.ResetProjectID()
 		return nil
 	case techniqueanalysis.FieldCreateAt:
 		m.ResetCreateAt()

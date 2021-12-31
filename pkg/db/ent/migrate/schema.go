@@ -24,6 +24,26 @@ var (
 		Columns:    CapitalsColumns,
 		PrimaryKey: []*schema.Column{CapitalsColumns[0]},
 	}
+	// LaunchTimesColumns holds the columns for the "launch_times" table.
+	LaunchTimesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "project_id", Type: field.TypeUUID, Unique: true},
+		{Name: "network_name", Type: field.TypeString},
+		{Name: "network_version", Type: field.TypeString},
+		{Name: "introduction", Type: field.TypeString},
+		{Name: "launch_time", Type: field.TypeUint32},
+		{Name: "incentive", Type: field.TypeBool},
+		{Name: "incentive_total", Type: field.TypeUint32},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
+	}
+	// LaunchTimesTable holds the schema information for the "launch_times" table.
+	LaunchTimesTable = &schema.Table{
+		Name:       "launch_times",
+		Columns:    LaunchTimesColumns,
+		PrimaryKey: []*schema.Column{LaunchTimesColumns[0]},
+	}
 	// ProjectsColumns holds the columns for the "projects" table.
 	ProjectsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -47,11 +67,10 @@ var (
 	TeamsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "team_name", Type: field.TypeString, Unique: true},
-		{Name: "team_logo", Type: field.TypeString},
+		{Name: "logo", Type: field.TypeString},
 		{Name: "leader_id", Type: field.TypeUUID},
 		{Name: "member_ids", Type: field.TypeJSON},
 		{Name: "introduction", Type: field.TypeString},
-		{Name: "logo", Type: field.TypeString},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 		{Name: "delete_at", Type: field.TypeUint32},
@@ -65,10 +84,10 @@ var (
 	// TechniqueAnalysesColumns holds the columns for the "technique_analyses" table.
 	TechniqueAnalysesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "project_id", Type: field.TypeUUID},
 		{Name: "author_id", Type: field.TypeUUID},
 		{Name: "title", Type: field.TypeString},
 		{Name: "content", Type: field.TypeString},
+		{Name: "project_id", Type: field.TypeUUID},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 		{Name: "delete_at", Type: field.TypeUint32},
@@ -122,6 +141,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CapitalsTable,
+		LaunchTimesTable,
 		ProjectsTable,
 		TeamsTable,
 		TechniqueAnalysesTable,

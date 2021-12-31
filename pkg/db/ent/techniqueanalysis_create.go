@@ -23,12 +23,6 @@ type TechniqueAnalysisCreate struct {
 	conflict []sql.ConflictOption
 }
 
-// SetProjectID sets the "project_id" field.
-func (tac *TechniqueAnalysisCreate) SetProjectID(u uuid.UUID) *TechniqueAnalysisCreate {
-	tac.mutation.SetProjectID(u)
-	return tac
-}
-
 // SetAuthorID sets the "author_id" field.
 func (tac *TechniqueAnalysisCreate) SetAuthorID(u uuid.UUID) *TechniqueAnalysisCreate {
 	tac.mutation.SetAuthorID(u)
@@ -44,6 +38,12 @@ func (tac *TechniqueAnalysisCreate) SetTitle(s string) *TechniqueAnalysisCreate 
 // SetContent sets the "content" field.
 func (tac *TechniqueAnalysisCreate) SetContent(s string) *TechniqueAnalysisCreate {
 	tac.mutation.SetContent(s)
+	return tac
+}
+
+// SetProjectID sets the "project_id" field.
+func (tac *TechniqueAnalysisCreate) SetProjectID(u uuid.UUID) *TechniqueAnalysisCreate {
+	tac.mutation.SetProjectID(u)
 	return tac
 }
 
@@ -186,9 +186,6 @@ func (tac *TechniqueAnalysisCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (tac *TechniqueAnalysisCreate) check() error {
-	if _, ok := tac.mutation.ProjectID(); !ok {
-		return &ValidationError{Name: "project_id", err: errors.New(`ent: missing required field "project_id"`)}
-	}
 	if _, ok := tac.mutation.AuthorID(); !ok {
 		return &ValidationError{Name: "author_id", err: errors.New(`ent: missing required field "author_id"`)}
 	}
@@ -197,6 +194,9 @@ func (tac *TechniqueAnalysisCreate) check() error {
 	}
 	if _, ok := tac.mutation.Content(); !ok {
 		return &ValidationError{Name: "content", err: errors.New(`ent: missing required field "content"`)}
+	}
+	if _, ok := tac.mutation.ProjectID(); !ok {
+		return &ValidationError{Name: "project_id", err: errors.New(`ent: missing required field "project_id"`)}
 	}
 	if _, ok := tac.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
@@ -240,14 +240,6 @@ func (tac *TechniqueAnalysisCreate) createSpec() (*TechniqueAnalysis, *sqlgraph.
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tac.mutation.ProjectID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: techniqueanalysis.FieldProjectID,
-		})
-		_node.ProjectID = value
-	}
 	if value, ok := tac.mutation.AuthorID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -271,6 +263,14 @@ func (tac *TechniqueAnalysisCreate) createSpec() (*TechniqueAnalysis, *sqlgraph.
 			Column: techniqueanalysis.FieldContent,
 		})
 		_node.Content = value
+	}
+	if value, ok := tac.mutation.ProjectID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: techniqueanalysis.FieldProjectID,
+		})
+		_node.ProjectID = value
 	}
 	if value, ok := tac.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -303,7 +303,7 @@ func (tac *TechniqueAnalysisCreate) createSpec() (*TechniqueAnalysis, *sqlgraph.
 // of the `INSERT` statement. For example:
 //
 //	client.TechniqueAnalysis.Create().
-//		SetProjectID(v).
+//		SetAuthorID(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -312,7 +312,7 @@ func (tac *TechniqueAnalysisCreate) createSpec() (*TechniqueAnalysis, *sqlgraph.
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.TechniqueAnalysisUpsert) {
-//			SetProjectID(v+v).
+//			SetAuthorID(v+v).
 //		}).
 //		Exec(ctx)
 //
@@ -350,18 +350,6 @@ type (
 	}
 )
 
-// SetProjectID sets the "project_id" field.
-func (u *TechniqueAnalysisUpsert) SetProjectID(v uuid.UUID) *TechniqueAnalysisUpsert {
-	u.Set(techniqueanalysis.FieldProjectID, v)
-	return u
-}
-
-// UpdateProjectID sets the "project_id" field to the value that was provided on create.
-func (u *TechniqueAnalysisUpsert) UpdateProjectID() *TechniqueAnalysisUpsert {
-	u.SetExcluded(techniqueanalysis.FieldProjectID)
-	return u
-}
-
 // SetAuthorID sets the "author_id" field.
 func (u *TechniqueAnalysisUpsert) SetAuthorID(v uuid.UUID) *TechniqueAnalysisUpsert {
 	u.Set(techniqueanalysis.FieldAuthorID, v)
@@ -395,6 +383,18 @@ func (u *TechniqueAnalysisUpsert) SetContent(v string) *TechniqueAnalysisUpsert 
 // UpdateContent sets the "content" field to the value that was provided on create.
 func (u *TechniqueAnalysisUpsert) UpdateContent() *TechniqueAnalysisUpsert {
 	u.SetExcluded(techniqueanalysis.FieldContent)
+	return u
+}
+
+// SetProjectID sets the "project_id" field.
+func (u *TechniqueAnalysisUpsert) SetProjectID(v uuid.UUID) *TechniqueAnalysisUpsert {
+	u.Set(techniqueanalysis.FieldProjectID, v)
+	return u
+}
+
+// UpdateProjectID sets the "project_id" field to the value that was provided on create.
+func (u *TechniqueAnalysisUpsert) UpdateProjectID() *TechniqueAnalysisUpsert {
+	u.SetExcluded(techniqueanalysis.FieldProjectID)
 	return u
 }
 
@@ -484,20 +484,6 @@ func (u *TechniqueAnalysisUpsertOne) Update(set func(*TechniqueAnalysisUpsert)) 
 	return u
 }
 
-// SetProjectID sets the "project_id" field.
-func (u *TechniqueAnalysisUpsertOne) SetProjectID(v uuid.UUID) *TechniqueAnalysisUpsertOne {
-	return u.Update(func(s *TechniqueAnalysisUpsert) {
-		s.SetProjectID(v)
-	})
-}
-
-// UpdateProjectID sets the "project_id" field to the value that was provided on create.
-func (u *TechniqueAnalysisUpsertOne) UpdateProjectID() *TechniqueAnalysisUpsertOne {
-	return u.Update(func(s *TechniqueAnalysisUpsert) {
-		s.UpdateProjectID()
-	})
-}
-
 // SetAuthorID sets the "author_id" field.
 func (u *TechniqueAnalysisUpsertOne) SetAuthorID(v uuid.UUID) *TechniqueAnalysisUpsertOne {
 	return u.Update(func(s *TechniqueAnalysisUpsert) {
@@ -537,6 +523,20 @@ func (u *TechniqueAnalysisUpsertOne) SetContent(v string) *TechniqueAnalysisUpse
 func (u *TechniqueAnalysisUpsertOne) UpdateContent() *TechniqueAnalysisUpsertOne {
 	return u.Update(func(s *TechniqueAnalysisUpsert) {
 		s.UpdateContent()
+	})
+}
+
+// SetProjectID sets the "project_id" field.
+func (u *TechniqueAnalysisUpsertOne) SetProjectID(v uuid.UUID) *TechniqueAnalysisUpsertOne {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.SetProjectID(v)
+	})
+}
+
+// UpdateProjectID sets the "project_id" field to the value that was provided on create.
+func (u *TechniqueAnalysisUpsertOne) UpdateProjectID() *TechniqueAnalysisUpsertOne {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.UpdateProjectID()
 	})
 }
 
@@ -714,7 +714,7 @@ func (tacb *TechniqueAnalysisCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.TechniqueAnalysisUpsert) {
-//			SetProjectID(v+v).
+//			SetAuthorID(v+v).
 //		}).
 //		Exec(ctx)
 //
@@ -798,20 +798,6 @@ func (u *TechniqueAnalysisUpsertBulk) Update(set func(*TechniqueAnalysisUpsert))
 	return u
 }
 
-// SetProjectID sets the "project_id" field.
-func (u *TechniqueAnalysisUpsertBulk) SetProjectID(v uuid.UUID) *TechniqueAnalysisUpsertBulk {
-	return u.Update(func(s *TechniqueAnalysisUpsert) {
-		s.SetProjectID(v)
-	})
-}
-
-// UpdateProjectID sets the "project_id" field to the value that was provided on create.
-func (u *TechniqueAnalysisUpsertBulk) UpdateProjectID() *TechniqueAnalysisUpsertBulk {
-	return u.Update(func(s *TechniqueAnalysisUpsert) {
-		s.UpdateProjectID()
-	})
-}
-
 // SetAuthorID sets the "author_id" field.
 func (u *TechniqueAnalysisUpsertBulk) SetAuthorID(v uuid.UUID) *TechniqueAnalysisUpsertBulk {
 	return u.Update(func(s *TechniqueAnalysisUpsert) {
@@ -851,6 +837,20 @@ func (u *TechniqueAnalysisUpsertBulk) SetContent(v string) *TechniqueAnalysisUps
 func (u *TechniqueAnalysisUpsertBulk) UpdateContent() *TechniqueAnalysisUpsertBulk {
 	return u.Update(func(s *TechniqueAnalysisUpsert) {
 		s.UpdateContent()
+	})
+}
+
+// SetProjectID sets the "project_id" field.
+func (u *TechniqueAnalysisUpsertBulk) SetProjectID(v uuid.UUID) *TechniqueAnalysisUpsertBulk {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.SetProjectID(v)
+	})
+}
+
+// UpdateProjectID sets the "project_id" field to the value that was provided on create.
+func (u *TechniqueAnalysisUpsertBulk) UpdateProjectID() *TechniqueAnalysisUpsertBulk {
+	return u.Update(func(s *TechniqueAnalysisUpsert) {
+		s.UpdateProjectID()
 	})
 }
 
