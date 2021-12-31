@@ -338,6 +338,7 @@
 | Logo | [string](#string) |  |  |
 | LeaderID | [string](#string) |  |  |
 | MemberIDs | [string](#string) | repeated |  |
+| Introduction | [string](#string) |  |  |
 
 
 

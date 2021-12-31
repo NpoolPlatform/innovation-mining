@@ -143,6 +143,7 @@ message Team {
     string Logo = 30;
     string LeaderID = 40;
     repeated string MemberIDs = 50;
+    string Introduction = 60;
 }
 
 message CreateTeamRequest {
